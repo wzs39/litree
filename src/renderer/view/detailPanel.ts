@@ -194,6 +194,14 @@ export function renderDetailPanel(
   el.querySelector('#dp-enter')?.addEventListener('click', () => {
     if (node.kind !== 'leaf') handlers.onEnter(node.id)
   })
+  el.querySelector('#dp-light-all')?.addEventListener('click', () => {
+    try {
+      store.lightAllLeaves(node.id)
+    } catch (err) {
+      console.error('批量点亮失败', err)
+    }
+    renderDetailPanel(el, store, node.id, handlers)
+  })
   el.querySelector('#dp-learning')?.addEventListener('click', () => {
     store.toggleLearning(node.id)
   })

@@ -186,3 +186,33 @@ test.describe('v2 章扁平化与锁定引导', () => {
     expect(hint).toContain('还差')
   })
 })
+
+test.describe('批量点亮回归', () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+  test('面板批量点亮全部知识点（监听器丢失回归）', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('litree:pack-override', 'dev-mini'))
+    await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
+    await page.locator('#hm-subjects').click()
+    await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
+    await page.locator('g.node[data-id="b1"]').dblclick()
+    // 单击单元一（available）→ 面板 → 批量点亮
+    await page.locator('g.node[data-id="u1"]').click()
+    await expect(page.locator('#dp-light-all')).toBeVisible()
+    await page.locator('#dp-light-all').click()
+    // lane 视图叶子不渲染：以 XP/面板/进度环验证（u1 3 叶 ×2 = XP 6）
+    await expect(page.locator('#sidebar')).toContainText('XP 6')
+    await expect(page.locator('#detail-panel')).toContainText('3/3')
+    await expect(page.locator('#detail-panel')).toContainText('已点亮')
+    // 进入 u1 验证叶子确实全亮
+    await page.locator('#dp-enter').click()
+    await expect(page.locator('g.node--leaf.node--lit')).toHaveCount(3, { timeout: 15000 })
+    // ESC 关面板 → ESC 回 lane → u2 已解锁（0/2 可批量）
+    await page.keyboard.press('Escape')
+    await page.keyboard.press('Escape')
+    await expect(page.locator('g.node[data-id="u2"]')).toBeVisible({ timeout: 15000 })
+    await page.locator('g.node[data-id="u2"]').click()
+    await expect(page.locator('#detail-panel')).toContainText('进入单元')
+    await expect(page.locator('#detail-panel')).toContainText('0/2')
+})
+})

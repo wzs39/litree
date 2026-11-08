@@ -9,6 +9,7 @@ import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { createEffectLayer } from './view/effects'
 import { renderDetailPanel, ancestorStack } from './view/detailPanel'
 import { renderGraph } from './view/graphCanvas'
+import { renderHome } from './view/homeView'
 import { renderSidebar } from './view/sidebar'
 
 const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
@@ -18,6 +19,7 @@ const sidebarEl = document.getElementById('sidebar')!
 const panelEl = document.createElement('div')
 panelEl.id = 'detail-panel'
 stageEl.appendChild(panelEl)
+const homeEl = document.getElementById('home-root')!
 
 async function boot(): Promise<void> {
   const store = new AppStore(createWebApi())
@@ -79,6 +81,29 @@ async function boot(): Promise<void> {
   async function renderView(): Promise<void> {
     const token = ++viewToken
     const containerId = store.viewStack[store.viewStack.length - 1]!
+    // home 虚拟视图：DOM 首页替代 SVG
+    if (containerId === 'home') {
+      renderedContainerId = 'home'
+      svgEl.style.display = 'none'
+      homeEl.style.display = 'block'
+      crumbEl.style.display = 'none'
+      renderHome(homeEl, store, {
+        onContinue: (t) => {
+          jumpToNode(t.unitId)
+          openPanel(t.unitId)
+        },
+        onOpenUnit: (id) => {
+          jumpToNode(id)
+          openPanel(id)
+        },
+        onOpenSubjects: () => store.setStack(['root'])
+      })
+      renderBreadcrumb(crumbEl, [], () => undefined)
+      return
+    }
+    svgEl.style.display = 'block'
+    homeEl.style.display = 'none'
+    crumbEl.style.display = 'flex'
     const containerChanged = containerId !== renderedContainerId
     if (containerChanged) {
       let layout = layoutCache.get(containerId)

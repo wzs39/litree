@@ -13,6 +13,8 @@ test.describe('dev-mini 确定性流程', () => {
       localStorage.setItem('litree:pack-override', 'dev-mini')
     })
     await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
+    await page.locator('#hm-subjects').click()
 
     // 1. 根视图含 2 个分支节点
     await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
@@ -48,6 +50,8 @@ test.describe('cs-math 真实包冒烟', () => {
       localStorage.removeItem('litree:pack-override')
     })
     await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 30000 })
+    await page.locator('#hm-subjects').click()
     await expect(page.locator('g.node--branch')).toHaveCount(11, { timeout: 30000 })
 
     // 数学 M → M1/M2/M3 三条 lane
@@ -67,6 +71,8 @@ test.describe('终审修复回归', () => {
   test('F5: 点亮不重置缩放平移', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('litree:pack-override', 'dev-mini'))
     await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
+    await page.locator('#hm-subjects').click()
     await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
     await page.locator('g.node[data-id="b1"]').dblclick()
     await page.locator('g.node[data-id="u1"]').dblclick()
@@ -101,12 +107,12 @@ test.describe('终审修复回归', () => {
       )
     })
     await page.goto('/')
-    await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#sidebar')).toContainText('孤立')
     await page.locator('#orphan-clean').click()
     await expect(page.locator('#sidebar')).not.toContainText('孤立')
     await page.reload()
-    await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#sidebar')).not.toContainText('孤立') // 清理已持久化
   })
 
@@ -121,6 +127,9 @@ test.describe('终审修复回归', () => {
 test.describe('v2 路由', () => {
   test('hash 路由：刷新恢复位置 + 返回键回退', async ({ page }) => {
     await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 30000 })
+    await expect(page.locator('#home-root')).toContainText('推荐学习路线')
+    await page.locator('#hm-subjects').click()
     await expect(page.locator('g.node--branch')).toHaveCount(11, { timeout: 30000 })
     await page.locator('g.node[data-id="M"]').dblclick()
     await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法')
@@ -130,8 +139,23 @@ test.describe('v2 路由', () => {
     await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法', { timeout: 30000 })
 
     await page.goBack()
-    await page.playwright?.waitForTimeout?.(0) // no-op 兼容
     await expect(page.locator('#breadcrumb')).toContainText('计算机 + 数学', { timeout: 10000 })
+    expect(await page.evaluate(() => location.hash)).toBe('#/tree/root')
+    await page.goBack()
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 10000 })
     expect(await page.evaluate(() => location.hash)).toBe('#/home')
+  })
+})
+
+test.describe('v2 首页', () => {
+  test('路线卡片与继续学习直达单元', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('litree:pack-override', 'dev-mini'))
+    await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('#home-root')).toContainText('入门路线')
+    await expect(page.locator('#home-root')).toContainText('进阶路线')
+    await page.locator('#hm-continue').click()
+    await expect(page.locator('#detail-panel')).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('#detail-panel')).toContainText('单元一')
   })
 })

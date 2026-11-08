@@ -10,14 +10,20 @@ if (!validation.ok) throw new Error('fixture 校验失败: ' + validation.errors
 const index = buildGraphIndex(validation.pack)
 
 describe('stackToHash / hashToStack', () => {
-  it('根视图 → #/home', () => {
-    expect(stackToHash(['root'])).toBe('#/home')
+  it('home 虚拟栈 → #/home', () => {
+    expect(stackToHash(['home'])).toBe('#/home')
+  })
+  it('根（学科总览）→ #/tree/root', () => {
+    expect(stackToHash(['root'])).toBe('#/tree/root')
   })
   it('钻取链 → #/tree/…', () => {
     expect(stackToHash(['root', 'b1', 'u1'])).toBe('#/tree/root/b1/u1')
   })
-  it('home 解析回根栈', () => {
-    expect(hashToStack('#/home', index)).toEqual({ stack: ['root'], valid: true })
+  it('#/home 解析回 home 栈', () => {
+    expect(hashToStack('#/home', index)).toEqual({ stack: ['home'], valid: true })
+  })
+  it('#/tree/root 解析回学科总览', () => {
+    expect(hashToStack('#/tree/root', index)).toEqual({ stack: ['root'], valid: true })
   })
   it('合法钻取链解析（parent 链逐级校验）', () => {
     expect(hashToStack('#/tree/root/b1/u1', index)).toEqual({

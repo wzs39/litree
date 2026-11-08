@@ -3,7 +3,8 @@ import type { AppStore } from './store'
 import type { GraphIndex } from './graph'
 
 export function stackToHash(stack: string[]): string {
-  if (stack.length <= 1) return '#/home'
+  if (stack.length === 1 && stack[0] === 'home') return '#/home'
+  if (stack.length <= 1) return '#/tree/root'
   return '#/tree/' + stack.join('/')
 }
 
@@ -11,11 +12,11 @@ export function hashToStack(
   hash: string,
   index: GraphIndex
 ): { stack: string[]; valid: boolean } {
-  if (!hash.startsWith('#/')) return { stack: ['root'], valid: false }
-  if (hash === '#/home' || hash === '#/' || hash === '#') return { stack: ['root'], valid: true }
-  if (!hash.startsWith('#/tree/')) return { stack: ['root'], valid: false }
+  if (!hash.startsWith('#/')) return { stack: ['home'], valid: false }
+  if (hash === '#/home' || hash === '#/' || hash === '#') return { stack: ['home'], valid: true }
+  if (!hash.startsWith('#/tree/')) return { stack: ['home'], valid: false }
   const parts = hash.slice('#/tree/'.length).split('/').filter((p) => p.length > 0)
-  if (parts.length === 0 || parts[0] !== 'root') return { stack: ['root'], valid: false }
+  if (parts.length === 0 || parts[0] !== 'root') return { stack: ['home'], valid: false }
   // 逐级校验 parent 链：第一级必须是根节点（parent null），后续每级 parent === 前一级 id
   let prev = 'root'
   const stack: string[] = ['root']
@@ -53,14 +54,13 @@ export function attachRouter(store: AppStore): () => void {
   })
 
   window.addEventListener('hashchange', onHashChange)
-  // 启动恢复：先解析现有 hash（刷新/分享链接），合法则恢复位置，否则才写 home
+  // 启动恢复：合法 hash 恢复位置；无 hash / 非法 hash → 默认首页
   const initial = hashToStack(window.location.hash, store.index)
-  if (!sameStack(initial.stack, store.viewStack)) {
-    if (initial.valid) {
-      store.setStack(initial.stack)
-    } else {
-      window.history.replaceState(null, '', stackToHash(store.viewStack))
-    }
+  if (initial.valid) {
+    if (!sameStack(initial.stack, store.viewStack)) store.setStack(initial.stack)
+  } else {
+    window.history.replaceState(null, '', stackToHash(['home']))
+    if (!sameStack(store.viewStack, ['home'])) store.setStack(['home'])
   }
 
   return () => {

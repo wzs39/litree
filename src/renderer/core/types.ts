@@ -35,6 +35,13 @@ export interface Domain {
   color: string
 }
 
+/** 推荐学习路线（v2 路线首页；ids 必须全部指向 unit） */
+export interface PackRoute {
+  name: string
+  note?: string
+  ids: string[]
+}
+
 export interface Pack {
   schema: 'litree/pack-v1'
   id: string
@@ -42,6 +49,7 @@ export interface Pack {
   domains: Domain[]
   nodes: PackNode[]
   edges: PackEdge[]
+  routes?: PackRoute[]
 }
 
 export interface LitRecord {

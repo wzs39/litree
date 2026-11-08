@@ -156,3 +156,34 @@ describe('叶子必须有 unit 祖先（终审 Critical 防回归）', () => {
     expect(validatePack(p).ok).toBe(true)
   })
 })
+
+describe('routes 可选字段（v2 路线首页数据）', () => {
+  it('合法 routes 通过并保留', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.routes = [
+      { name: '入门路线', note: '先学单元一', ids: ['u1', 'u2'] }
+    ]
+    const r = validatePack(p)
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.pack.routes?.[0]?.ids).toEqual(['u1', 'u2'])
+  })
+  it('routes 引用不存在的 id → 拒绝', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.routes = [{ name: '坏路线', ids: ['u1', 'ghost'] }]
+    const r = validatePack(p)
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.errors.join('\n')).toContain('ghost')
+  })
+  it('routes 引用非 unit 节点 → 拒绝', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.routes = [{ name: '坏路线', ids: ['u1.k1'] }]
+    const r = validatePack(p)
+    expect(r.ok).toBe(false)
+  })
+  it('routes 缺 name 或 ids 为空 → 拒绝', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.routes = [{ name: '', ids: [] }]
+    const r = validatePack(p)
+    expect(r.ok).toBe(false)
+  })
+})

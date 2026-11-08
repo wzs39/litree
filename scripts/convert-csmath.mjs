@@ -187,6 +187,21 @@ export function convertCsmath(skilltree, outlines) {
     }
   }
 
+  // ---- routes 透传（v2 路线首页）----
+  let routes
+  if (Array.isArray(skilltree.routes)) {
+    routes = []
+    for (const rt of skilltree.routes) {
+      const rawIds = rt.ids ?? []
+      const ids = rawIds.filter((id) => unitIds.has(id))
+      const dropped = rawIds.filter((id) => !unitIds.has(id))
+      if (dropped.length > 0) {
+        diffs.push(`路线 "${rt.name}" 有 ${dropped.length} 个 id 不在技能列表（已剔除）: ${dropped.join(', ')}`)
+      }
+      if (ids.length > 0) routes.push({ name: rt.name, ...(rt.note ? { note: rt.note } : {}), ids })
+    }
+  }
+
   // ---- 报告（README 对账在 CLI 全量运行时执行，fixture 截取不做全量对账）----
   const report = { units: skills.length, hard, soft, leaves, chapters, diffs }
 
@@ -196,7 +211,8 @@ export function convertCsmath(skilltree, outlines) {
     title: { zh: '计算机 + 数学', en: 'CS & Math' },
     domains,
     nodes,
-    edges
+    edges,
+    ...(routes && routes.length > 0 ? { routes } : {})
   }
   return { pack, report }
 }

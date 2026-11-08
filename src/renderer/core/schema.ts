@@ -188,6 +188,34 @@ export function validatePack(raw: unknown): ValidationResult {
     }
   }
 
+  // routes（可选）：ids 必须存在且为 unit
+  const routes = o['routes']
+  if (routes !== undefined && routes !== null) {
+    if (!Array.isArray(routes)) {
+      errors.push('routes 必须为数组')
+    } else {
+      for (const rt of routes) {
+        if (!isRecord(rt) || typeof rt['name'] !== 'string' || rt['name'].length === 0) {
+          errors.push('routes 项缺少非空 name')
+          continue
+        }
+        const ids = rt['ids']
+        if (!Array.isArray(ids) || ids.length === 0) {
+          errors.push(`路线 "${rt['name']}" 的 ids 必须为非空数组`)
+          continue
+        }
+        for (const id of ids) {
+          const node = typeof id === 'string' ? nodeById.get(id) : undefined
+          if (node === undefined) {
+            errors.push(`路线 "${rt['name']}" 引用不存在的节点: ${String(id)}`)
+          } else if (node.kind !== 'unit') {
+            errors.push(`路线 "${rt['name']}" 引用了非 unit 节点: ${id}`)
+          }
+        }
+      }
+    }
+  }
+
   if (errors.length > 0) return { ok: false, errors }
   return {
     ok: true,
@@ -197,7 +225,8 @@ export function validatePack(raw: unknown): ValidationResult {
       title: o['title'] as Pack['title'],
       domains: domains as Pack['domains'],
       nodes: [...nodeById.values()],
-      edges: validEdges
+      edges: validEdges,
+      ...(Array.isArray(routes) ? { routes: routes as Pack['routes'] } : {})
     }
   }
 }

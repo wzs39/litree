@@ -100,3 +100,18 @@ describe('convertCsmath（以真实结构截取的 fixture 为准）', () => {
     expect(m12chapters.length).toBe(0)
   })
 })
+
+describe('convertCsmath routes 透传（v2）', () => {
+  it('上游 routes 转换为 pack.routes，无效 id 进 diffs', () => {
+    const st = JSON.parse(JSON.stringify(sample.skilltree)) as never
+    const stObj = st as { skills: { id: string }[]; routes?: unknown[] }
+    stObj.routes = [
+      { name: '路线A', note: 'n', ids: ['M.1.1', 'M.1.2'] },
+      { name: '路线B', ids: ['ghost'] }
+    ]
+    const { pack, report } = convertCsmath(st, sample.outlines)
+    expect(pack.routes?.[0]?.name).toBe('路线A')
+    expect(pack.routes?.[0]?.ids).toEqual(['M.1.1', 'M.1.2'])
+    expect(report.diffs.some((d: string) => d.includes('ghost'))).toBe(true)
+  })
+})

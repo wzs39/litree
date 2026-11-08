@@ -26,16 +26,17 @@ test.describe('dev-mini 确定性流程', () => {
     await page.locator('g.node[data-id="u1"]').dblclick()
     await expect(page.locator('g.node--leaf')).toHaveCount(3)
 
-    // 3. 点亮一个 available 叶子 → lit + XP=2
+    // 3. 点击叶子 → DetailPanel → 确认点亮 → lit + XP=2
     await page.locator('g.node--leaf.node--available').first().click()
+    await expect(page.locator('#detail-panel')).toBeVisible()
+    await expect(page.locator('#detail-panel')).toContainText('我已掌握，点亮')
+    await page.locator('#dp-light').click()
     await expect(page.locator('g.node--leaf.node--lit')).toHaveCount(1)
     await expect(page.locator('#sidebar')).toContainText('XP 2')
 
-    // 4. 重载后状态保持（localStorage 持久化）
+    // 4. 重载后位置恢复（v2 路由）+ 状态保持（localStorage 持久化）
     await page.reload()
-    await expect(page.locator('g.node--branch')).toHaveCount(2, { timeout: 15000 })
-    await page.locator('g.node[data-id="b1"]').dblclick()
-    await page.locator('g.node[data-id="u1"]').dblclick()
+    await expect(page.locator('#breadcrumb')).toContainText('单元一', { timeout: 15000 })
     await expect(page.locator('g.node--leaf.node--lit')).toHaveCount(1)
     await expect(page.locator('#sidebar')).toContainText('XP 2')
   })
@@ -77,6 +78,7 @@ test.describe('终审修复回归', () => {
     const zoomed = await vp.getAttribute('transform')
     expect(zoomed).not.toBe(before)
     await page.locator('g.node--leaf.node--available').first().click()
+    await page.locator('#dp-light').click()
     await page.waitForTimeout(400)
     expect(await vp.getAttribute('transform')).toBe(zoomed)
   })

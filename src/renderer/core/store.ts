@@ -116,7 +116,16 @@ export class AppStore {
   private scheduleSave(): void {
     if (this.saveTimer !== null) clearTimeout(this.saveTimer)
     this.saveTimer = setTimeout(() => {
+      this.saveTimer = null
       void this.api.saveProgress(this.pack.id, this.progress)
     }, SAVE_DEBOUNCE_MS)
+  }
+
+  /** 立即落盘待保存进度（页面卸载前调用，spec §7 防丢失） */
+  flushSave(): void {
+    if (this.saveTimer === null) return
+    clearTimeout(this.saveTimer)
+    this.saveTimer = null
+    void this.api.saveProgress(this.pack.id, this.progress)
   }
 }

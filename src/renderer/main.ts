@@ -362,6 +362,10 @@ async function boot(): Promise<void> {
     svgEl.classList.remove('panning')
   })
 
+  window.addEventListener('beforeunload', () => {
+    store.flushSave()
+  })
+
   await renderView()
 }
 

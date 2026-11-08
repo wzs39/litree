@@ -155,3 +155,24 @@ describe('AppStore', () => {
     expect(store2.stateOf('u1.k1')).toBe('lit') // 重新 init 读回持久化进度
   })
 })
+
+describe('AppStore.flushSave', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    fake = makeFakeApi()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  it('debounce 未到即 flush 立即落盘', async () => {
+    const store = new AppStore(fake.api)
+    await store.init()
+    store.lightLeaf('u1.k1')
+    expect(fake.saves).toHaveLength(0)
+    store.flushSave()
+    expect(fake.saves).toHaveLength(1)
+    expect(fake.saves[0]!.progress.xp).toBe(2)
+    await vi.advanceTimersByTimeAsync(500)
+    expect(fake.saves).toHaveLength(1) // 不重复保存
+  })
+})

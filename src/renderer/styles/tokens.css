@@ -28,3 +28,13 @@
   --cascade: 80ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* 无障碍（spec §9.3）：偏好减少动效时全部退化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01s !important;
+    transition-duration: 0.01s !important;
+  }
+}

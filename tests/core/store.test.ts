@@ -104,6 +104,33 @@ describe('AppStore', () => {
     expect(store.viewStack).toEqual(['root']) // 根不可再退
   })
 
+  it('门控：locked 单元的叶子点亮抛错', async () => {
+    const store = new AppStore(fake.api)
+    await store.init()
+    expect(() => store.lightLeaf('u2.k1')).toThrow(/前置/)
+  })
+
+  it('点亮 u1 全部叶子后 u2 解锁为 available', async () => {
+    const store = new AppStore(fake.api)
+    await store.init()
+    store.lightLeaf('u1.k1')
+    store.lightLeaf('u1.k2')
+    expect(store.stateOf('u2')).toBe('locked')
+    store.lightLeaf('u1.k3')
+    expect(store.stateOf('u2')).toBe('available')
+  })
+
+  it('批量点亮 lightAllLeaves：xp 累计 +4，u3 解锁；对 locked 单元抛错', async () => {
+    const store = new AppStore(fake.api)
+    await store.init()
+    expect(() => store.lightAllLeaves('u3')).toThrow(/前置/) // u3 尚 locked
+    for (const id of ['u1.k1', 'u1.k2', 'u1.k3']) store.lightLeaf(id)
+    store.lightAllLeaves('u2')
+    expect(store.stateOf('u2')).toBe('lit')
+    expect(store.progress.xp).toBe(10) // 3×2 + 2×2
+    expect(store.stateOf('u3')).toBe('available')
+  })
+
   it('webApi 接口与 AppStore 兼容（真实现冒烟，mock fetch/storage）', async () => {
     const storage = new Map<string, string>()
     const memStorage = {

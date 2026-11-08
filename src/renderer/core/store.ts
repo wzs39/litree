@@ -1,6 +1,13 @@
 /** 应用状态容器（spec §5/§7）：持有 pack/进度/视图栈，订阅驱动视图重渲染 */
 import type { LitreeApi } from '../api/webApi'
-import { aggregateState, buildGraphIndex, type GraphIndex, type NodeState } from './graph'
+import {
+  aggregateState,
+  buildGraphIndex,
+  leafAvailable,
+  unitAvailable,
+  type GraphIndex,
+  type NodeState
+} from './graph'
 import { emptyProgress, lightLeaf, toggleLearning } from './progress'
 import { validatePack } from './schema'
 import type { Pack, Progress } from './types'
@@ -45,11 +52,28 @@ export class AppStore {
     return { lit: litN, total: leaves.length }
   }
 
-  /** 点亮知识点（T10 加入门控与批量）；500ms debounce 自动保存 */
+  /** 点亮知识点：硬门控（所属单元的 hard 前置须全部点亮）；500ms debounce 自动保存 */
   lightLeaf(id: string): void {
     const node = this.index.nodeById.get(id)
     if (node?.kind !== 'leaf') throw new Error('只有知识点可点亮: ' + id)
+    if (!leafAvailable(id, this.index, this.litLeaves())) {
+      throw new Error('前置未满足，无法点亮: ' + id)
+    }
     this.progress = lightLeaf(this.progress, id, this.index, new Date().toISOString())
+    this.scheduleSave()
+    this.notify()
+  }
+
+  /** 批量点亮本单元全部知识点（spec §4.2）：仅当单元解锁；逐个计分 */
+  lightAllLeaves(unitId: string): void {
+    const node = this.index.nodeById.get(unitId)
+    if (node?.kind !== 'unit') throw new Error('批量点亮只作用于单元: ' + unitId)
+    if (!unitAvailable(unitId, this.index, this.litLeaves())) {
+      throw new Error('前置未满足，无法批量点亮: ' + unitId)
+    }
+    for (const leaf of this.index.leavesOf(unitId)) {
+      this.progress = lightLeaf(this.progress, leaf.id, this.index, new Date().toISOString())
+    }
     this.scheduleSave()
     this.notify()
   }

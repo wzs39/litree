@@ -205,3 +205,120 @@ body {
 .node.in-path .node-rect {
   stroke: var(--node-lit-stroke);
 }
+
+/* ---- 点亮编排（spec §9.3 五拍）---- */
+.effect-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.node-rect,
+.node--denied .node-rect,
+.node--unlocking .node-rect {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.node--pressed .node-rect {
+  transform: scale(0.98);
+}
+.node--bloom .node-rect {
+  animation: bloom 360ms var(--ease-out);
+}
+@keyframes bloom {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255, 215, 106, 0));
+  }
+  40% {
+    filter: drop-shadow(0 0 22px rgba(255, 215, 106, 0.8));
+  }
+  100% {
+    filter: drop-shadow(0 0 5px var(--node-lit-glow));
+  }
+}
+.node--denied .node-rect {
+  animation: shake 300ms var(--ease-out);
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+.node--unlocking .node-rect {
+  animation: unlock-pop 400ms var(--ease-out);
+}
+@keyframes unlock-pop {
+  0% {
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.xp-float {
+  position: absolute;
+  color: var(--node-lit-stroke);
+  font-weight: 600;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 6;
+  animation: xp-up 700ms var(--ease-out) forwards;
+  text-shadow: 0 0 8px rgba(255, 215, 106, 0.5);
+}
+@keyframes xp-up {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+}
+
+/* 上下文菜单（批量点亮） */
+.ctx-menu {
+  position: fixed;
+  z-index: 20;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  min-width: 180px;
+}
+.ctx-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font-size: 13px;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ctx-menu button:hover:not(:disabled) {
+  background: var(--bg-soft);
+}
+.ctx-menu button:disabled {
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}

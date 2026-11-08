@@ -76,6 +76,47 @@ function toMap(children: ElkResultChild[]): Map<string, LaidOutNode> {
   return out
 }
 
+/** 知识清单布局：章条为宽标题条、叶子芯片网格（每行 4 枚），章条总在其叶子之上 */
+export function checklistLayout(index: GraphIndex, children: PackNode[]): Map<string, LaidOutNode> {
+  const out = new Map<string, LaidOutNode>()
+  const LEAF_W = NODE_SIZE['leaf']!.w
+  const LEAF_H = NODE_SIZE['leaf']!.h
+  const HEADER_W = 560
+  const HEADER_H = 30
+  const GAP = 12
+  const ROW = 4
+  let y = 0
+  let x = 0
+  let rowStartY = y
+  let rowFill = 0
+  const placeLeaf = (c: PackNode): void => {
+    if (rowFill >= ROW) {
+      y = rowStartY + LEAF_H + GAP
+      rowStartY = y
+      rowFill = 0
+      x = 0
+    }
+    out.set(c.id, { id: c.id, x, y: rowStartY, width: LEAF_W, height: LEAF_H })
+    x += LEAF_W + GAP
+    rowFill++
+  }
+  for (const c of children) {
+    if (c.kind === 'branch') {
+      // 章条：收起当前行，另起
+      y += rowFill > 0 ? LEAF_H + GAP * 2 : 0
+      x = 0
+      rowFill = 0
+      out.set(c.id, { id: c.id, x: 0, y, width: HEADER_W, height: HEADER_H })
+      y += HEADER_H + GAP
+      rowStartY = y
+      for (const leaf of index.childrenOf(c.id)) placeLeaf(leaf) // 章下叶子直接平铺
+    } else {
+      placeLeaf(c)
+    }
+  }
+  return out
+}
+
 interface WorkerReply {
   id: number
   ok: boolean
@@ -88,6 +129,11 @@ export async function layoutSubview(
   index: GraphIndex,
   containerId: string
 ): Promise<Map<string, LaidOutNode>> {
+  // unit 视图 = 知识清单（章条 + 叶子芯片网格），确定性手工布局；叶子无依赖边，elk 分层无意义
+  const containerNode = index.nodeById.get(containerId)
+  if (containerNode?.kind === 'unit') {
+    return Promise.resolve(checklistLayout(index, index.childrenOf(containerId)))
+  }
   const graph = buildGraph(pack, index, containerId)
 
   // Node/测试环境：elkjs 主入口经 worker_threads 自跑（@vite-ignore 阻止浏览器打包解析）

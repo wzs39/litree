@@ -947,3 +947,23 @@ body {
   color: var(--ink-faint);
   font-size: 13px;
 }
+
+/* ---- 章条（清单分组标题）与锁定引导（v2 §3）---- */
+.node--section {
+  cursor: default;
+}
+.node--section .node-rect {
+  fill: var(--bg-soft);
+  stroke: var(--line-soft);
+}
+.node--section .node-title {
+  fill: var(--ink-dim);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.node-hint {
+  fill: var(--ink-faint);
+  font-size: 10px;
+  user-select: none;
+}

@@ -159,3 +159,30 @@ test.describe('v2 首页', () => {
     await expect(page.locator('#detail-panel')).toContainText('单元一')
   })
 })
+
+test.describe('v2 章扁平化与锁定引导', () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+  test('单元内章条 + 叶子直铺；锁定单元卡含还差提示', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#home-root')).toBeVisible({ timeout: 30000 })
+    await page.locator('#hm-subjects').click()
+    await expect(page.locator('g.node--branch')).toHaveCount(11, { timeout: 30000 })
+    await page.locator('g.node[data-id="M"]').dblclick()
+    await page.locator('g.node[data-id="M1"]').dblclick()
+    await expect(page.locator('g.node--unit').first()).toBeVisible({ timeout: 20000 })
+    // 进入 极限与连续（M.1.1）：章条 + 叶子直铺
+    await page.locator('g.node[data-id="M.1.1"]').dblclick()
+    await expect(page.locator('g.node--section').first()).toBeVisible({ timeout: 15000 })
+    expect(await page.locator('g.node--section').count()).toBeGreaterThanOrEqual(2)
+    expect(await page.locator('g.node--leaf').count()).toBeGreaterThanOrEqual(10)
+    // ESC 关面板 → ESC 返回 lane：锁定单元卡带引导
+    await page.keyboard.press('Escape')
+    await page.keyboard.press('Escape')
+    await expect(page.locator('g.node--unit').first()).toBeVisible({ timeout: 15000 })
+    const hint = await page.evaluate(() => {
+      const locked = document.querySelector('g.node--unit.node--locked')
+      return locked?.querySelector('.node-hint')?.textContent ?? null
+    })
+    expect(hint).toContain('还差')
+  })
+})

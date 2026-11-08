@@ -8,6 +8,7 @@ import { layoutSubview, ROOT_VIEW, type LaidOutNode } from './layout/elk'
 import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { createEffectLayer } from './view/effects'
 import { renderDetailPanel, ancestorStack } from './view/detailPanel'
+import { minimalHardClosure } from './core/graph'
 import { renderGraph } from './view/graphCanvas'
 import { renderHome } from './view/homeView'
 import { renderSidebar } from './view/sidebar'
@@ -116,7 +117,14 @@ async function boot(): Promise<void> {
       renderedContainerId = containerId
     }
     renderGraph(svgEl, store.pack, store.index, containerId, currentLayout, (id) => store.stateOf(id), {
-      progressOf: (id) => store.progressOfContainer(id)
+      progressOf: (id) => store.progressOfContainer(id),
+      missingHint: (id) => {
+        if (store.stateOf(id) !== 'locked') return null
+        const closure = minimalHardClosure(id, store.index, store.litLeaves())
+        if (closure.length === 0) return null
+        const first = store.index.nodeById.get(closure[0]!)?.title.zh
+        return `还差 ${closure.length} 步 · 缺 ${first ?? '?'}`
+      }
     })
     applyTransform()
     if (containerChanged) fitView()

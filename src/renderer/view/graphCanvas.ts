@@ -7,6 +7,8 @@ import { icon } from './icons'
 export interface RenderOptions {
   progressOf?: (id: string) => { lit: number; total: number } | null
   onStubClick?: (externalId: string) => void
+  /** locked unit 的引导文案（spec v2 §3：卡上直接显示还差 N 步） */
+  missingHint?: (id: string) => string | null
 }
 
 function esc(s: string): string {
@@ -31,11 +33,14 @@ export function renderGraph(
   stateOf: (id: string) => NodeState,
   opts: RenderOptions = {}
 ): void {
-  const children =
-    containerId === ROOT_VIEW ? pack.nodes.filter((n) => n.parent === null) : index.childrenOf(containerId)
-  const childIds = new Set(children.map((c) => c.id))
+  const childIds = new Set(layout.keys()) // 渲染源 = layout 全集（unit 视图含章下叶子）
   const byId = (id: string) => layout.get(id)
   const nodeOf = (id: string) => index.nodeById.get(id)
+  const children: PackNode[] = []
+  for (const id of layout.keys()) {
+    const n = index.nodeById.get(id)
+    if (n) children.push(n)
+  }
 
   const parts: string[] = []
   parts.push('<defs><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="context-stroke"/></marker></defs>')
@@ -77,7 +82,9 @@ export function renderGraph(
     if (!pos) continue
     const size = NODE_SIZE[n.kind] ?? NODE_SIZE['unit']!
     const state = stateOf(n.id)
-    const cls = `node node--${state} node--${n.kind}`
+    const parentKind = n.parent ? nodeOf(n.parent)?.kind : undefined
+    const isSection = n.kind === 'branch' && parentKind === 'unit' // 章条（清单分组标题，非交互）
+    const cls = `node node--${state} node--${n.kind}${isSection ? ' node--section' : ''}`
     let inner = ''
     // 容器进度环
     const prog = opts.progressOf?.(n.id)
@@ -92,14 +99,20 @@ export function renderGraph(
         `<circle class="ring" cx="${cx}" cy="${cy}" r="${r}" stroke-dasharray="${(c * frac).toFixed(1)} ${c.toFixed(1)}"/>` +
         `<text class="ring-label" x="${cx}" y="${cy + r + 10}">${prog.lit}/${prog.total}</text>`
     }
-    // 锁图标（locked 状态）
-    if (state === 'locked') {
-      inner += `<g class="node-icon" transform="translate(10, ${(size.h - 16) / 2})">${icon('lock', 16)}</g>`
-      inner += `<text class="node-title" x="34" y="${size.h / 2 + 5}">${esc(n.title.zh.slice(0, 9))}</text>`
+    if (isSection) {
+      inner += `<text class="node-title" x="14" y="${size.h / 2 + 5}">${esc(n.title.zh)}</text>`
     } else {
-      inner += `<text class="node-title" x="${n.kind === 'leaf' ? 12 : 14}" y="${size.h / 2 + 5}">${esc(n.title.zh.slice(0, 12))}</text>`
+      // 锁图标（locked 状态）
+      if (state === 'locked') {
+        inner += `<g class="node-icon" transform="translate(10, ${(size.h - 16) / 2})">${icon('lock', 16)}</g>`
+        inner += `<text class="node-title" x="34" y="${size.h / 2 + 5}">${esc(n.title.zh.slice(0, 9))}</text>`
+        const hint = opts.missingHint?.(n.id)
+        if (hint) inner += `<text class="node-hint" x="34" y="${size.h / 2 + 21}">${esc(hint.slice(0, 18))}</text>`
+      } else {
+        inner += `<text class="node-title" x="${n.kind === 'leaf' ? 12 : 14}" y="${size.h / 2 + 5}">${esc(n.title.zh.slice(0, 12))}</text>`
+      }
+      if (n.core) inner += `<circle class="core-dot" cx="${pos.width - 10}" cy="10" r="2.5"/>`
     }
-    if (n.core) inner += `<circle class="core-dot" cx="${pos.width - 10}" cy="10" r="2.5"/>`
     parts.push(
       `<g class="${cls}" data-id="${esc(n.id)}" transform="translate(${pos.x}, ${pos.y})">` +
         `<rect class="node-rect" width="${pos.width}" height="${pos.height}" rx="10"/>${inner}</g>`

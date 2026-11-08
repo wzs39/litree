@@ -1,8 +1,8 @@
 /** 渲染进程引导：T8 为钻取浏览最小装配，T9 换入 AppStore 全量接线 */
 import './styles/tokens.css'
 import './styles/graph.css'
+import { createWebApi } from './api/webApi'
 import { aggregateState, buildGraphIndex } from './core/graph'
-import { validatePack } from './core/schema'
 import { layoutSubview } from './layout/elk'
 import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { renderGraph } from './view/graphCanvas'
@@ -11,8 +11,9 @@ const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
 const crumbEl = document.getElementById('breadcrumb')!
 
 async function boot(): Promise<void> {
-  const packId = await window.litree.defaultPackId()
-  const loaded = await window.litree.loadPack(packId)
+  const api = createWebApi()
+  const packId = await api.defaultPackId()
+  const loaded = await api.loadPack(packId)
   const appEl = document.getElementById('app')!
   if ('error' in loaded) {
     appEl.textContent = '数据包加载失败: ' + loaded.error

@@ -30,37 +30,35 @@
 
 | 决策 | 选择 | 依据 |
 |---|---|---|
-| 桌面壳 | **Electron** | 动效/编辑器属 web 强项；本机已有 Electron 缓存、npm 连通；Tauri 需装 Rust+MSVC（本机未装）；Qt 动效成本过高 |
+| 产品形态 | **纯静态 Web 应用**（2026-11-08 用户指示，由 Electron 迁移） | 动效/编辑器属 web 强项；零安装、可离线（打包后单目录静态托管）；pack fetch + localStorage 即满足全部需求 |
 | 渲染栈 | 纯 TypeScript + SVG + Canvas（无 UI 框架） | 图渲染是核心复杂度；DOM 框架无增益 |
-| 布局引擎 | **elkjs** | 分层 DAG 布局成熟，cs-math-skill-tree 同款 |
-| 构建 | Vite | 快、Electron 集成简单 |
-| 测试 | vitest（单测）+ Playwright Electron API（e2e 冒烟） | |
-| 运行环境 | Node ≥ 20（本机 v24.18） | |
+| 布局引擎 | **elkjs**（Worker 内运行） | 分层 DAG 布局成熟，cs-math-skill-tree 同款 |
+| 构建 | Vite | 静态构建 + dev server |
+| 测试 | vitest（单测）+ Playwright（Web e2e 冒烟） | |
+| 运行环境 | Node ≥ 20（本机 v24.18，仅开发/构建用） | |
 
-**非目标（本期不做）**：云同步/账号、移动端、从文献 API（OpenAlex 等）自动生成引用边（列为未来扩展）、多人协作。
+**非目标（本期不做）**：账号/云同步（localStorage 导出导入替代）、移动端适配、从文献 API（OpenAlex 等）自动生成引用边（列为未来扩展）、多人协作。
 
 ## 3. 总体架构
 
 ```
-┌────────────────────────────────────────────────────────┐
-│ Electron（LitTree）                                     │
-│  ┌─ Renderer（TS + SVG + Canvas）────────┐   ┌─ Main ─┐ │
-│  │ GraphCanvas   图谱渲染/动效/编辑画布   │   │ 文件读写 │ │
-│  │ Sidebar       领域筛选/搜索/统计面板  │◄─►│ 打包管理 │ │
-│  │ DetailPanel   节点详情/属性编辑表单   │IPC│ 系统对话框│ │
-│  │ Inspector     前置检查/点亮路径规划   │   │ 窗口管理 │ │
-│  └──────────────────────────────────────┘   └────────┘ │
-└────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│ 静态 Web 应用（Vite 构建，可离线托管）                  │
+│                                                      │
+│  ┌─ Renderer（TS + SVG + Canvas）────────┐            │
+│  │ GraphCanvas   图谱渲染/动效/编辑画布   │            │
+│  │ Sidebar       领域筛选/搜索/统计面板  │            │
+│  │ DetailPanel   节点详情/属性编辑表单   │            │
+│  │ Inspector     前置检查/点亮路径规划   │            │
+│  └──────────────────────────────────────┘            │
+│        │ fetch（数据包）  localStorage（进度）        │
+└──────────────────────────────────────────────────────┘
 ```
 
-- **安全边界**：`nodeIntegration: false`、`contextIsolation: true`；preload 经 `contextBridge` 仅暴露白名单 IPC：`pack:list/load/save/import/export`、`progress:load/save`、`dialog:openFile/saveFile`、`app:resetPack`
+- **宿主能力边界**：数据包经 `fetch('/packs/index.json' + '/packs/<file>.json')` 加载；进度经 `localStorage`（键 `litree:progress:<packId>`）；无其他宿主 API
 - **文件布局**：
-  - 内置数据包（只读，随应用分发）：`resources/packs/*.json`
-  - 用户区（Electron `userData`，Windows 为 `%APPDATA%/LitTree/`）：
-    - `packs/<packId>.json`（编辑产生的用户副本）
-    - `progress/<packId>.json`（进度）
-    - `settings.json`
-- 加载顺序：用户区存在 pack 副本则用副本，否则读内置包；"重置"删除副本回到内置包
+  - 数据包（静态资源，随构建发布）：`resources/packs/*.json` + `index.json` 清单（构建时复制到站点 `/packs/`）
+  - 进度：浏览器 `localStorage`，按 packId 隔离；提供导出/导入 JSON 备份
 
 ## 4. 数据模型
 
@@ -163,9 +161,9 @@
 
 ## 7. 持久化
 
-- 进度与 pack 副本均写入 `userData`；写临时文件后原子替换，防崩溃损坏
+- 进度存 `localStorage`（键 `litree:progress:<packId>`），500ms debounce 自动保存；浏览器存储随站点隔离
 - 进度导出/导入为独立 JSON 备份（含 schema 与 packId，导入时校验 packId 匹配）
-- 数据包导出：用户副本导出为 pack JSON，可分享导入
+- 数据包导出：编辑产生的用户副本导出为 pack JSON，可分享导入（M3 编辑器）
 
 ## 8. 内容管线（cs-math 迁移）
 
@@ -176,6 +174,7 @@
    - 领域 → 学科（L1）映射表内嵌于脚本，转换时人工核对后固化
 3. 产物写入 `resources/packs/cs-math.json`
 4. 对账断言：单元 192、hard 260、soft 400、知识点 8,411（±章节分组合并产生的差异需在脚本中显式报告）
+5. 产物与 `index.json` 清单一同发布到站点 `/packs/` 路径
 
 ## 9. 视觉语言与动效编排
 
@@ -212,7 +211,7 @@
 ## 10. 测试策略
 
 - **单测（vitest）**：图核心纯函数——门控判定（unit 的叶子可点亮 ⇔ 该 unit 全部 hard 前置 unit 已 lit）、环检测、最小前置闭包、容器聚合状态、schema 校验、XP 计算、进度迁移
-- **e2e 冒烟（Playwright Electron）**：启动 → pack 加载（对账数量）→ 点亮一个无前置知识点 → 重启进程验证状态保持
+- **e2e 冒烟（Playwright，Web）**：启动 dev/preview 站点 → pack 加载（对账数量）→ 点亮一个无前置知识点 → 重载页面验证 localStorage 状态保持
 - 动效观感与编辑流程：人工验收清单
 
 ## 11. 实施里程碑
@@ -236,7 +235,8 @@
 
 | 风险 | 缓解 |
 |---|---|
-| Electron 下载失败 | 本机已有缓存；npm registry 已验证连通（PONG 369ms） |
-| cs-math 数据格式与 README 描述不符 | 转换脚本先做结构探测，字段映射失败即报错而非猜测 |
-| 知识点数量对账有出入（PDF 抽字差异等） | 脚本显式输出差异报告，人工确认后固化 |
+| cs-math 数据格式与 README 描述不符 | 转换脚本先做结构探测，字段映射失败即报错而非猜测（已执行，见转换报告） |
+| 知识点数量对账有出入（PDF 抽字差异等） | 脚本显式输出差异报告，人工确认后固化（leaves=8,124，见实施账本） |
 | elkjs 对 >200 节点布局慢 | 嵌套钻取天然限制单视图规模；Worker 隔离 |
+| localStorage 容量/清除 | 进度体积远小于 5MB 配额；提供导出备份；站点数据被清除时提示导入恢复 |
+| 静态托管的 CORS/路径 | 同源 fetch（/packs/ 相对路径），本地 file:// 以 `npx serve dist` 或任意静态服务器托管 |

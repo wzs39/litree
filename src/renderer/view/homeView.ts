@@ -1,5 +1,6 @@
 /** 路线首页（v2 spec §1）：总进度 + 继续学习 + 推荐路线卡片 + 全部学科入口 */
 import { continueTarget, type HomeTarget } from '../core/home'
+import { overallProgress } from '../core/stats'
 import type { AppStore } from '../core/store'
 import { esc } from './escape'
 
@@ -27,7 +28,7 @@ const STATE_COLOR: Record<string, string> = {
 }
 
 export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandlers): void {
-  const overall = store.progressOfContainer(ROOT)
+  const overall = overallProgress(store.index, store.litLeaves())
   const frac = overall.total > 0 ? overall.lit / overall.total : 0
   const target = continueTarget(store.pack, store.index, store.progress)
   const routes = store.pack.routes ?? []
@@ -102,4 +103,4 @@ export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandl
   })
 }
 
-const ROOT = 'root'
+

@@ -24,10 +24,11 @@ export const ROOT_VIEW = 'root'
 const LAYOUT_OPTIONS: Record<string, string> = {
   'elk.algorithm': 'layered',
   'elk.direction': 'DOWN',
-  'elk.spacing.nodeNode': '36',
-  'elk.layered.spacing.nodeNodeBetweenLayers': '72',
+  'elk.spacing.nodeNode': '28',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '56',
   'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
-  'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF'
+  'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
+  'elk.layered.edgeRouting': 'NETWORK_SIMPLEX'
 }
 
 interface ElkGraph {

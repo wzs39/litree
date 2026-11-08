@@ -124,6 +124,10 @@ async function boot(): Promise<void> {
         if (closure.length === 0) return null
         const first = store.index.nodeById.get(closure[0]!)?.title.zh
         return `还差 ${closure.length} 步 · 缺 ${first ?? '?'}`
+      },
+      domainColor: (id) => {
+        const d = store.index.nodeById.get(id)?.domain
+        return d ? store.pack.domains.find((x) => x.id === d)?.color ?? null : null
       }
     })
     applyTransform()
@@ -217,8 +221,8 @@ async function boot(): Promise<void> {
     }
   })
   svgEl.addEventListener('stub-click', (e) => {
-    const extId = (e as CustomEvent<string>).detail
-    if (store.index.nodeById.get(extId)) openPanel(extId)
+    const anchorId = (e as CustomEvent<string>).detail
+    if (store.index.nodeById.get(anchorId)) openPanel(anchorId)
   })
   window.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return

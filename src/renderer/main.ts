@@ -1,9 +1,9 @@
-/** 渲染进程引导：T8 为钻取浏览最小装配，T9 换入 AppStore 全量接线 */
+/** 渲染进程引导（spec §5.4）：AppStore 驱动钻取浏览 */
 import './styles/tokens.css'
 import './styles/graph.css'
 import { createWebApi } from './api/webApi'
-import { aggregateState, buildGraphIndex } from './core/graph'
-import { layoutSubview } from './layout/elk'
+import { AppStore } from './core/store'
+import { layoutSubview, ROOT_VIEW } from './layout/elk'
 import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { renderGraph } from './view/graphCanvas'
 
@@ -11,28 +11,15 @@ const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
 const crumbEl = document.getElementById('breadcrumb')!
 
 async function boot(): Promise<void> {
-  const api = createWebApi()
-  const packId = await api.defaultPackId()
-  const loaded = await api.loadPack(packId)
-  const appEl = document.getElementById('app')!
-  if ('error' in loaded) {
-    appEl.textContent = '数据包加载失败: ' + loaded.error
-    return
-  }
-  const pack = loaded
-  const index = buildGraphIndex(pack)
+  const store = new AppStore(createWebApi())
+  await store.init()
 
-  const lit = new Set<string>()
-  const learning: Record<string, string> = {}
-  let viewStack: string[] = ['root']
   let viewToken = 0
 
-  const stateOf = (id: string) => aggregateState(id, index, lit, learning)
-
   function trail(): Crumb[] {
-    const out: Crumb[] = [{ id: 'root', label: pack.title.zh }]
-    for (const id of viewStack.slice(1)) {
-      const n = index.nodeById.get(id)
+    const out: Crumb[] = [{ id: ROOT_VIEW, label: store.pack.title.zh }]
+    for (const id of store.viewStack.slice(1)) {
+      const n = store.index.nodeById.get(id)
       if (n) out.push({ id, label: n.title.zh })
     }
     return out
@@ -40,49 +27,40 @@ async function boot(): Promise<void> {
 
   async function renderView(): Promise<void> {
     const token = ++viewToken
-    const containerId = viewStack[viewStack.length - 1]!
-    const layout = await layoutSubview(pack, index, containerId)
+    const containerId = store.viewStack[store.viewStack.length - 1]!
+    const layout = await layoutSubview(store.pack, store.index, containerId)
     if (token !== viewToken) return // 已切视图，丢弃过期结果
-    renderGraph(svgEl, pack, index, containerId, layout, stateOf, {
-      onStubClick: (extId) => {
-        const n = index.nodeById.get(extId)
-        if (n) jumpTo(n.parent ?? 'root')
-      }
+    renderGraph(svgEl, store.pack, store.index, containerId, layout, (id) => store.stateOf(id), {
+      progressOf: (id) => store.progressOfContainer(id)
     })
     fitView()
     renderBreadcrumb(crumbEl, trail(), (i) => {
-      viewStack = viewStack.slice(0, i + 1)
-      void renderView()
+      store.jumpTo(i)
     })
   }
 
-  function jumpTo(containerId: string): void {
-    if (viewStack.includes(containerId)) {
-      viewStack = viewStack.slice(0, viewStack.indexOf(containerId) + 1)
-    } else {
-      viewStack.push(containerId)
-    }
+  store.subscribe(() => {
     void renderView()
-  }
+  })
 
-  // 双击进入容器；stub 徽章跳转
+  // 双击进入容器；stub 徽章跳转（spec §5.4）
   svgEl.addEventListener('dblclick', (e) => {
     const g = (e.target as Element).closest('g.node')
     if (!(g instanceof SVGGElement)) return
     const id = g.getAttribute('data-id')
-    const node = id ? index.nodeById.get(id) : undefined
-    if (node && (node.kind === 'branch' || node.kind === 'unit')) jumpTo(node.id)
+    const node = id ? store.index.nodeById.get(id) : undefined
+    if (node && (node.kind === 'branch' || node.kind === 'unit')) store.enter(node.id)
   })
   svgEl.addEventListener('stub-click', (e) => {
     const extId = (e as CustomEvent<string>).detail
-    const n = index.nodeById.get(extId)
-    if (n) jumpTo(n.parent ?? 'root')
+    const n = store.index.nodeById.get(extId)
+    if (n?.parent) {
+      if (store.viewStack.includes(n.parent)) store.jumpTo(store.viewStack.indexOf(n.parent))
+      else store.enter(n.parent)
+    }
   })
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && viewStack.length > 1) {
-      viewStack.pop()
-      void renderView()
-    }
+    if (e.key === 'Escape') store.back()
   })
 
   // 平移/缩放（滚轮 + 拖拽，只动 transform）

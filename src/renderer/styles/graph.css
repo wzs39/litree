@@ -1,0 +1,207 @@
+/* 图谱画布样式（spec §5/§9） */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg-panel);
+  font-size: 13px;
+  flex: none;
+}
+.crumb {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.crumb:hover {
+  color: var(--ink);
+  background: var(--bg-soft);
+}
+.crumb--current {
+  color: var(--ink);
+  font-weight: 600;
+  cursor: default;
+}
+.crumb-sep {
+  color: var(--ink-faint);
+  display: inline-flex;
+}
+
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+#graph {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+#graph.panning {
+  cursor: grabbing;
+}
+
+/* ---- 边 ---- */
+.edge {
+  fill: none;
+  stroke: #4a5f85;
+  stroke-width: 2;
+  transition: stroke var(--base) var(--ease-out), opacity var(--base) var(--ease-out);
+}
+.edge--soft {
+  stroke-dasharray: 6 5;
+  opacity: 0.65;
+}
+.edge--hard {
+  opacity: 0.8;
+}
+
+/* ---- 节点 ---- */
+.node {
+  cursor: pointer;
+}
+.node-rect {
+  transition: fill var(--base) var(--ease-out), stroke var(--base) var(--ease-out),
+    filter var(--base) var(--ease-out);
+}
+.node-title {
+  fill: var(--ink);
+  font-size: 13px;
+  user-select: none;
+}
+.node--branch .node-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+.node--leaf .node-title {
+  font-size: 12px;
+  fill: var(--ink-dim);
+}
+.node-icon {
+  color: var(--ink-faint);
+}
+
+.node--locked .node-rect {
+  fill: var(--node-locked-fill);
+  stroke: var(--node-locked-stroke);
+}
+.node--locked .node-title {
+  fill: var(--ink-faint);
+}
+
+.node--available .node-rect {
+  fill: var(--node-avail-fill);
+  stroke: var(--node-avail-stroke);
+  filter: drop-shadow(0 0 6px rgba(127, 208, 255, 0.25));
+}
+
+.node--learning .node-rect {
+  fill: var(--node-avail-fill);
+  stroke: var(--node-learning-stroke);
+  animation: pulse-learning 2s var(--ease-out) infinite;
+}
+@keyframes pulse-learning {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px rgba(240, 180, 41, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 9px rgba(240, 180, 41, 0.5));
+  }
+}
+
+.node--lit .node-rect {
+  fill: var(--node-lit-fill);
+  stroke: var(--node-lit-stroke);
+  animation: breathe 3s ease-in-out infinite;
+}
+.node--lit .node-title {
+  fill: var(--ink);
+}
+@keyframes breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px var(--node-lit-glow));
+  }
+  50% {
+    filter: drop-shadow(0 0 13px var(--node-lit-glow));
+  }
+}
+
+/* 进度环 */
+.ring-bg {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 3;
+}
+.ring {
+  fill: none;
+  stroke: var(--node-lit-stroke);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.ring-label {
+  fill: var(--ink-faint);
+  font-size: 9px;
+  text-anchor: middle;
+}
+.core-dot {
+  fill: var(--node-lit-stroke);
+  opacity: 0.85;
+}
+
+/* stub 徽章 */
+.stub {
+  cursor: pointer;
+}
+.stub rect {
+  fill: var(--bg-panel);
+  stroke: var(--line);
+}
+.stub text {
+  fill: var(--ink-dim);
+  font-size: 10px;
+  text-anchor: middle;
+  user-select: none;
+}
+.stub:hover rect {
+  stroke: var(--node-avail-stroke);
+}
+
+/* 依赖链 hover 高亮（app 层加 .in-path/.missing-prereq） */
+.edge.in-path {
+  stroke: var(--node-lit-stroke);
+  opacity: 1;
+}
+.edge.missing-prereq {
+  stroke: #e5646c;
+  opacity: 1;
+}
+.node.in-path .node-rect {
+  stroke: var(--node-lit-stroke);
+}

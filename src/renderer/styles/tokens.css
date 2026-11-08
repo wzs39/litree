@@ -1,0 +1,30 @@
+/* 设计令牌（spec §9.2/§9.3） */
+:root {
+  --bg: #0b1220;
+  --bg-soft: #101a2e;
+  --bg-panel: #0e1728;
+  --ink: #e8eef7;
+  --ink-dim: #8fa1b8;
+  --ink-faint: #5a6a82;
+  --line: #26334a;
+  --line-soft: #1a2538;
+
+  /* 节点状态色 */
+  --node-locked-fill: #131c2f;
+  --node-locked-stroke: #2a3854;
+  --node-avail-stroke: #7fd0ff;
+  --node-avail-fill: #16233c;
+  --node-learning-stroke: #f0b429;
+  --node-lit-stroke: #ffd76a;
+  --node-lit-fill: #1d2b4a;
+  --node-lit-glow: rgba(255, 215, 106, 0.35);
+
+  /* 领域色由数据包注入 --domain-<id> */
+
+  /* 动效令牌（spec §9.3） */
+  --fast: 120ms;
+  --base: 200ms;
+  --slow: 400ms;
+  --cascade: 80ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -430,3 +430,62 @@ body {
   flex: 1;
   min-height: 0;
 }
+
+/* ---- 点亮路径 Inspector（spec §5.5）---- */
+#inspector {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 10;
+  width: 260px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+#inspector .insp-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+#inspector .insp-close {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  cursor: pointer;
+  padding: 2px;
+}
+#inspector .insp-steps {
+  color: var(--node-lit-stroke);
+  margin-bottom: 8px;
+}
+#inspector .insp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+#inspector .insp-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: var(--bg-soft);
+  cursor: pointer;
+  color: var(--ink-dim);
+}
+#inspector .insp-item:hover {
+  color: var(--ink);
+}
+#inspector .insp-item .tag {
+  font-size: 10px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}

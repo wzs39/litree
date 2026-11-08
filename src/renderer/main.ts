@@ -9,11 +9,18 @@ import { createEffectLayer } from './view/effects'
 import { icon } from './view/icons'
 import { renderGraph } from './view/graphCanvas'
 import { renderSidebar } from './view/sidebar'
+import { minimalHardClosure } from './core/graph'
 
 const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
 const crumbEl = document.getElementById('breadcrumb')!
 const stageEl = document.getElementById('stage')!
 const sidebarEl = document.getElementById('sidebar')!
+const inspectorEl = document.createElement('div')
+inspectorEl.id = 'inspector'
+inspectorEl.style.display = 'none'
+stageEl.appendChild(inspectorEl)
+
+let selectedId: string | null = null
 
 async function boot(): Promise<void> {
   const store = new AppStore(createWebApi())
@@ -56,7 +63,100 @@ async function boot(): Promise<void> {
 
   function scheduleRender(): void {
     renderSidebar(sidebarEl, store)
-    lastRender = renderView().catch((err) => console.error('renderView 失败', err))
+    lastRender = renderView()
+      .then(() => applyPathHighlight())
+      .catch((err) => console.error('renderView 失败', err))
+  }
+
+  /** 点亮路径规划（spec §5.5）：最小必须前置闭包 + 还差 N 步 */
+  function showInspector(id: string): void {
+    selectedId = id
+    renderInspector()
+    void applyPathHighlight()
+  }
+
+  function clearSelection(): void {
+    selectedId = null
+    inspectorEl.style.display = 'none'
+    void applyPathHighlight()
+  }
+
+  function renderInspector(): void {
+    const node = selectedId ? store.index.nodeById.get(selectedId) : undefined
+    if (!node) {
+      inspectorEl.style.display = 'none'
+      return
+    }
+    const unitId = node.kind === 'leaf' ? (node.parent ?? node.id) : node.id
+    const unit = store.index.nodeById.get(unitId)
+    if (!unit || unit.kind !== 'unit') {
+      // 分支节点：显示整体进度
+      const prog = store.progressOfContainer(node.id)
+      inspectorEl.innerHTML = `
+        <div class="insp-title"><span>${node.title.zh}</span>
+          <button class="insp-close" aria-label="关闭">${icon('check', 12)}</button></div>
+        <div class="insp-steps">${prog.lit}/${prog.total} 个知识点已点亮</div>`
+      inspectorEl.style.display = 'block'
+      inspectorEl.querySelector('.insp-close')?.addEventListener('click', clearSelection)
+      return
+    }
+    const closure = minimalHardClosure(unit.id, store.index, store.litLeaves())
+    const rows = closure
+      .map((cid) => {
+        const c = store.index.nodeById.get(cid)!
+        const lit = store.stateOf(cid) === 'lit'
+        const inView = store.viewStack.includes(cid)
+        return `<div class="insp-item" data-id="${cid}">
+          <span>${c.title.zh}</span><span class="tag">${lit ? '已点亮' : inView ? '在当前视图' : '跨视图 → 点击跳转'}</span></div>`
+      })
+      .join('')
+    inspectorEl.innerHTML = `
+      <div class="insp-title"><span>${unit.title.zh}</span>
+        <button class="insp-close" aria-label="关闭">${icon('check', 12)}</button></div>
+      <div class="insp-steps">${closure.length === 0 ? '✓ 前置已全部满足，可点亮' : `还差 ${closure.length} 步`}</div>
+      <div class="insp-list">${rows || '<div class="side-empty">无必须前置</div>'}</div>`
+    inspectorEl.style.display = 'block'
+    inspectorEl.querySelector('.insp-close')?.addEventListener('click', clearSelection)
+    inspectorEl.querySelectorAll('.insp-item').forEach((el) => {
+      el.addEventListener('click', () => {
+        const cid = (el as HTMLElement).dataset['id']
+        if (!cid) return
+        const target = store.index.nodeById.get(cid)
+        if (target && !store.viewStack.includes(cid) && target.parent) {
+          if (store.viewStack.includes(target.parent)) store.jumpTo(store.viewStack.indexOf(target.parent))
+          else store.enter(target.parent)
+        }
+        showInspector(cid)
+      })
+    })
+  }
+
+  /** 画布高亮闭包（in-path 节点 / missing-prereq 边） */
+  function applyPathHighlight(): void {
+    svgEl.querySelectorAll('.in-path, .missing-prereq').forEach((el) => {
+      el.classList.remove('in-path', 'missing-prereq')
+    })
+    if (!selectedId) return
+    const node = store.index.nodeById.get(selectedId)
+    if (!node) return
+    const unitId = node.kind === 'leaf' ? (node.parent ?? node.id) : node.id
+    const unit = store.index.nodeById.get(unitId)
+    if (!unit || unit.kind !== 'unit') return
+    const closure = minimalHardClosure(unit.id, store.index, store.litLeaves())
+    const closureSet = new Set(closure)
+    for (const cid of closure) {
+      svgEl
+        .querySelector(`g.node[data-id="${CSS.escape(cid)}"]`)
+        ?.classList.add('in-path')
+    }
+    for (const e of store.pack.edges) {
+      if (e.type !== 'hard') continue
+      if (closureSet.has(e.from) && (closureSet.has(e.to) || e.to === unit.id)) {
+        svgEl
+          .querySelector(`path.edge[data-from="${CSS.escape(e.from)}"][data-to="${CSS.escape(e.to)}"]`)
+          ?.classList.add('missing-prereq')
+      }
+    }
   }
   store.subscribe(scheduleRender)
 
@@ -123,19 +223,24 @@ async function boot(): Promise<void> {
     }
   }
 
-  // 单击：available 叶子点亮；locked 抖动反馈（spec §5.2/§9.3）
+  // 单击：available 叶子点亮；locked 叶子抖动+展示前置；单元/分支显示路径规划
   svgEl.addEventListener('click', (e) => {
     const g = (e.target as Element).closest('g.node')
     if (!(g instanceof SVGGElement)) return
     const id = g.getAttribute('data-id')
     const node = id ? store.index.nodeById.get(id) : undefined
-    if (!node || node.kind !== 'leaf') return
+    if (!node) return
     const state = store.stateOf(node.id)
-    if (state === 'available') {
-      void lightWithCeremony(node.id)
-    } else if (state === 'locked') {
-      g.classList.add('node--denied')
-      window.setTimeout(() => g.classList.remove('node--denied'), 320)
+    if (node.kind === 'leaf') {
+      if (state === 'available') {
+        void lightWithCeremony(node.id)
+      } else if (state === 'locked') {
+        g.classList.add('node--denied')
+        window.setTimeout(() => g.classList.remove('node--denied'), 320)
+        if (node.parent) showInspector(node.parent)
+      }
+    } else {
+      showInspector(node.id)
     }
   })
 
@@ -156,7 +261,9 @@ async function boot(): Promise<void> {
     }
   })
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') store.back()
+    if (e.key !== 'Escape') return
+    if (selectedId !== null) clearSelection()
+    else store.back()
   })
 
   // 单元右键菜单：批量点亮（spec §4.2）

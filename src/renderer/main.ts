@@ -22,6 +22,9 @@ panelEl.id = 'detail-panel'
 stageEl.appendChild(panelEl)
 const homeEl = document.getElementById('home-root')!
 
+/** 面板选中节点 → URL 同步（由 attachRouter 的句柄赋值；先声明后赋值，调用点均在赋值后触发） */
+let routerSyncNode: ((node: string | null) => void) | null = null
+
 async function boot(): Promise<void> {
   const store = new AppStore(createWebApi())
   await store.init()
@@ -51,19 +54,28 @@ async function boot(): Promise<void> {
   }
 
   function renderPanel(): void {
+    // 面板是滚动容器：内容重建后保持滚动位置（审查 P1）
+    const prevTop = panelEl.scrollTop
     renderDetailPanel(panelEl, store, selectedId, {
-      onLight: (id) => void lightWithCeremony(id),
+      onLight: (id) => void lightWithCeremony(id).catch((err) => console.error('点亮失败', err)),
       onEnter: (id) => jumpToNode(id),
       onJump: (id) => {
         jumpToNode(id)
         selectedId = id
         renderPanel()
+      },
+      onClose: () => {
+        selectedId = null
+        routerSyncNode?.(null)
+        renderPanel()
       }
     })
+    panelEl.scrollTop = prevTop
   }
 
   function openPanel(id: string): void {
     selectedId = id
+    routerSyncNode?.(id)
     renderPanel()
   }
 
@@ -97,7 +109,13 @@ async function boot(): Promise<void> {
           jumpToNode(id)
           openPanel(id)
         },
-        onOpenSubjects: () => store.setStack(['root'])
+        onOpenSubjects: () => store.setStack(['root']),
+        onOpenDomain: (id) => {
+          // 领域 token 即 lane id（branch 节点）：进入其第一个子视图
+          const lane = store.index.nodeById.get(id)
+          if (lane) jumpToNode(id)
+          else store.setStack(['root'])
+        }
       })
       renderBreadcrumb(crumbEl, [], () => undefined)
       return
@@ -150,7 +168,17 @@ async function boot(): Promise<void> {
       .catch((err) => console.error('renderView 失败', err))
   }
   store.subscribe(scheduleRender)
-  attachRouter(store)
+  const router = attachRouter(store, {
+    onNodeRestore: (node) => {
+      // 刷新/分享链接恢复选中节点（v2 spec §1 ?node=）
+      if (store.index.nodeById.get(node) !== undefined) {
+        selectedId = node
+        renderPanel()
+      }
+    }
+  })
+  routerSyncNode = router.syncNode
+  void router.detach
 
   /** 点亮仪式（v2：由 DetailPanel 确认触发） */
   async function lightWithCeremony(id: string): Promise<void> {
@@ -228,6 +256,7 @@ async function boot(): Promise<void> {
     if (e.key !== 'Escape') return
     if (selectedId !== null) {
       selectedId = null
+      routerSyncNode?.(null)
       renderPanel()
     } else {
       store.back()
@@ -287,7 +316,8 @@ async function boot(): Promise<void> {
     const vp = svgEl.querySelector('.viewport')
     const bbox = vp instanceof SVGGElement ? vp.getBBox() : null
     if (bbox && bbox.width > 0) {
-      scale = Math.min(1.2, Math.min(sw / (bbox.width + 80), sh / (bbox.height + 80)))
+      // 下限 0.7（审查 P0：57 个大单元 fitView 缩到 4.5px 不可读），超出交给平移缩放
+      scale = Math.min(1.2, Math.max(0.7, Math.min(sw / (bbox.width + 80), sh / (bbox.height + 80))))
       tx = (sw - bbox.width * scale) / 2 - bbox.x * scale
       ty = (sh - bbox.height * scale) / 2 - bbox.y * scale
     } else {
@@ -339,11 +369,16 @@ async function boot(): Promise<void> {
 }
 
 boot().catch((err: unknown) => {
+  const msg = String((err as Error)?.message ?? err)
+  const isFile = window.location.protocol === 'file:'
   stageEl.innerHTML = `
     <div id="boot-error">
       <div class="boot-title">加载失败</div>
-      <div class="boot-msg">${String((err as Error)?.message ?? err)}</div>
-      <button id="boot-retry" type="button">重试</button>
+      <div class="boot-msg"></div>
+      ${isFile ? '<div class="boot-msg">检测到 file:// 协议：请用静态服务器打开，例如 npx serve dist</div>' : '<button id="boot-retry" type="button">重试</button>'}
     </div>`
+  // textContent 防注入（错误消息可能携带第三方包内容）
+  const msgEl = stageEl.querySelector('.boot-msg')
+  if (msgEl !== null) msgEl.textContent = msg
   document.getElementById('boot-retry')?.addEventListener('click', () => location.reload())
 })

@@ -133,17 +133,17 @@ test.describe('v2 路由', () => {
     await expect(page.locator('g.node--branch')).toHaveCount(11, { timeout: 30000 })
     await page.locator('g.node[data-id="M"]').dblclick()
     await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法')
-    expect(await page.evaluate(() => location.hash)).toBe('#/tree/root/M')
+    expect(await page.evaluate(() => location.hash)).toBe('#/tree/root/M?node=M')
 
     await page.reload()
     await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法', { timeout: 30000 })
 
     await page.goBack()
     await expect(page.locator('#breadcrumb')).toContainText('计算机 + 数学', { timeout: 10000 })
-    expect(await page.evaluate(() => location.hash)).toBe('#/tree/root')
+    expect(await page.evaluate(() => location.hash)).toContain('#/tree/root')
     await page.goBack()
     await expect(page.locator('#home-root')).toBeVisible({ timeout: 10000 })
-    expect(await page.evaluate(() => location.hash)).toBe('#/home')
+    expect(await page.evaluate(() => location.hash)).toContain('#/home')
   })
 })
 

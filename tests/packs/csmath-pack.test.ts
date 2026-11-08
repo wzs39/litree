@@ -23,7 +23,7 @@ describe('resources/packs/cs-math.json 回归', () => {
     expect(units.length).toBe(192)
     expect(hard.length).toBe(260)
     expect(soft.length).toBe(400)
-    expect(leaves.length).toBe(8124)
+    expect(leaves.length).toBe(8112) // 8124 - 12 乱码/单字叶（Batch1 质量门禁剔除）
   })
 
   it('结构：11 个学科根（CS 的 lane 与学科同 id 合并）、数学 3 lane 挂 M 下、全部叶子有父', () => {

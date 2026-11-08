@@ -38,12 +38,30 @@ export class AppStore {
     this.notify()
   }
 
+  /** litLeaves 记忆化：progress 换代时失效（审查实测 20ms/点击的根因之一） */
   litLeaves(): Set<string> {
-    return new Set(Object.keys(this.progress.lit))
+    if (this.litCache === null || this.litCacheProgress !== this.progress) {
+      this.litCache = new Set(Object.keys(this.progress.lit))
+      this.litCacheProgress = this.progress
+    }
+    return this.litCache
   }
 
+  private litCache: Set<string> | null = null
+  private litCacheProgress: Progress | null = null
+  private stateCache: Map<string, NodeState> | null = null
+  private stateCacheProgress: Progress | null = null
+
   stateOf(id: string): NodeState {
-    return aggregateState(id, this.index, this.litLeaves(), this.progress.learning)
+    if (this.stateCache === null || this.stateCacheProgress !== this.progress) {
+      this.stateCache = new Map()
+      this.stateCacheProgress = this.progress
+    }
+    const cached = this.stateCache.get(id)
+    if (cached !== undefined) return cached
+    const st = aggregateState(id, this.index, this.litLeaves(), this.progress.learning)
+    this.stateCache.set(id, st)
+    return st
   }
 
   progressOfContainer(id: string): { lit: number; total: number } {
@@ -85,6 +103,7 @@ export class AppStore {
   }
 
   enter(id: string): void {
+    if (this.viewStack.includes(id)) return // 查重：重复 id 会生成非法 hash
     this.viewStack.push(id)
     this.notify()
   }
@@ -116,7 +135,22 @@ export class AppStore {
   }
 
   private notify(): void {
-    for (const fn of this.listeners) fn()
+    for (const fn of this.listeners) {
+      try {
+        fn()
+      } catch (err) {
+        console.error('store 订阅者异常', err)
+      }
+    }
+  }
+
+  /** 立即落盘（供面板 note 等即时保存场景） */
+  saveNow(): void {
+    if (this.saveTimer !== null) {
+      clearTimeout(this.saveTimer)
+      this.saveTimer = null
+    }
+    void this.api.saveProgress(this.pack.id, this.progress)
   }
 
   private scheduleSave(): void {

@@ -1,8 +1,7 @@
 /** elkjs 封装：renderer 环境 Worker 化（elk 协议），Node/测试环境直调主入口（spec §5.1） */
-// @ts-expect-error elkjs api 无类型声明
 import ELKApi from 'elkjs/lib/elk-api.js'
 import type { GraphIndex } from '../core/graph'
-import type { Pack } from '../core/types'
+import type { Pack, PackNode } from '../core/types'
 
 export interface LaidOutNode {
   id: string

@@ -85,12 +85,14 @@ export function buildGraphIndex(pack: Pack): GraphIndex {
   }
 }
 
-/** 容器或叶子是否点亮：叶子按集合；unit/branch 按叶子后代全亮 */
+/** 容器或叶子是否点亮：叶子按集合；unit/branch 按叶子后代全亮（无叶容器不虚亮） */
 export function isLit(id: string, index: GraphIndex, litLeaves: Set<string>): boolean {
   const node = index.nodeById.get(id)
   if (node === undefined) return false
   if (node.kind === 'leaf') return litLeaves.has(id)
-  return index.leavesOf(id).every((l) => litLeaves.has(l.id))
+  const leaves = index.leavesOf(id)
+  if (leaves.length === 0) return false // 空容器（审查发现 252 个虚点亮）：不视为已点亮
+  return leaves.every((l) => litLeaves.has(l.id))
 }
 
 /** unit 解锁 ⇔ 全部 hard 前置 unit 已 lit */

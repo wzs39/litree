@@ -10,6 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "convert:csmath": "node scripts/convert-csmath.mjs",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
   },

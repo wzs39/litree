@@ -152,3 +152,25 @@ describe('章分组层下的门控（终审 Critical 修复回归）', () => {
     expect(aggregateState('uC.c0', ci, litSet(['uP.k1']), {})).toBe('available')
   })
 })
+
+describe('空容器不虚点亮（审查 Batch1）', () => {
+  const emptyPack = {
+    schema: 'litree/pack-v1', id: 'empty-mini', title: { zh: '空' },
+    domains: [{ id: 'D1', name: '域', color: '#3DD6C3' }],
+    nodes: [
+      { id: 'b', parent: null, kind: 'branch', title: { zh: '分支' }, domain: 'D1' },
+      { id: 'u0', parent: 'b', kind: 'unit', title: { zh: '空单元' }, domain: 'D1', core: true },
+      { id: 'u0.c0', parent: 'u0', kind: 'branch', title: { zh: '空章' }, domain: 'D1' }
+    ],
+    edges: []
+  }
+  const v = validatePack(JSON.parse(JSON.stringify(emptyPack)))
+  if (!v.ok) throw new Error(v.errors.join('; '))
+  const ei = buildGraphIndex(v.pack)
+  it('无叶 unit/branch 恒不 lit', () => {
+    expect(isLit('u0', ei, litSet([]))).toBe(false)
+    expect(isLit('u0', ei, litSet(['ghost'])))?.toBe(false)
+    expect(isLit('u0.c0', ei, litSet([]))).toBe(false)
+    expect(aggregateState('u0', ei, litSet([]), {})).toBe('available')
+  })
+})

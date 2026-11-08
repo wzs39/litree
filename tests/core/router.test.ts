@@ -20,25 +20,37 @@ describe('stackToHash / hashToStack', () => {
     expect(stackToHash(['root', 'b1', 'u1'])).toBe('#/tree/root/b1/u1')
   })
   it('#/home 解析回 home 栈', () => {
-    expect(hashToStack('#/home', index)).toEqual({ stack: ['home'], valid: true })
+    expect(hashToStack('#/home', index)).toEqual({ stack: ['home'], valid: true, node: null })
   })
   it('#/tree/root 解析回学科总览', () => {
-    expect(hashToStack('#/tree/root', index)).toEqual({ stack: ['root'], valid: true })
+    expect(hashToStack('#/tree/root', index)).toEqual({ stack: ['root'], valid: true, node: null })
   })
   it('合法钻取链解析（parent 链逐级校验）', () => {
     expect(hashToStack('#/tree/root/b1/u1', index)).toEqual({
       stack: ['root', 'b1', 'u1'],
-      valid: true
+      valid: true,
+      node: null
     })
   })
   it('断链 hash（b1 的 parent 不是根级）→ invalid 回退', () => {
-    expect(hashToStack('#/tree/root/u1', index)).toEqual({ stack: ['root'], valid: false })
+    expect(hashToStack('#/tree/root/u1', index)).toEqual({ stack: ['root'], valid: false, node: null })
   })
   it('不存在的节点 → invalid 回退', () => {
-    expect(hashToStack('#/tree/root/b1/ghost', index)).toEqual({ stack: ['root'], valid: false })
+    expect(hashToStack('#/tree/root/b1/ghost', index)).toEqual({ stack: ['root'], valid: false, node: null })
   })
   it('非 home/tree 前缀 → invalid', () => {
     expect(hashToStack('#/whatever', index).valid).toBe(false)
+  })
+  it('?node= 解析选中节点', () => {
+    expect(hashToStack('#/tree/root/b1/u1?node=u1.k1', index)).toEqual({
+      stack: ['root', 'b1', 'u1'],
+      valid: true,
+      node: 'u1.k1'
+    })
+  })
+  it('stackToHash 带选中节点', () => {
+    expect(stackToHash(['root', 'b1'], 'b1.u1')).toBe('#/tree/root/b1?node=b1.u1')
+    expect(stackToHash(['root'], null)).toBe('#/tree/root')
   })
 })
 

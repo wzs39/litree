@@ -2,6 +2,7 @@
 import type { GraphIndex, NodeState } from '../core/graph'
 import type { Pack, PackNode } from '../core/types'
 import { NODE_SIZE, ROOT_VIEW, type LaidOutNode } from '../layout/elk'
+import { esc } from './escape'
 import { icon } from './icons'
 
 export interface RenderOptions {
@@ -10,11 +11,7 @@ export interface RenderOptions {
   /** locked unit 的引导文案（spec v2 §3：卡上直接显示还差 N 步） */
   missingHint?: (id: string) => string | null
   /** 领域色（卡顶色条） */
-  domainColor?: (id: string) => string
-}
-
-function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  domainColor?: (id: string) => string | null
 }
 
 function bezier(from: LaidOutNode, to: LaidOutNode): string {

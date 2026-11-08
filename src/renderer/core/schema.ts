@@ -66,8 +66,14 @@ export function validatePack(raw: unknown): ValidationResult {
     errors.push('domains 必须为数组')
   } else {
     for (const d of domains) {
-      if (isRecord(d) && typeof d['id'] === 'string') domainIds.add(d['id'])
-      else errors.push('domains 项缺少 id')
+      if (isRecord(d) && typeof d['id'] === 'string') {
+        domainIds.add(d['id'])
+        // 安全：color 必须是色值字面量（第三方包的 color 会进入 SVG fill）
+        const color = d['color']
+        if (typeof color !== 'string' || !/^#[0-9a-fA-F]{3,8}$/.test(color)) {
+          errors.push(`领域 ${d['id']} color 非法: ${String(color)}`)
+        }
+      } else errors.push('domains 项缺少 id')
     }
   }
 
@@ -100,6 +106,15 @@ export function validatePack(raw: unknown): ValidationResult {
       const parent = n['parent']
       if (parent !== null && typeof parent !== 'string') {
         errors.push(`节点 ${id} parent 必须为 null 或字符串`)
+      }
+      // 安全：资源 URL 仅允许 http(s)（第三方包的 url 会进入 href）
+      for (const r of Array.isArray(n['resources']) ? (n['resources'] as unknown[]) : []) {
+        if (isRecord(r)) {
+          const url = r['url']
+          if (typeof url !== 'string' || !/^https?:\/\//.test(url)) {
+            errors.push(`节点 ${id} 资源 URL 非法（仅允许 http/https）: ${String(url).slice(0, 40)}`)
+          }
+        }
       }
       nodeById.set(id, n as unknown as PackNode)
     }

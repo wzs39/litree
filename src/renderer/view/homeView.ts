@@ -1,6 +1,6 @@
 /** 路线首页（v2 spec §1）：总进度 + 继续学习 + 推荐路线卡片 + 全部学科入口 */
 import { continueTarget, type HomeTarget } from '../core/home'
-import { overallProgress } from '../core/stats'
+import { domainStats, overallProgress } from '../core/stats'
 import type { AppStore } from '../core/store'
 import { esc } from './escape'
 
@@ -8,6 +8,7 @@ export interface HomeHandlers {
   onContinue(target: HomeTarget): void
   onOpenUnit(id: string): void
   onOpenSubjects(): void
+  onOpenDomain(id: string): void
 }
 
 function unitState(store: AppStore, id: string): 'lit' | 'available' | 'locked' | 'learning' {
@@ -28,10 +29,28 @@ const STATE_COLOR: Record<string, string> = {
 }
 
 export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandlers): void {
+  const progress = store.progress
   const overall = overallProgress(store.index, store.litLeaves())
   const frac = overall.total > 0 ? overall.lit / overall.total : 0
   const target = continueTarget(store.pack, store.index, store.progress)
   const routes = store.pack.routes ?? []
+  const today = new Date().toISOString().slice(0, 10)
+  let todayCount = 0
+  for (const key of Object.keys(progress.lit)) {
+    const rec = progress.lit[key]
+    if (rec !== undefined && rec.at.slice(0, 10) === today) todayCount++
+  }
+  const domainCards = store.pack.domains
+    .map((d) => {
+      const stat = domainStats(store.index, store.litLeaves()).find((x) => x.domainId === d.id)
+      const pct = stat && stat.total > 0 ? Math.round((stat.lit / stat.total) * 100) : 0
+      return `<button class="hm-domain" data-domain="${esc(d.id)}" type="button">
+        <span class="dot" style="background:${esc(d.color)}"></span>
+        <span class="hm-domain-name">${esc(d.name)}</span>
+        <span class="hm-domain-num">${stat?.lit ?? 0}/${stat?.total ?? 0}</span>
+      </button>`
+    })
+    .join('')
 
   const routeCards = routes
     .map((r, i) => {
@@ -83,8 +102,11 @@ export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandl
         <div class="hm-xp">XP ${store.progress.xp}</div>
         ${continueBtn}
       </div>
+      <div class="hm-today">今日已点亮 <b>${todayCount}</b> 个知识点</div>
       <div class="hm-section">推荐学习路线</div>
       <div class="hm-routes">${routeCards || '<div class="hm-empty">此数据包暂无路线</div>'}</div>
+      <div class="hm-section">按领域浏览</div>
+      <div class="hm-domains">${domainCards}</div>
       <button id="hm-subjects" class="hm-subjects" type="button">浏览全部学科 →</button>
     </div>
   `
@@ -99,6 +121,12 @@ export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandl
     chip.addEventListener('click', () => {
       const id = (chip as HTMLElement).dataset['unit']
       if (id) handlers.onOpenUnit(id)
+    })
+  })
+  el.querySelectorAll('[data-domain]').forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = (card as HTMLElement).dataset['domain']
+      if (id) handlers.onOpenDomain(id)
     })
   })
 }

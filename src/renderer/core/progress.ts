@@ -20,7 +20,11 @@ export function lightLeaf(
     ...progress,
     lit: { ...progress.lit, [leafId]: { at } },
     xp: progress.xp + XP_PER_LEAF,
-    history: [...progress.history, { id: leafId, at, xp: XP_PER_LEAF }]
+    // 修剪上限 500（UI 只展示 8 条；防 localStorage 配额无限增长）
+    history: (() => {
+      const h = [...progress.history, { id: leafId, at, xp: XP_PER_LEAF }]
+      return h.length > 500 ? h.slice(h.length - 500) : h
+    })()
   }
 }
 

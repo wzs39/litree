@@ -46,8 +46,19 @@ export function createWebApi(
   fetchFn: typeof fetch = fetch,
   storage: StorageLike | null = typeof localStorage !== 'undefined' ? localStorage : null
 ): LitreeApi {
+  /** 带超时的 fetch（审查 P1：服务器停滞时 boot 永挂） */
+  const fetchTimeout = async (url: string): Promise<Response> => {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 10000)
+    try {
+      return await fetchFn(url, { signal: controller.signal })
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+
   async function loadManifest(): Promise<ManifestEntry[]> {
-    const res = await fetchFn('packs/index.json')
+    const res = await fetchTimeout('packs/index.json')
     if (!res.ok) throw new Error(`packs/index.json 加载失败: ${res.status}`)
     return (await res.json()) as ManifestEntry[]
   }
@@ -63,7 +74,7 @@ export function createWebApi(
         const manifest = await loadManifest()
         const entry = manifest.find((m) => m.id === packId)
         if (!entry) return { error: `数据包不存在: ${packId}` }
-        const res = await fetchFn(`packs/${entry.file}`)
+        const res = await fetchTimeout(`packs/${entry.file}`)
         if (!res.ok) return { error: `数据包加载失败: ${packId} (${res.status})` }
         const raw: unknown = await res.json()
         // 校验在 AppStore 层做（需要中文错误聚合）；此处仅做最低形状检查
@@ -86,17 +97,25 @@ export function createWebApi(
 
     async loadProgress(packId) {
       const raw = storage?.getItem(progressKey(packId))
-      if (raw === null) return null
+      if (raw === null || raw === undefined) return null
       try {
         const parsed: unknown = JSON.parse(raw)
         return isProgressShape(parsed) ? parsed : null
       } catch {
+        // 损坏进度：保留原始串供人工恢复（审查 P1：静默清零风险）
+        storage?.setItem(`${progressKey(packId)}:corrupt`, raw)
         return null
       }
     },
 
     async saveProgress(packId, progress) {
-      storage?.setItem(progressKey(packId), JSON.stringify(progress))
+      try {
+        storage?.setItem(progressKey(packId), JSON.stringify(progress))
+      } catch (err) {
+        // 配额超限等：不静默（审查 P1）
+        console.error('进度保存失败', err)
+        window.dispatchEvent(new CustomEvent('litree-save-error', { detail: String(err) }))
+      }
     }
   }
 }

@@ -8,10 +8,12 @@ import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { createEffectLayer } from './view/effects'
 import { icon } from './view/icons'
 import { renderGraph } from './view/graphCanvas'
+import { renderSidebar } from './view/sidebar'
 
 const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
 const crumbEl = document.getElementById('breadcrumb')!
 const stageEl = document.getElementById('stage')!
+const sidebarEl = document.getElementById('sidebar')!
 
 async function boot(): Promise<void> {
   const store = new AppStore(createWebApi())
@@ -53,6 +55,7 @@ async function boot(): Promise<void> {
   }
 
   function scheduleRender(): void {
+    renderSidebar(sidebarEl, store)
     lastRender = renderView().catch((err) => console.error('renderView 失败', err))
   }
   store.subscribe(scheduleRender)

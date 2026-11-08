@@ -102,6 +102,12 @@ export class AppStore {
     this.notify()
   }
 
+  /** 整栈替换（hash 路由回写用） */
+  setStack(stack: string[]): void {
+    this.viewStack = stack
+    this.notify()
+  }
+
   subscribe(fn: () => void): () => void {
     this.listeners.add(fn)
     return () => {

@@ -3,6 +3,7 @@ import './styles/tokens.css'
 import './styles/graph.css'
 import { createWebApi } from './api/webApi'
 import { AppStore } from './core/store'
+import { attachRouter } from './core/router'
 import { layoutSubview, ROOT_VIEW, type LaidOutNode } from './layout/elk'
 import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { createEffectLayer } from './view/effects'
@@ -172,6 +173,7 @@ async function boot(): Promise<void> {
     }
   }
   store.subscribe(scheduleRender)
+  attachRouter(store) // viewStack ↔ hash 双向绑定（返回键/刷新/分享）
 
   /** 点亮后新增解锁的节点及其 BFS 深度（级联错峰用） */
   function newlyAvailableAfter(id: string): Map<string, number> {

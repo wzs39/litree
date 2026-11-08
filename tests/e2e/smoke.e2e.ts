@@ -115,3 +115,21 @@ test.describe('终审修复回归', () => {
     await expect(page.locator('#boot-error')).toContainText('加载失败')
   })
 })
+
+test.describe('v2 路由', () => {
+  test('hash 路由：刷新恢复位置 + 返回键回退', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('g.node--branch')).toHaveCount(11, { timeout: 30000 })
+    await page.locator('g.node[data-id="M"]').dblclick()
+    await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法')
+    expect(await page.evaluate(() => location.hash)).toBe('#/tree/root/M')
+
+    await page.reload()
+    await expect(page.locator('#breadcrumb')).toContainText('数学基础与方法', { timeout: 30000 })
+
+    await page.goBack()
+    await page.playwright?.waitForTimeout?.(0) // no-op 兼容
+    await expect(page.locator('#breadcrumb')).toContainText('计算机 + 数学', { timeout: 10000 })
+    expect(await page.evaluate(() => location.hash)).toBe('#/home')
+  })
+})

@@ -489,3 +489,65 @@ body {
   color: var(--ink-faint);
   white-space: nowrap;
 }
+
+/* ---- 启动错误面板（终审 F2）---- */
+#boot-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--bg);
+  z-index: 30;
+}
+.boot-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.boot-msg {
+  color: var(--ink-dim);
+  font-size: 13px;
+  max-width: 480px;
+  text-align: center;
+  word-break: break-all;
+}
+#boot-retry {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+#boot-retry:hover {
+  border-color: var(--node-avail-stroke);
+}
+
+/* 孤立进度提示（终审 F3） */
+.side-orphan {
+  background: var(--bg-soft);
+  border: 1px dashed #e5646c;
+  border-radius: 8px;
+  padding: 8px;
+}
+.side-orphan .side-cap {
+  color: #e5646c;
+  margin-bottom: 6px;
+}
+#orphan-clean {
+  width: 100%;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+#orphan-clean:hover {
+  border-color: var(--node-avail-stroke);
+}

@@ -138,3 +138,21 @@ describe('validatePack', () => {
     if (!r3.ok) expect(r3.errors.length).toBeGreaterThan(1)
   })
 })
+
+describe('叶子必须有 unit 祖先（终审 Critical 防回归）', () => {
+  it('叶子直接挂在 branch 下且无 unit 祖先 → 拒绝', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.nodes.push({ id: 'b1.x', parent: 'b1', kind: 'leaf', title: { zh: '悬空叶' }, domain: 'D1' })
+    const r = validatePack(p)
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.errors.join('\n')).toContain('unit 节点')
+  })
+  it('叶子经章分组（branch）间接挂在 unit 下 → 通过', () => {
+    const p: Pack = JSON.parse(JSON.stringify(validPack))
+    p.nodes.push(
+      { id: 'u1.c0', parent: 'u1', kind: 'branch', title: { zh: '章' }, domain: 'D1' },
+      { id: 'u1.c0.k0', parent: 'u1.c0', kind: 'leaf', title: { zh: '章下叶' }, domain: 'D1' }
+    )
+    expect(validatePack(p).ok).toBe(true)
+  })
+})

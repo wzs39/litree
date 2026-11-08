@@ -6,6 +6,7 @@ import { AppStore } from './core/store'
 import { layoutSubview, ROOT_VIEW, type LaidOutNode } from './layout/elk'
 import { renderBreadcrumb, type Crumb } from './view/breadcrumb'
 import { createEffectLayer } from './view/effects'
+import { esc } from './view/escape'
 import { icon } from './view/icons'
 import { renderGraph } from './view/graphCanvas'
 import { renderSidebar } from './view/sidebar'
@@ -30,6 +31,9 @@ async function boot(): Promise<void> {
   let viewToken = 0
   let currentLayout = new Map<string, LaidOutNode>()
   let lastRender: Promise<void> = Promise.resolve()
+  // 布局与进度无关：按容器缓存，进度变化只重渲不重排（终审 F5；M3 编辑 layoutOverride 后需失效缓存）
+  const layoutCache = new Map<string, Map<string, LaidOutNode>>()
+  let renderedContainerId: string | null = null
 
   function centerOf(id: string): { x: number; y: number } {
     const p = currentLayout.get(id)
@@ -49,13 +53,22 @@ async function boot(): Promise<void> {
   async function renderView(): Promise<void> {
     const token = ++viewToken
     const containerId = store.viewStack[store.viewStack.length - 1]!
-    const layout = await layoutSubview(store.pack, store.index, containerId)
-    if (token !== viewToken) return // 已切视图，丢弃过期结果
-    currentLayout = layout
-    renderGraph(svgEl, store.pack, store.index, containerId, layout, (id) => store.stateOf(id), {
+    const containerChanged = containerId !== renderedContainerId
+    if (containerChanged) {
+      let layout = layoutCache.get(containerId)
+      if (!layout) {
+        layout = await layoutSubview(store.pack, store.index, containerId)
+        if (token !== viewToken) return // 已切视图，丢弃过期结果
+        layoutCache.set(containerId, layout)
+      }
+      currentLayout = layout
+      renderedContainerId = containerId
+    }
+    renderGraph(svgEl, store.pack, store.index, containerId, currentLayout, (id) => store.stateOf(id), {
       progressOf: (id) => store.progressOfContainer(id)
     })
-    fitView()
+    applyTransform() // 重渲染重建 viewport，需重新套用当前缩放平移
+    if (containerChanged) fitView() // 仅视图切换重置视野；进度变化保留缩放平移
     renderBreadcrumb(crumbEl, trail(), (i) => {
       store.jumpTo(i)
     })
@@ -93,7 +106,7 @@ async function boot(): Promise<void> {
       // 分支节点：显示整体进度
       const prog = store.progressOfContainer(node.id)
       inspectorEl.innerHTML = `
-        <div class="insp-title"><span>${node.title.zh}</span>
+        <div class="insp-title"><span>${esc(node.title.zh)}</span>
           <button class="insp-close" aria-label="关闭">${icon('check', 12)}</button></div>
         <div class="insp-steps">${prog.lit}/${prog.total} 个知识点已点亮</div>`
       inspectorEl.style.display = 'block'
@@ -106,12 +119,12 @@ async function boot(): Promise<void> {
         const c = store.index.nodeById.get(cid)!
         const lit = store.stateOf(cid) === 'lit'
         const inView = store.viewStack.includes(cid)
-        return `<div class="insp-item" data-id="${cid}">
-          <span>${c.title.zh}</span><span class="tag">${lit ? '已点亮' : inView ? '在当前视图' : '跨视图 → 点击跳转'}</span></div>`
+        return `<div class="insp-item" data-id="${esc(cid)}">
+          <span>${esc(c.title.zh)}</span><span class="tag">${lit ? '已点亮' : inView ? '在当前视图' : '跨视图 → 点击跳转'}</span></div>`
       })
       .join('')
     inspectorEl.innerHTML = `
-      <div class="insp-title"><span>${unit.title.zh}</span>
+      <div class="insp-title"><span>${esc(unit.title.zh)}</span>
         <button class="insp-close" aria-label="关闭">${icon('check', 12)}</button></div>
       <div class="insp-steps">${closure.length === 0 ? '✓ 前置已全部满足，可点亮' : `还差 ${closure.length} 步`}</div>
       <div class="insp-list">${rows || '<div class="side-empty">无必须前置</div>'}</div>`
@@ -366,7 +379,17 @@ async function boot(): Promise<void> {
     store.flushSave()
   })
 
-  await renderView()
+  scheduleRender() // 首屏：init 的 notify 发生在 subscribe 之前，显式渲染一次侧栏与视图
+  await lastRender
 }
 
-void boot()
+boot().catch((err: unknown) => {
+  // 终审 F2：加载失败呈现错误面板而非白屏（spec Review Focus 2）
+  stageEl.innerHTML = `
+    <div id="boot-error">
+      <div class="boot-title">加载失败</div>
+      <div class="boot-msg">${esc(String((err as Error)?.message ?? err))}</div>
+      <button id="boot-retry" type="button">重试</button>
+    </div>`
+  document.getElementById('boot-retry')?.addEventListener('click', () => location.reload())
+})

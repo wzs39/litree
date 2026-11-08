@@ -101,9 +101,18 @@ export function unitAvailable(unitId: string, index: GraphIndex, litLeaves: Set<
 }
 
 export function leafAvailable(leafId: string, index: GraphIndex, litLeaves: Set<string>): boolean {
+  // 叶子的 parent 可能是章分组（branch），沿 parent 链上溯到最近的 unit 祖先判定门控
   const leaf = index.nodeById.get(leafId)
-  if (leaf === undefined || leaf.parent === null) return false
-  return unitAvailable(leaf.parent, index, litLeaves)
+  if (leaf === undefined) return false
+  let cur = leaf.parent
+  let guard = 0
+  while (cur !== null && guard++ < 64) {
+    const node = index.nodeById.get(cur)
+    if (node === undefined) return false
+    if (node.kind === 'unit') return unitAvailable(node.id, index, litLeaves)
+    cur = node.parent
+  }
+  return false
 }
 
 /** 四态聚合（spec §5.2）：lit 优先于 learning；叶子可用性随所属单元 */

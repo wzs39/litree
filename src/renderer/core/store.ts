@@ -8,7 +8,7 @@ import {
   type GraphIndex,
   type NodeState
 } from './graph'
-import { emptyProgress, lightLeaf, toggleLearning } from './progress'
+import { emptyProgress, lightLeaf, orphanedLitIds, toggleLearning } from './progress'
 import { validatePack } from './schema'
 import type { Pack, Progress } from './types'
 
@@ -127,5 +127,19 @@ export class AppStore {
     clearTimeout(this.saveTimer)
     this.saveTimer = null
     void this.api.saveProgress(this.pack.id, this.progress)
+  }
+
+  /** 孤立点亮 id 数量（pack 更新后残留，spec §12） */
+  orphanCount(): number {
+    return orphanedLitIds(this.progress, this.index).length
+  }
+
+  /** 一键清理孤立点亮记录（数据操作，不影响点亮语义） */
+  cleanOrphans(): void {
+    for (const id of orphanedLitIds(this.progress, this.index)) {
+      delete this.progress.lit[id]
+    }
+    this.scheduleSave()
+    this.notify()
   }
 }

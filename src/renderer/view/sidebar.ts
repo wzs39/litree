@@ -1,6 +1,8 @@
-/** 统计面板（spec §5/统计）：总进度环 + 各领域进度条 + 最近点亮时间线 */
+/** 统计面板（spec §5/统计）：总进度环 + 各领域进度条 + 最近点亮时间线 + 孤立进度清理 */
 import type { AppStore } from '../core/store'
+import { orphanedLitIds } from '../core/progress'
 import { domainStats, overallProgress, recentHistory } from '../core/stats'
+import { esc } from './escape'
 import { icon } from './icons'
 
 export function renderSidebar(el: HTMLElement, store: AppStore): void {
@@ -8,6 +10,7 @@ export function renderSidebar(el: HTMLElement, store: AppStore): void {
   const overall = overallProgress(store.index, lit)
   const domains = domainStats(store.index, lit)
   const recent = recentHistory(store.progress, store.index, 8)
+  const orphans = orphanedLitIds(store.progress, store.index)
 
   const frac = overall.total > 0 ? overall.lit / overall.total : 0
   const ringR = 26
@@ -30,20 +33,31 @@ export function renderSidebar(el: HTMLElement, store: AppStore): void {
           const color = store.pack.domains.find((x) => x.id === d.domainId)?.color ?? '#888'
           const pct = d.total > 0 ? Math.round((d.lit / d.total) * 100) : 0
           return `<div class="side-domain">
-            <div class="side-domain-name"><span class="dot" style="background:${color}"></span>${d.domainId} ${d.lit}/${d.total}</div>
-            <div class="side-bar"><div class="side-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            <div class="side-domain-name"><span class="dot" style="background:${esc(color)}"></span>${esc(d.domainId)} ${d.lit}/${d.total}</div>
+            <div class="side-bar"><div class="side-bar-fill" style="width:${pct}%;background:${esc(color)}"></div></div>
           </div>`
         })
         .join('')}
     </div>
+    ${
+      orphans.length > 0
+        ? `<div class="side-orphan">
+            <div class="side-cap">孤立进度 ${orphans.length} 条（数据包已更新）</div>
+            <button id="orphan-clean" type="button">一键清理</button>
+          </div>`
+        : ''
+    }
     <div class="side-recent">
       <div class="side-cap">最近点亮</div>
       ${recent
         .map(
           (r) =>
-            `<div class="side-item" data-id="${r.id}">${r.titleZh}<span class="side-time">${r.at.slice(5, 16).replace('T', ' ')}</span></div>`
+            `<div class="side-item" data-id="${esc(r.id)}">${esc(r.titleZh)}<span class="side-time">${esc(r.at.slice(5, 16).replace('T', ' '))}</span></div>`
         )
         .join('') || '<div class="side-empty">暂无记录</div>'}
     </div>
   `
+  el.querySelector('#orphan-clean')?.addEventListener('click', () => {
+    store.cleanOrphans()
+  })
 }

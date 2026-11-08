@@ -117,3 +117,38 @@ describe('isLit', () => {
     expect(isLit('b1', index, litSet(U1_LEAVES))).toBe(false)
   })
 })
+
+describe('章分组层下的门控（终审 Critical 修复回归）', () => {
+  // unit uC (hard←u1) → 章 c(branch) → 叶子挂在章下
+  const chapterPack: Pack = {
+    schema: 'litree/pack-v1',
+    id: 'chapter-mini',
+    title: { zh: 'chapter-mini' },
+    domains: [{ id: 'D1', name: '域', color: '#3DD6C3' }],
+    nodes: [
+      { id: 'b', parent: null, kind: 'branch', title: { zh: '分支' }, domain: 'D1' },
+      { id: 'uP', parent: 'b', kind: 'unit', title: { zh: '前置单元' }, domain: 'D1', core: true },
+      { id: 'uP.k1', parent: 'uP', kind: 'leaf', title: { zh: '前置叶' }, domain: 'D1' },
+      { id: 'uC', parent: 'b', kind: 'unit', title: { zh: '分组单元' }, domain: 'D1', core: true },
+      { id: 'uC.c0', parent: 'uC', kind: 'branch', title: { zh: '第一章' }, domain: 'D1' },
+      { id: 'uC.c0.k0', parent: 'uC.c0', kind: 'leaf', title: { zh: '章下叶A' }, domain: 'D1' },
+      { id: 'uC.c0.k1', parent: 'uC.c0', kind: 'leaf', title: { zh: '章下叶B' }, domain: 'D1' }
+    ],
+    edges: [{ from: 'uP', to: 'uC', type: 'hard', reason: '前置' }]
+  }
+  const v = validatePack(JSON.parse(JSON.stringify(chapterPack)))
+  if (!v.ok) throw new Error('chapter fixture 校验失败: ' + v.errors.join('; '))
+  const ci = buildGraphIndex(v.pack)
+
+  it('前置未点亮时，章下叶子不可点亮（沿 parent 链上溯到 unit）', () => {
+    expect(leafAvailable('uC.c0.k0', ci, litSet([]))).toBe(false)
+    expect(unitAvailable('uC', ci, litSet([]))).toBe(false)
+  })
+  it('前置单元叶子全亮后，章下叶子可点亮', () => {
+    expect(leafAvailable('uC.c0.k0', ci, litSet(['uP.k1']))).toBe(true)
+  })
+  it('章分支的聚合状态随单元门控', () => {
+    expect(aggregateState('uC.c0', ci, litSet([]), {})).toBe('locked')
+    expect(aggregateState('uC.c0', ci, litSet(['uP.k1']), {})).toBe('available')
+  })
+})

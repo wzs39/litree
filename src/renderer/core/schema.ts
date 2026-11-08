@@ -110,6 +110,25 @@ export function validatePack(raw: unknown): ValidationResult {
         errors.push(`节点 ${node.id} 的 parent 不存在: ${parent}`)
       }
     }
+    // 叶子必须有 unit 祖先（门控语义依赖 unit 层；章分组叶子的 unit 在祖先链上）
+    for (const node of nodeById.values()) {
+      if (node.kind !== 'leaf') continue
+      let cur = node.parent
+      let hasUnit = false
+      let guard = 0
+      while (cur !== null && guard++ < 64) {
+        const p = nodeById.get(cur)
+        if (p === undefined) break
+        if (p.kind === 'unit') {
+          hasUnit = true
+          break
+        }
+        cur = p.parent
+      }
+      if (!hasUnit) {
+        errors.push(`叶子 ${node.id} 的祖先链上没有 unit 节点，无法挂接门控`)
+      }
+    }
     for (const node of nodeById.values()) {
       const seen = new Set<string>([node.id])
       let cur = node.parent

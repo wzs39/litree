@@ -2,7 +2,7 @@
 
 学科科技树：把一门学科建模为**带前置依赖的分层知识图谱**，学习者在其中**点亮**知识点记录掌握进度——兼具游戏科技树的解锁感与学术引用链的可溯源性（每条前置边可附证据）。
 
-**在线使用**：<https://overthinknow.github.io/litree/>（GitHub Pages，纯静态、数据本地存储）
+**在线使用**：<https://wzs39.github.io/litree/>（GitHub Pages，纯静态、数据本地存储）
 
 ## 特性
 

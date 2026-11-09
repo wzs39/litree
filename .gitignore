@@ -4,3 +4,9 @@ out/
 dist/
 test-results/
 playwright-report/
+
+logs/
+npm-install.log
+*.f-before
+*.before
+litree-wt-a-backup-before-copy/

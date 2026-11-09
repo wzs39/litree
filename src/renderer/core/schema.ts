@@ -195,7 +195,12 @@ export function validatePack(raw: unknown): ValidationResult {
         errors.push(`边 ${from}→${to} 的两端必须是 unit 节点`)
         continue
       }
-      validEdges.push({ from, to, type: type as 'hard' | 'soft' })
+      validEdges.push({
+        from,
+        to,
+        type: type as 'hard' | 'soft',
+        ...(typeof e['reason'] === 'string' ? { reason: e['reason'] as string } : {})
+      })
     }
     const cycleNodes = hasEdgeCycle([...nodeById.values()], validEdges)
     if (cycleNodes !== null) {

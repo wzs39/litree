@@ -81,10 +81,14 @@ body {
 /* ---- 节点 ---- */
 .node {
   cursor: pointer;
+  /* 位置变化平滑过渡：增量 DOM 复用元素后，节点位移不再硬跳（审查 P0） */
+  transition: transform var(--base) var(--ease-out);
 }
 .node-rect {
   transition: fill var(--base) var(--ease-out), stroke var(--base) var(--ease-out),
-    filter var(--base) var(--ease-out);
+    filter var(--base) var(--ease-out), transform var(--fast) var(--ease-out);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 .node-title {
   fill: var(--ink);
@@ -117,37 +121,27 @@ body {
   filter: drop-shadow(0 0 6px rgba(127, 208, 255, 0.25));
 }
 
+/* learning：静态发光（原先 infinite filter 动画是 CPU 重项，且随重建反复重启） */
 .node--learning .node-rect {
   fill: var(--node-avail-fill);
   stroke: var(--node-learning-stroke);
-  animation: pulse-learning 2s var(--ease-out) infinite;
-}
-@keyframes pulse-learning {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 3px rgba(240, 180, 41, 0.2));
-  }
-  50% {
-    filter: drop-shadow(0 0 9px rgba(240, 180, 41, 0.5));
-  }
+  filter: drop-shadow(0 0 5px rgba(240, 180, 41, 0.25));
 }
 
+/* lit：静态发光（stroke + 静态 halo）。呼吸感只在刚点亮/选中/hover 时一次性动画，
+   绝不用 filter 的 infinite（CPU 重项 + 随重建反复重启） */
 .node--lit .node-rect {
   fill: var(--node-lit-fill);
   stroke: var(--node-lit-stroke);
-  animation: breathe 3s ease-in-out infinite;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 6px var(--node-lit-glow));
 }
 .node--lit .node-title {
   fill: var(--ink);
 }
-@keyframes breathe {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 5px var(--node-lit-glow));
-  }
-  50% {
-    filter: drop-shadow(0 0 13px var(--node-lit-glow));
-  }
+/* hover：合成层友好的 transform 呼吸（一次性，不 infinite） */
+.node:not(.node--section):hover .node-rect {
+  transform: scale(1.04);
 }
 
 /* 进度环 */
@@ -227,13 +221,13 @@ body {
 }
 @keyframes bloom {
   0% {
-    filter: drop-shadow(0 0 0 rgba(255, 215, 106, 0));
+    transform: scale(0.94);
   }
-  40% {
-    filter: drop-shadow(0 0 22px rgba(255, 215, 106, 0.8));
+  45% {
+    transform: scale(1.05);
   }
   100% {
-    filter: drop-shadow(0 0 5px var(--node-lit-glow));
+    transform: scale(1);
   }
 }
 .node--denied .node-rect {
@@ -714,7 +708,7 @@ body {
 }
 .dp-dep {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   padding: 6px 8px;
   border-radius: 6px;
@@ -731,6 +725,26 @@ body {
 }
 .dp-dep-state {
   flex: none;
+  line-height: 1.4;
+}
+.dp-dep-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.dp-dep-title {
+  line-height: 1.4;
+}
+/* 边的 reason（为什么需要这门前置）：小字、两行截断，避免长依据撑破卡片 */
+.dp-dep-reason {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.4;
 }
 .dp-actions {
   margin-top: 16px;
@@ -966,4 +980,20 @@ body {
   fill: var(--ink-faint);
   font-size: 10px;
   user-select: none;
+}
+
+/* 无障碍：偏好减少动效时，本文件的具体 animation/transition 各自尊重（tokens.css 全局规则之外） */
+@media (prefers-reduced-motion: reduce) {
+  .node,
+  .node-rect,
+  .edge,
+  .stub,
+  .xp-float,
+  .crumb,
+  .hm-chip,
+  .hm-continue,
+  .dp-action {
+    animation: none !important;
+    transition: none !important;
+  }
 }

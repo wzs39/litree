@@ -146,11 +146,28 @@ export async function layoutSubview(
   }
 
   // renderer 环境：Worker 化（elk 协议：api 在主线程、elk-worker.js 在 worker 内自注册）
-  const mod = (await import('./elk.worker?worker')) as unknown as {
-    default: new () => Worker
-  }
-  const elk = new ELKApi({
-    workerFactory: () => new mod.default()
-  }) as ElkLike
+  // 模块级惰性单例：每次 layoutSubview 复用同一个 ELKApi/Worker，避免 worker 泄漏与重复初始化
+  const elk = await getBrowserElk()
   return elk.layout(graph).then((r) => toMap(r.children ?? []))
+}
+
+let browserElkPromise: Promise<ElkLike> | null = null
+
+/** 浏览器侧 ELKApi 单例（失败后重置，允许重试） */
+function getBrowserElk(): Promise<ElkLike> {
+  if (browserElkPromise === null) {
+    const p = (async () => {
+      const mod = (await import('./elk.worker?worker')) as unknown as {
+        default: new () => Worker
+      }
+      return new ELKApi({
+        workerFactory: () => new mod.default()
+      }) as ElkLike
+    })()
+    browserElkPromise = p
+    p.catch(() => {
+      if (browserElkPromise === p) browserElkPromise = null
+    })
+  }
+  return browserElkPromise
 }

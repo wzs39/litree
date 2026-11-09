@@ -97,13 +97,24 @@ export function renderDetailPanel(
         `<textarea id="dp-note" class="dp-note" placeholder="卡住了？记录上下文…">${esc(store.progress.lit[node.id]?.note ?? '')}</textarea>`
       : ''
 
+  // 边的 reason（"为什么需要这门前置"）：validatePack 现在会保留它，
+  // 之前 UI 完全看不到（spec §1「每条前置边可附证据」名不副实）。
+  // 按 to 端聚合，前置链每一项若命中则展示依据。
+  const reasonByTo = new Map<string, string>()
+  for (const e of store.pack.edges) {
+    if (e.type === 'hard' && e.reason) reasonByTo.set(e.to, e.reason)
+  }
   const closureRows = closure
     .map((cid) => {
       const c = store.index.nodeById.get(cid)
       if (!c) return ''
       const lit = store.stateOf(cid) === 'lit'
+      const reason = reasonByTo.get(cid)
       return `<div class="dp-dep${lit ? ' dp-dep--lit' : ''}" data-jump="${esc(cid)}">` +
-        `<span class="dp-dep-state">${lit ? '●' : '○'}</span>${esc(c.title.zh)}</div>`
+        `<span class="dp-dep-state">${lit ? '●' : '○'}</span>` +
+        `<span class="dp-dep-body"><span class="dp-dep-title">${esc(c.title.zh)}</span>` +
+        (reason ? `<span class="dp-dep-reason">${esc(reason)}</span>` : '') +
+        `</span></div>`
     })
     .join('')
 

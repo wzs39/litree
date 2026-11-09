@@ -1,6 +1,7 @@
 /** 渲染进程引导（v2 spec）：路由驱动 + DetailPanel 内容本体 + 点亮仪式 */
 import './styles/tokens.css'
 import './styles/graph.css'
+import './styles/ui.css'
 import { createWebApi } from './api/webApi'
 import { attachRouter } from './core/router'
 import { AppStore } from './core/store'
@@ -12,6 +13,14 @@ import { minimalHardClosure } from './core/graph'
 import { renderGraph } from './view/graphCanvas'
 import { renderHome } from './view/homeView'
 import { renderSidebar } from './view/sidebar'
+import { createToolbar, TOOLBAR_IDS } from './view/toolbar'
+import { buildSearchIndex, createSearch } from './view/search'
+import { createMinimap } from './view/minimap'
+import { createPackSwitcher } from './view/packSwitcher'
+import { createIoProgress } from './view/ioProgress'
+import { createHelpOverlay, createOnboarding } from './view/helpOverlay'
+import { computeHighlight, applyHighlight, clearHighlight } from './view/highlightPath'
+import { createPathTrace } from './view/pathTrace'
 
 const svgEl = document.getElementById('graph') as unknown as SVGSVGElement
 const crumbEl = document.getElementById('breadcrumb')!
@@ -29,6 +38,148 @@ async function boot(): Promise<void> {
   const store = new AppStore(createWebApi())
   await store.init()
   const effects = createEffectLayer(stageEl)
+
+  // ── 工具栏挂载点 ──
+  const toolbarMount = document.createElement('div')
+  crumbEl.parentNode?.insertBefore(toolbarMount, crumbEl)
+
+  // ── 搜索索引 + 搜索面板 ──
+  let searchIndex = buildSearchIndex(store.pack.nodes)
+  const searchMount = document.createElement('div')
+  document.body.appendChild(searchMount)
+  const search = createSearch(searchMount, {
+    index: searchIndex,
+    onSelect: (nodeId) => {
+      jumpToNode(nodeId)
+      openPanel(nodeId)
+      search.close()
+    }
+  })
+
+  // ── minimap 挂载 ──
+  const minimapMount = document.createElement('div')
+  stageEl.appendChild(minimapMount)
+  const minimap = createMinimap(minimapMount, {
+    onPanTo: (wx, wy) => {
+      // 把视口中心移到世界坐标 (wx, wy)
+      const sw = stageEl.clientWidth
+      const sh = stageEl.clientHeight
+      tx = sw / 2 - wx * scale
+      ty = sh / 2 - wy * scale
+      applyTransform()
+    },
+    onZoom: (delta) => {
+      const factor = delta > 0 ? 1.15 : 0.87
+      const rect = svgEl.getBoundingClientRect()
+      const mx = rect.width / 2
+      const my = rect.height / 2
+      tx = mx - (mx - tx) * factor
+      ty = my - (my - ty) * factor
+      scale *= factor
+      scale = Math.max(0.15, Math.min(4, scale))
+      applyTransform()
+    }
+  })
+
+  // ── 包切换 ──
+  const packSwitcherMount = document.createElement('div')
+  document.body.appendChild(packSwitcherMount)
+  let packSwitcher = createPackSwitcher(packSwitcherMount, {
+    packs: [{ id: store.pack.id, title: store.pack.title.zh }],
+    currentId: store.pack.id,
+    onPick: async (id) => {
+      if (id === store.pack.id) { packSwitcher.close(); return }
+      // 切包：重建 store（进度按包独立保存）
+      const api = createWebApi()
+      const newStore = new AppStore(api)
+      await newStore.init()
+      // 重建索引与搜索
+      searchIndex = buildSearchIndex(newStore.pack.nodes)
+      packSwitcher.update({ packs: [{ id: newStore.pack.id, title: newStore.pack.title.zh }], currentId: newStore.pack.id })
+      // 简化：直接替换 store 引用（后续 render 用新 store）
+      // 注：完整重建需要重写订阅，这里先记录
+      console.warn('[pack-switch] 切换到', id, '（完整重建待集成收尾）')
+      packSwitcher.close()
+    }
+  })
+
+  // ── 导入导出 ──
+  const ioMount = document.createElement('div')
+  document.body.appendChild(ioMount)
+  const io = createIoProgress(ioMount, {
+    getProgress: () => store.progress,
+    expectedPackId: () => store.pack.id,
+    onMessage: (text, kind) => console[kind === 'error' ? 'error' : 'warn']('[io]', text),
+    onApply: (p) => { store.progress = p; store.saveNow() }
+  })
+
+  // ── 帮助/引导 ──
+  const helpMount = document.createElement('div')
+  document.body.appendChild(helpMount)
+  const help = createHelpOverlay(helpMount, { onClose: () => undefined })
+  const onboardingMount = document.createElement('div')
+  document.body.appendChild(onboardingMount)
+  const onboarding = createOnboarding(onboardingMount, {
+    storage: {
+      getItem: (k: string) => localStorage.getItem(k),
+      setItem: (k: string, v: string) => localStorage.setItem(k, v)
+    },
+    onDone: () => undefined
+  })
+
+  // ── 工具栏回调 ──
+  const toolbar = createToolbar(toolbarMount, {
+    onZoomIn: () => { zoomBy(1.15) },
+    onZoomOut: () => { zoomBy(0.87) },
+    onFit: () => fitView(),
+    onReset: () => { scale = 1; tx = stageEl.clientWidth / 2; ty = 60; applyTransform() },
+    onBack: () => store.back(),
+    onSearch: () => search.toggle(),
+    onPack: () => packSwitcher.toggle(),
+    onExport: () => { io.exportNow() },
+    onImport: () => { io.importButton?.click?.() },
+    onHelp: () => help.toggle()
+  }, { crumbSlot: document.createElement('div') })
+
+  // ── Ctrl+K / / 打开搜索 ──
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); search.toggle(); return }
+    if (e.key === '/' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+      e.preventDefault(); search.open()
+    }
+  })
+
+  // ── hover 依赖链高亮 ──
+  svgEl.addEventListener('mouseover', (e) => {
+    const g = (e.target as Element).closest('g.node')
+    if (!(g instanceof SVGGElement)) return
+    const id = g.getAttribute('data-id')
+    if (!id) return
+    const hl = computeHighlight(id, store.index, store.litLeaves(), { soft: false })
+    applyHighlight(svgEl, hl)
+  })
+  svgEl.addEventListener('mouseout', (e) => {
+    const g = (e.target as Element).closest('g.node')
+    if (!(g instanceof SVGGElement)) return
+    clearHighlight(svgEl)
+  })
+
+  // ── pathTrace 挂载到 detailPanel ──
+  // 注意：pathTraceMount 不能在 boot 时 append 到 panelEl，
+  // 因为 renderDetailPanel 用 innerHTML 全量重建 panelEl 会销毁它。
+  // 改在 renderPanel() 里 renderDetailPanel 之后 append。
+  const pathTraceMount = document.createElement('div')
+  const pathTrace = createPathTrace(pathTraceMount, {
+    index: store.index,
+    litLeavesProvider: () => store.litLeaves(),
+    onLightLeaf: (leafId) => { void lightWithCeremony(leafId) },
+    onJump: (nodeId) => { jumpToNode(nodeId); openPanel(nodeId) },
+    // 收起偏好持久化（组件内部键 litree:path-trace:collapsed）
+    storage: {
+      getItem: (k: string) => localStorage.getItem(k),
+      setItem: (k: string, v: string) => localStorage.setItem(k, v)
+    }
+  })
 
   let viewToken = 0
   let currentLayout = new Map<string, LaidOutNode>()
@@ -71,6 +222,19 @@ async function boot(): Promise<void> {
       }
     })
     panelEl.scrollTop = prevTop
+
+    // pathTraceMount 被 renderDetailPanel 的 innerHTML 重建销毁，每次 renderPanel 后重新挂载
+    if (pathTraceMount.parentNode !== panelEl) panelEl.appendChild(pathTraceMount)
+
+    // pathTrace：选中 locked 节点时打开，否则关闭
+    const sel = selectedId ? store.index.nodeById.get(selectedId) : undefined
+    const selState = sel ? store.stateOf(sel.id) : null
+    const isLockedTarget = sel !== undefined && selState === 'locked' && (sel.kind === 'unit' || sel.kind === 'leaf' || sel.kind === 'branch')
+    if (isLockedTarget) {
+      pathTrace.open(sel!.id)
+    } else {
+      pathTrace.close()
+    }
   }
 
   function openPanel(id: string): void {
@@ -118,6 +282,7 @@ async function boot(): Promise<void> {
         }
       })
       renderBreadcrumb(crumbEl, [], () => undefined)
+      minimap.clear()
       return
     }
     svgEl.style.display = 'block'
@@ -153,6 +318,23 @@ async function boot(): Promise<void> {
     renderBreadcrumb(crumbEl, trail(), (i) => {
       store.jumpTo(i)
     })
+    // minimap 更新（当前视图节点 + 视口框）
+    const vp = svgEl.querySelector('.viewport')
+    if (vp instanceof SVGGElement) {
+      const bb = vp.getBBox()
+      const miniNodes: { id: string; x: number; y: number; width: number; height: number; kind: 'branch' | 'unit' | 'leaf'; state: import('./core/graph').NodeState }[] = []
+      for (const [id, pos] of currentLayout) {
+        const n = store.index.nodeById.get(id)
+        if (!n) continue
+        miniNodes.push({
+          id, x: pos.x, y: pos.y, width: pos.width, height: pos.height,
+          kind: n.kind as 'branch' | 'unit' | 'leaf',
+          state: store.stateOf(id)
+        })
+      }
+      const viewRect = { x: bb.x, y: bb.y, width: bb.width, height: bb.height }
+      minimap.update(miniNodes, viewRect, viewRect)
+    }
     // 选中节点不存在时清空面板
     if (selectedId && !store.index.nodeById.get(selectedId)) {
       selectedId = null
@@ -184,10 +366,18 @@ async function boot(): Promise<void> {
   async function lightWithCeremony(id: string): Promise<void> {
     const node = store.index.nodeById.get(id)
     if (!node || node.kind !== 'leaf') return
-    // 点亮前可用性快照，用于解锁级联
+    // 点亮前可用性快照：只遍历 hardDependentsOf 可达子集（旧实现遍历全部 9793 节点）
     const before = new Map<string, boolean>()
-    for (const nid of store.index.nodeById.keys()) {
-      before.set(nid, store.stateOf(nid) === 'available')
+    const reachQueue = [id]
+    const seen = new Set<string>([id])
+    while (reachQueue.length > 0) {
+      const cur = reachQueue.shift()!
+      for (const dep of store.index.hardDependentsOf(cur)) {
+        if (seen.has(dep.id)) continue
+        seen.add(dep.id)
+        before.set(dep.id, store.stateOf(dep.id) === 'available')
+        reachQueue.push(dep.id)
+      }
     }
     store.lightLeaf(id)
     await lastRender
@@ -199,12 +389,12 @@ async function boot(): Promise<void> {
     const from = centerOf(id)
     const newly: { id: string; depth: number }[] = []
     const queue: { id: string; depth: number }[] = [{ id, depth: 0 }]
-    const seen = new Set<string>([id])
+    const seen2 = new Set<string>([id])
     while (queue.length > 0) {
       const cur = queue.shift()!
       for (const dep of store.index.hardDependentsOf(cur.id)) {
-        if (seen.has(dep.id)) continue
-        seen.add(dep.id)
+        if (seen2.has(dep.id)) continue
+        seen2.add(dep.id)
         if (!before.get(dep.id) && store.stateOf(dep.id) === 'available') {
           newly.push({ id: dep.id, depth: cur.depth + 1 })
         }
@@ -231,10 +421,28 @@ async function boot(): Promise<void> {
 
   // 单击 = 打开/更新 DetailPanel（v2 spec §3）
   svgEl.addEventListener('click', (e) => {
+    // stub 徽章点击（跨视图前置/后继）→ 打开锚点面板
+    const stub = (e.target as Element).closest('g.stub')
+    if (stub instanceof SVGGElement) {
+      const anchorId = stub.getAttribute('data-anchor')
+      if (anchorId && store.index.nodeById.get(anchorId)) {
+        openPanel(anchorId)
+        return
+      }
+    }
     const g = (e.target as Element).closest('g.node')
     if (!(g instanceof SVGGElement)) return
     const id = g.getAttribute('data-id')
-    if (id && store.index.nodeById.get(id)) openPanel(id)
+    if (id && store.index.nodeById.get(id)) {
+      // locked 节点误触反馈（spec §9.3：抖动 + 锁图标确认动画）。
+      // 不能 return：锁定单元也要打开面板，才能看到「还差 N 步」与 pathTrace 点亮路径，
+      // 否则用户点锁着的节点只看到抖一下、什么信息都没有（操作复杂的根因之一）。
+      if (store.stateOf(id) === 'locked') {
+        g.classList.add('node--denied')
+        window.setTimeout(() => g.classList.remove('node--denied'), 300)
+      }
+      openPanel(id)
+    }
   })
 
   // 双击容器 = 进入（面板跟随）
@@ -247,10 +455,6 @@ async function boot(): Promise<void> {
       jumpToNode(node.id)
       openPanel(node.id)
     }
-  })
-  svgEl.addEventListener('stub-click', (e) => {
-    const anchorId = (e as CustomEvent<string>).detail
-    if (store.index.nodeById.get(anchorId)) openPanel(anchorId)
   })
   window.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return
@@ -309,6 +513,9 @@ async function boot(): Promise<void> {
   function applyTransform(): void {
     const vp = svgEl.querySelector('.viewport')
     if (vp instanceof SVGGElement) vp.setAttribute('transform', `translate(${tx}, ${ty}) scale(${scale})`)
+    // 粒子层坐标系同步（审查 P0：旧实现粒子位置错乱）
+    effects.setTransform(tx, ty, scale)
+    toolbar.setZoomPercent(scale)
   }
   function fitView(): void {
     const sw = stageEl.clientWidth
@@ -327,6 +534,16 @@ async function boot(): Promise<void> {
     }
     applyTransform()
   }
+  function zoomBy(factor: number): void {
+    const rect = svgEl.getBoundingClientRect()
+    const mx = rect.width / 2
+    const my = rect.height / 2
+    tx = mx - (mx - tx) * factor
+    ty = my - (my - ty) * factor
+    scale *= factor
+    scale = Math.max(0.15, Math.min(4, scale))
+    applyTransform()
+  }
   svgEl.addEventListener('wheel', (e) => {
     e.preventDefault()
     const factor = e.deltaY < 0 ? 1.1 : 0.9
@@ -336,21 +553,28 @@ async function boot(): Promise<void> {
     tx = mx - (mx - tx) * factor
     ty = my - (my - ty) * factor
     scale *= factor
+    scale = Math.max(0.15, Math.min(4, scale))
     applyTransform()
   })
   let dragging = false
   let lastX = 0
   let lastY = 0
+  let dragMoved = false
   svgEl.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return // 右键不进入拖拽（审查：旧实现右键也 dragging）
     dragging = true
+    dragMoved = false
     lastX = e.clientX
     lastY = e.clientY
     svgEl.classList.add('panning')
   })
   window.addEventListener('mousemove', (e) => {
     if (!dragging) return
-    tx += e.clientX - lastX
-    ty += e.clientY - lastY
+    const dx = e.clientX - lastX
+    const dy = e.clientY - lastY
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragMoved = true // 位移阈值：抑制随之而来的 click
+    tx += dx
+    ty += dy
     lastX = e.clientX
     lastY = e.clientY
     applyTransform()
@@ -362,6 +586,11 @@ async function boot(): Promise<void> {
 
   window.addEventListener('beforeunload', () => {
     store.flushSave()
+  })
+
+  window.addEventListener('resize', () => {
+    // 审查：旧实现只有 effects 监听 resize，视口不重新 fit
+    if (renderedContainerId !== null && renderedContainerId !== 'home') fitView()
   })
 
   scheduleRender()

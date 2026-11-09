@@ -40,10 +40,10 @@ export function renderHome(el: HTMLElement, store: AppStore, handlers: HomeHandl
     const rec = progress.lit[key]
     if (rec !== undefined && rec.at.slice(0, 10) === today) todayCount++
   }
+  const domainStatsAll = domainStats(store.index, store.litLeaves())
   const domainCards = store.pack.domains
     .map((d) => {
-      const stat = domainStats(store.index, store.litLeaves()).find((x) => x.domainId === d.id)
-      const pct = stat && stat.total > 0 ? Math.round((stat.lit / stat.total) * 100) : 0
+      const stat = domainStatsAll.find((x) => x.domainId === d.id)
       return `<button class="hm-domain" data-domain="${esc(d.id)}" type="button">
         <span class="dot" style="background:${esc(d.color)}"></span>
         <span class="hm-domain-name">${esc(d.name)}</span>

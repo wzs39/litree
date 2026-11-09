@@ -1,1 +1,0 @@
-import{t as e}from"./index-BoKXU9Ip.js";function t(e){return new Worker(new URL(`elk.worker-ysmwvEZ9.js`,import.meta.url).href,{name:e?.name})}e((()=>{}))();export{t as default};

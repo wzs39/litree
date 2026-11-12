@@ -1,30 +1,44 @@
-/* 设计令牌（spec §9.2/§9.3） */
+/* 设计令牌：天体恒星与宇宙星系风格（Cosmic Celestial Design System） */
 :root {
-  --bg: #0b1220;
-  --bg-soft: #101a2e;
-  --bg-panel: #0e1728;
-  --ink: #e8eef7;
-  --ink-dim: #8fa1b8;
-  --ink-faint: #5a6a82;
-  --line: #26334a;
-  --line-soft: #1a2538;
+  --bg: #050813;
+  --bg-deep: #03050a;
+  --bg-soft: #0b1426;
+  --bg-panel: rgba(9, 16, 32, 0.88);
+  --ink: #eaf1fb;
+  --ink-dim: #94a7c1;
+  --ink-faint: #566885;
+  --line: #1a273f;
+  --line-soft: #111a2c;
+
+  /* 天体物理与恒星状态色 */
+  --star-gold: #fbbf24;
+  --star-corona: rgba(251, 191, 36, 0.4);
+  --planet-blue: #38bdf8;
+  --planet-halo: rgba(56, 189, 248, 0.35);
+  --nebula-purple: #c084fc;
+  --nebula-glow: rgba(192, 132, 252, 0.35);
+  --pulsar-glow: rgba(251, 191, 36, 0.6);
 
   /* 节点状态色 */
-  --node-locked-fill: #131c2f;
-  --node-locked-stroke: #2a3854;
-  --node-avail-stroke: #7fd0ff;
-  --node-avail-fill: #16233c;
-  --node-learning-stroke: #f0b429;
-  --node-lit-stroke: #ffd76a;
-  --node-lit-fill: #1d2b4a;
-  --node-lit-glow: rgba(255, 215, 106, 0.35);
+  --node-locked-fill: #080e1a;
+  --node-locked-stroke: #182438;
+  --node-avail-stroke: #38bdf8;
+  --node-avail-fill: #0c182c;
+  --node-learning-stroke: #f59e0b;
+  --node-lit-stroke: #fbbf24;
+  --node-lit-fill: #16243d;
+  --node-lit-glow: rgba(251, 191, 36, 0.45);
+
+  /* 聚焦透镜光圈 */
+  --focus-ring: #38bdf8;
+  --focus-glow: rgba(56, 189, 248, 0.65);
 
   /* 领域色由数据包注入 --domain-<id> */
 
-  /* 动效令牌（spec §9.3） */
+  /* 动效令牌 */
   --fast: 120ms;
-  --base: 200ms;
-  --slow: 400ms;
+  --base: 220ms;
+  --slow: 420ms;
   --cascade: 80ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }

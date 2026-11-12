@@ -28,6 +28,18 @@ export function lightLeaf(
   }
 }
 
+/** 撤回知识点点亮状态：移除记录并扣减 XP */
+export function unlightLeaf(progress: Progress, leafId: string): Progress {
+  if (progress.lit[leafId] === undefined) return progress // 幂等
+  const lit = { ...progress.lit }
+  delete lit[leafId]
+  return {
+    ...progress,
+    lit,
+    xp: Math.max(0, progress.xp - XP_PER_LEAF)
+  }
+}
+
 export function toggleLearning(progress: Progress, id: string, date: string): Progress {
   const learning = { ...progress.learning }
   if (learning[id] !== undefined) delete learning[id]

@@ -15,15 +15,16 @@ describe('resources/packs/cs-math.json 回归', () => {
     expect(pack.id).toBe('cs-math')
   })
 
-  it('对账：192 单元 / 260 hard / 400 soft / 8124 叶子', () => {
+  it('对账：202 单元（192基线+10前沿/语言）/ 279 hard / 411 soft / 8286 叶子 / 12 路线', () => {
     const units = pack.nodes.filter((n) => n.kind === 'unit')
     const leaves = pack.nodes.filter((n) => n.kind === 'leaf')
     const hard = pack.edges.filter((e) => e.type === 'hard')
     const soft = pack.edges.filter((e) => e.type === 'soft')
-    expect(units.length).toBe(192)
-    expect(hard.length).toBe(260)
-    expect(soft.length).toBe(400)
-    expect(leaves.length).toBe(8112) // 8124 - 12 乱码/单字叶（Batch1 质量门禁剔除）
+    expect(units.length).toBe(202)
+    expect(hard.length).toBe(279)
+    expect(soft.length).toBe(411)
+    expect(leaves.length).toBe(8286)
+    expect(pack.routes?.length).toBe(12)
   })
 
   it('结构：11 个学科根（CS 的 lane 与学科同 id 合并）、数学 3 lane 挂 M 下、全部叶子有父', () => {

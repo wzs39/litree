@@ -18,6 +18,8 @@ export interface RenderOptions {
   missingHint?: (id: string) => string | null
   /** 领域色（卡顶色条） */
   domainColor?: (id: string) => string | null
+  /** 当前聚焦选中的天体节点 ID（用于聚焦光圈与星系缩放） */
+  focusedId?: string | null
 }
 
 export interface BezierSegment {
@@ -80,6 +82,27 @@ function createState(svgEl: SVGSVGElement): RenderState {
   arrow.setAttribute('stroke', 'context-stroke')
   marker.appendChild(arrow)
   defs.appendChild(marker)
+
+  // 天体恒星辉光滤镜 (Celestial Star Glow Filter)
+  const filter = mk(doc, 'filter')
+  filter.setAttribute('id', 'celestial-glow')
+  filter.setAttribute('x', '-50%')
+  filter.setAttribute('y', '-50%')
+  filter.setAttribute('width', '200%')
+  filter.setAttribute('height', '200%')
+  const feBlur = mk(doc, 'feGaussianBlur')
+  feBlur.setAttribute('stdDeviation', '5')
+  feBlur.setAttribute('result', 'blur')
+  const feMerge = mk(doc, 'feMerge')
+  const feMerge1 = mk(doc, 'feMergeNode')
+  feMerge1.setAttribute('in', 'blur')
+  const feMerge2 = mk(doc, 'feMergeNode')
+  feMerge2.setAttribute('in', 'SourceGraphic')
+  feMerge.appendChild(feMerge1)
+  feMerge.appendChild(feMerge2)
+  filter.appendChild(feBlur)
+  filter.appendChild(feMerge)
+  defs.appendChild(filter)
 
   const viewport = mk(doc, 'g') as SVGGElement
   viewport.setAttribute('class', 'viewport')
@@ -263,9 +286,10 @@ function syncNode(
 ): void {
   const size = NODE_SIZE[n.kind] ?? NODE_SIZE['unit']!
   const state = stateOf(n.id)
+  const isFocused = opts.focusedId === n.id
   const parentKind = n.parent ? nodeOf(n.parent)?.kind : undefined
   const isSection = n.kind === 'branch' && parentKind === 'unit'
-  const cls = `node node--${state} node--${n.kind}${isSection ? ' node--section' : ''}`
+  const cls = `node node--${state} node--${n.kind}${isSection ? ' node--section' : ''}${isFocused ? ' node--focused' : ''}`
   setAttrs(g, {
     class: cls,
     'data-id': esc(n.id),
@@ -279,10 +303,50 @@ function syncNode(
     rect.setAttribute('class', 'node-rect')
     g.appendChild(rect)
   }
-  setAttrs(rect, { width: String(pos.width), height: String(pos.height), rx: '10' })
+  const rx = n.kind === 'branch' ? '16' : n.kind === 'unit' ? '14' : '10'
+  setAttrs(rect, { width: String(pos.width), height: String(pos.height), rx })
 
   // 重建 rect 之后的子元素（保留 rect 引用）
   const extras: SVGElement[] = []
+
+  // 天体聚焦定位圈（处于聚焦状态时渲染光圈与定位指示）
+  if (isFocused) {
+    const reticle = mk(doc, 'rect')
+    setAttrs(reticle, {
+      class: 'celestial-reticle',
+      x: '-6',
+      y: '-6',
+      width: String(pos.width + 12),
+      height: String(pos.height + 12),
+      rx: String(parseInt(rx, 10) + 6)
+    })
+    extras.push(reticle)
+  }
+
+  // 天体恒星日冕 / 行星大气光环
+  if (n.kind === 'branch' && !isSection) {
+    const corona = mk(doc, 'rect')
+    setAttrs(corona, {
+      class: 'celestial-corona',
+      x: '-2',
+      y: '-2',
+      width: String(pos.width + 4),
+      height: String(pos.height + 4),
+      rx: '18'
+    })
+    extras.push(corona)
+  } else if (n.kind === 'unit') {
+    const halo = mk(doc, 'rect')
+    setAttrs(halo, {
+      class: 'celestial-halo',
+      x: '-1.5',
+      y: '-1.5',
+      width: String(pos.width + 3),
+      height: String(pos.height + 3),
+      rx: '15'
+    })
+    extras.push(halo)
+  }
   const prog = opts.progressOf?.(n.id)
   if (prog && prog.total > 0 && (n.kind === 'branch' || n.kind === 'unit')) {
     const r = n.kind === 'branch' ? 8 : 7

@@ -148,6 +148,21 @@ export class ViewportController {
     }
   }
 
+  /** 聚焦天体/行星世界坐标并平滑补间居中（offsetX 为面板避让偏移，默认偏左保证视野开阔） */
+  focusOn(worldX: number, worldY: number, targetScale?: number, offsetX = 160): void {
+    const sw = this.svgEl.clientWidth || window.innerWidth
+    const sh = this.svgEl.clientHeight || window.innerHeight
+    const s = targetScale !== undefined
+      ? Math.min(this.opts.maxScale, Math.max(this.opts.minScale, targetScale))
+      : Math.min(this.opts.maxScale, Math.max(1.05, this.cur.scale))
+    // 计算屏幕视觉中心点（考虑右侧展开的 DetailPanel，中心点偏左 offsetX）
+    const cx = Math.max(sw * 0.3, (sw - offsetX) / 2)
+    const cy = sh / 2
+    const tx = cx - worldX * s
+    const ty = cy - worldY * s
+    this.setTransform(tx, ty, s)
+  }
+
   private schedule(): void {
     if (this.rafId === 0) this.rafId = requestAnimationFrame(this.boundTick)
   }

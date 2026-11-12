@@ -4,6 +4,7 @@ import { validatePack } from '../../src/renderer/core/schema'
 import {
   emptyProgress,
   lightLeaf,
+  unlightLeaf,
   orphanedLitIds,
   toggleLearning
 } from '../../src/renderer/core/progress'
@@ -40,6 +41,23 @@ describe('lightLeaf', () => {
     p = lightLeaf(p, 'ghost', index, '2026-11-08T10:00:00Z')
     expect(p.xp).toBe(0)
     expect(Object.keys(p.lit)).toHaveLength(0)
+  })
+})
+
+describe('unlightLeaf', () => {
+  it('撤回点亮扣减 xp 并移除记录', () => {
+    let p = emptyProgress('mini')
+    p = lightLeaf(p, 'u1.k1', index, '2026-11-08T10:00:00Z')
+    expect(p.xp).toBe(2)
+    p = unlightLeaf(p, 'u1.k1')
+    expect(p.lit['u1.k1']).toBeUndefined()
+    expect(p.xp).toBe(0)
+  })
+  it('撤回未点亮的节点幂等', () => {
+    let p = emptyProgress('mini')
+    const before = JSON.stringify(p)
+    p = unlightLeaf(p, 'u1.k1')
+    expect(JSON.stringify(p)).toBe(before)
   })
 })
 

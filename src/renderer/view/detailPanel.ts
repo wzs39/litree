@@ -6,8 +6,14 @@ import { esc } from './escape'
 import { icon } from './icons'
 
 export interface DetailHandlers {
-  /** 确认点亮（main 层执行仪式：store.lightLeaf + 动效） */
-  onLight(id: string): void
+  /** 确认点亮（main 层执行仪式：store.lightLeaf + 动效；force=true 时支持跳过门控自由点亮） */
+  onLight(id: string, force?: boolean): void
+  /** 撤回知识点点亮标记 */
+  onUnlight?(id: string): void
+  /** 批量点亮单元全部知识点（force=true 支持跳过门控） */
+  onLightAll?(unitId: string, force?: boolean): void
+  /** 批量撤回单元全部已点亮知识点 */
+  onUnlightAll?(unitId: string): void
   /** 进入容器视图（stack 需含其祖先链） */
   onEnter(id: string): void
   /** 跳到任意节点的所属视图 */
@@ -51,8 +57,13 @@ export function renderDetailPanel(
   }
   const domain = store.pack.domains.find((d) => d.id === node.domain)
   const color = domain?.color ?? '#7fd0ff'
-  const kindLabel = node.core === false ? '选修' : node.kind === 'unit' ? '主干' : node.kind === 'branch' ? '分支' : '知识点'
   const state = store.stateOf(node.id)
+  const kindLabel =
+    node.kind === 'branch'
+      ? (node.core !== false ? '🌌 核心星系' : '🌌 边缘星系')
+      : node.kind === 'unit'
+      ? (state === 'lit' ? '☀️ 恒星级系统' : '🪐 行星级系统')
+      : (node.core !== false ? '✦ 主干知识卫星' : '✦ 选修知识卫星')
 
   // 前置链（叶子映射所属 unit）
   const unitId = node.kind === 'leaf' ? owningUnit(node) : node.kind === 'unit' ? node.id : null
@@ -138,6 +149,48 @@ export function renderDetailPanel(
           .find((l) => l.id !== node.id && leafAvailable(l.id, store.index, store.litLeaves()) && store.stateOf(l.id) !== 'lit')
       : undefined
 
+  // Google 官方资料库与学术检索快捷通道
+  const searchBaseTitle = (contentNode?.title.en ? `${contentNode.title.en} ` : '') + (contentNode?.title.zh ?? node.title.zh)
+  const q = encodeURIComponent(searchBaseTitle.trim())
+  const googleDevUrl = `https://developers.google.com/search?q=${q}`
+  const googleCloudUrl = `https://cloud.google.com/search?q=${q}`
+  const googleScholarUrl = `https://scholar.google.com/scholar?q=${q}`
+  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchBaseTitle.trim() + ' documentation tutorial')}`
+
+  const googleSection = `
+    <div class="dp-cap">Google 官方知识库与文献</div>
+    <div class="dp-google-group">
+      <a class="dp-res" href="${googleDevUrl}" target="_blank" rel="noopener noreferrer">
+        <span class="dp-res-lang" style="color:#4285f4; border-color:rgba(66,133,244,0.4)">G·Dev</span>
+        <span class="dp-res-body">
+          <span class="dp-res-title">Google Developers 官方文档与指南</span>
+          <span class="dp-res-url">developers.google.com</span>
+        </span>
+      </a>
+      <a class="dp-res" href="${googleCloudUrl}" target="_blank" rel="noopener noreferrer">
+        <span class="dp-res-lang" style="color:#ea4335; border-color:rgba(234,67,53,0.4)">G·Cloud</span>
+        <span class="dp-res-body">
+          <span class="dp-res-title">Google Cloud 架构中心与工程实践</span>
+          <span class="dp-res-url">cloud.google.com/architecture</span>
+        </span>
+      </a>
+      <a class="dp-res" href="${googleScholarUrl}" target="_blank" rel="noopener noreferrer">
+        <span class="dp-res-lang" style="color:#fbbc05; border-color:rgba(251,188,5,0.4)">Scholar</span>
+        <span class="dp-res-body">
+          <span class="dp-res-title">Google Scholar 学术文献与论文检索</span>
+          <span class="dp-res-url">scholar.google.com</span>
+        </span>
+      </a>
+      <a class="dp-res" href="${googleSearchUrl}" target="_blank" rel="noopener noreferrer">
+        <span class="dp-res-lang" style="color:#34a853; border-color:rgba(52,168,83,0.4)">Search</span>
+        <span class="dp-res-body">
+          <span class="dp-res-title">Google 专题精准检索（教程与专栏）</span>
+          <span class="dp-res-url">google.com</span>
+        </span>
+      </a>
+    </div>
+  `
+
   const actionArea = (() => {
     const learningBtn =
       state !== 'lit'
@@ -147,6 +200,7 @@ export function renderDetailPanel(
       if (state === 'lit') {
         return (
           `<div class="dp-action dp-action--done">✓ 已点亮</div>` +
+          `<button id="dp-unlight" class="dp-action dp-action--secondary" type="button">撤回点亮标记（重新学习）</button>` +
           (nextUp
             ? `<button id="dp-next" class="dp-action dp-action--secondary" type="button">下一个可学：${esc(nextUp.title.zh.slice(0, 10))}</button>`
             : '')
@@ -157,14 +211,26 @@ export function renderDetailPanel(
           `<button id="dp-light" class="dp-action dp-action--light" type="button">我已掌握，点亮</button>` + learningBtn
         )
       }
-      return `<div class="dp-action dp-action--locked">🔒 还差 ${closure.length} 步${missingFirst ? ` · 缺「${esc(missingFirst)}」` : ''}</div>` + learningBtn
+      return (
+        `<div class="dp-action dp-action--locked">🔒 还差 ${closure.length} 步${missingFirst ? ` · 缺「${esc(missingFirst)}」` : ''}</div>` +
+        `<button id="dp-force-light" class="dp-action dp-action--light" type="button" title="跳过前置门控限制直接点亮">跳过前置，直接点亮 (自由学习)</button>` +
+        learningBtn
+      )
     }
     if (node.kind === 'unit') {
       const avail = state === 'available'
+      const hasUnlit = store.index.leavesOf(node.id).some((l) => store.progress.lit[l.id] === undefined)
+      const hasLit = store.index.leavesOf(node.id).some((l) => store.progress.lit[l.id] !== undefined)
       return (
         `<button id="dp-enter" class="dp-action dp-action--enter" type="button">进入单元</button>` +
-        (avail && store.index.leavesOf(node.id).some((l) => store.progress.lit[l.id] === undefined)
+        (hasUnlit && avail
           ? `<button id="dp-light-all" class="dp-action dp-action--light" type="button">批量点亮全部知识点</button>`
+          : '') +
+        (hasUnlit && !avail
+          ? `<button id="dp-force-light-all" class="dp-action dp-action--secondary" type="button" title="跳过前置限制直接学习点亮该单元">跳过前置，批量点亮全部 (自由学习)</button>`
+          : '') +
+        (hasLit
+          ? `<button id="dp-unlight-all" class="dp-action dp-action--secondary" type="button">撤回本单元已点亮内容</button>`
           : '') +
         learningBtn
       )
@@ -175,8 +241,19 @@ export function renderDetailPanel(
     )
   })()
 
+  const celestialDrilldownBar =
+    node.kind === 'branch' || node.kind === 'unit'
+      ? `<div class="dp-celestial-focus-bar" id="dp-focus-enter" title="点击或在画布上再次点击深入星系">` +
+        `<span class="dp-focus-icon">${node.kind === 'branch' ? '🌌' : state === 'lit' ? '☀️' : '🪐'}</span>` +
+        `<span class="dp-focus-text">已锁定聚焦天体 · 点击深入星系</span>` +
+        `<span class="dp-focus-arrow">⤓</span></div>`
+      : `<div class="dp-celestial-focus-bar dp-celestial-focus-bar--leaf">` +
+        `<span class="dp-focus-icon">✦</span>` +
+        `<span class="dp-focus-text">已聚焦知识卫星 · 准备就绪</span></div>`
+
   el.innerHTML = `
     <div class="dp-colorbar" style="background:${esc(color)}"></div>
+    ${celestialDrilldownBar}
     <div class="dp-head">
       <div class="dp-title">${esc(node.title.zh)}${node.title.en ? `<span class="dp-title-en">${esc(node.title.en)}</span>` : ''}</div>
       <button id="dp-close" class="dp-close" aria-label="关闭">${icon('back', 12)}</button>
@@ -191,6 +268,7 @@ export function renderDetailPanel(
     ${contentFromUnit && contentNode ? `<div class="dp-from">以下内容来自单元「<span class="dp-from-link" data-jump="${esc(contentNode.id)}">${esc(contentNode.title.zh)}</span>」</div>` : ''}
     ${contentNode?.summary ? `<div class="dp-summary">${esc(contentNode.summary)}</div>` : ''}
     ${resList ? `<div class="dp-cap">学习资源</div>${resList}` : ''}
+    ${googleSection}
     ${exList ? `<div class="dp-cap">练习</div>${exList}` : ''}
     ${contentNode?.evidence ? `<div class="dp-cap">前置依据</div><div class="dp-evidence">${esc(contentNode.evidence)}</div>` : ''}
     ${litNote}
@@ -201,15 +279,43 @@ export function renderDetailPanel(
   el.style.display = 'block'
 
   el.querySelector('#dp-close')?.addEventListener('click', () => handlers.onClose())
-  el.querySelector('#dp-light')?.addEventListener('click', () => handlers.onLight(node.id))
+  el.querySelector('#dp-focus-enter')?.addEventListener('click', () => {
+    if (node.kind !== 'leaf') handlers.onEnter(node.id)
+  })
+  el.querySelector('#dp-light')?.addEventListener('click', () => handlers.onLight(node.id, false))
+  el.querySelector('#dp-force-light')?.addEventListener('click', () => handlers.onLight(node.id, true))
+  el.querySelector('#dp-unlight')?.addEventListener('click', () => {
+    if (handlers.onUnlight) handlers.onUnlight(node.id)
+    else store.unlightLeaf(node.id)
+    renderDetailPanel(el, store, node.id, handlers)
+  })
   el.querySelector('#dp-enter')?.addEventListener('click', () => {
     if (node.kind !== 'leaf') handlers.onEnter(node.id)
   })
   el.querySelector('#dp-light-all')?.addEventListener('click', () => {
     try {
-      store.lightAllLeaves(node.id)
+      if (handlers.onLightAll) handlers.onLightAll(node.id, false)
+      else store.lightAllLeaves(node.id, false)
     } catch (err) {
       console.error('批量点亮失败', err)
+    }
+    renderDetailPanel(el, store, node.id, handlers)
+  })
+  el.querySelector('#dp-force-light-all')?.addEventListener('click', () => {
+    try {
+      if (handlers.onLightAll) handlers.onLightAll(node.id, true)
+      else store.lightAllLeaves(node.id, true)
+    } catch (err) {
+      console.error('批量自由点亮失败', err)
+    }
+    renderDetailPanel(el, store, node.id, handlers)
+  })
+  el.querySelector('#dp-unlight-all')?.addEventListener('click', () => {
+    try {
+      if (handlers.onUnlightAll) handlers.onUnlightAll(node.id)
+      else store.unlightAllLeaves(node.id)
+    } catch (err) {
+      console.error('批量撤回失败', err)
     }
     renderDetailPanel(el, store, node.id, handlers)
   })

@@ -104,10 +104,32 @@ describe('AppStore', () => {
     expect(store.viewStack).toEqual(['root']) // 根不可再退
   })
 
-  it('门控：locked 单元的叶子点亮抛错', async () => {
+  it('门控：locked 单元的叶子默认点亮抛错，force=true 可自由学习点亮', async () => {
     const store = new AppStore(fake.api)
     await store.init()
     expect(() => store.lightLeaf('u2.k1')).toThrow(/前置/)
+    // 自由学习模式
+    store.lightLeaf('u2.k1', true)
+    expect(store.stateOf('u2.k1')).toBe('lit')
+    expect(store.progress.xp).toBe(2)
+  })
+
+  it('unlightLeaf 与 unlightAllLeaves：撤回点亮并恢复状态', async () => {
+    const store = new AppStore(fake.api)
+    await store.init()
+    store.lightLeaf('u1.k1')
+    expect(store.stateOf('u1.k1')).toBe('lit')
+    expect(store.progress.xp).toBe(2)
+    store.unlightLeaf('u1.k1')
+    expect(store.stateOf('u1.k1')).not.toBe('lit')
+    expect(store.progress.xp).toBe(0)
+
+    // 批量点亮与批量撤回
+    store.lightAllLeaves('u1')
+    expect(store.progress.xp).toBe(6)
+    store.unlightAllLeaves('u1')
+    expect(store.progress.xp).toBe(0)
+    expect(store.progressOfContainer('u1').lit).toBe(0)
   })
 
   it('点亮 u1 全部叶子后 u2 解锁为 available', async () => {

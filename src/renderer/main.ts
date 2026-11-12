@@ -189,6 +189,87 @@ async function boot(): Promise<void> {
   const layoutCache = new Map<string, Map<string, LaidOutNode>>()
   let renderedContainerId: string | null = null
 
+  // ── 平移/缩放与天体聚焦控制器 ──
+  let tx = 0
+  let ty = 0
+  let scale = 1
+  let dragMoved = false
+
+  function applyTransform(): void {
+    const vp = svgEl.querySelector('.viewport')
+    if (vp instanceof SVGGElement) vp.setAttribute('transform', `translate(${tx}, ${ty}) scale(${scale})`)
+    // 粒子层坐标系同步（审查 P0：旧实现粒子位置错乱）
+    effects.setTransform(tx, ty, scale)
+    toolbar.setZoomPercent(scale)
+  }
+
+  function fitView(): void {
+    const sw = stageEl.clientWidth
+    const sh = stageEl.clientHeight
+    const vp = svgEl.querySelector('.viewport')
+    const bbox = vp instanceof SVGGElement ? vp.getBBox() : null
+    if (bbox && bbox.width > 0) {
+      // 下限 0.7（审查 P0：57 个大单元 fitView 缩到 4.5px 不可读），超出交给平移缩放
+      scale = Math.min(1.2, Math.max(0.7, Math.min(sw / (bbox.width + 80), sh / (bbox.height + 80))))
+      tx = (sw - bbox.width * scale) / 2 - bbox.x * scale
+      ty = (sh - bbox.height * scale) / 2 - bbox.y * scale
+    } else {
+      scale = 1
+      tx = sw / 2
+      ty = 60
+    }
+    applyTransform()
+  }
+
+  function zoomBy(factor: number): void {
+    const rect = svgEl.getBoundingClientRect()
+    const mx = rect.width / 2
+    const my = rect.height / 2
+    tx = mx - (mx - tx) * factor
+    ty = my - (my - ty) * factor
+    scale *= factor
+    scale = Math.max(0.15, Math.min(4, scale))
+    applyTransform()
+  }
+
+  /** 平滑聚焦至行星/恒星天体世界坐标并居中显示（针对右侧展开面板自动做视口偏移） */
+  function focusOn(worldX: number, worldY: number, targetScale?: number, smooth = true): void {
+    const sw = svgEl.clientWidth || stageEl.clientWidth || window.innerWidth
+    const sh = svgEl.clientHeight || stageEl.clientHeight || window.innerHeight
+    const targetCenterX = Math.max(sw * 0.3, (sw - 160) / 2)
+    const targetCenterY = sh / 2
+    const targetS = targetScale !== undefined ? targetScale : Math.min(1.6, Math.max(1.05, scale))
+    const targetTx = targetCenterX - worldX * targetS
+    const targetTy = targetCenterY - worldY * targetS
+
+    if (!smooth) {
+      tx = targetTx
+      ty = targetTy
+      scale = targetS
+      applyTransform()
+      return
+    }
+
+    const startTx = tx
+    const startTy = ty
+    const startScale = scale
+    const startTime = performance.now()
+    const duration = 280
+
+    function step(now: number): void {
+      const p = Math.min(1, (now - startTime) / duration)
+      const ease = 1 - Math.pow(1 - p, 3)
+      tx = startTx + (targetTx - startTx) * ease
+      ty = startTy + (targetTy - startTy) * ease
+      scale = startScale + (targetS - startScale) * ease
+      applyTransform()
+      if (p < 1) {
+        requestAnimationFrame(step)
+      }
+    }
+    requestAnimationFrame(step)
+  }
+
   function centerOf(id: string): { x: number; y: number } {
     const p = currentLayout.get(id)
     if (!p) return { x: 0, y: 0 }
@@ -208,7 +289,19 @@ async function boot(): Promise<void> {
     // 面板是滚动容器：内容重建后保持滚动位置（审查 P1）
     const prevTop = panelEl.scrollTop
     renderDetailPanel(panelEl, store, selectedId, {
-      onLight: (id) => void lightWithCeremony(id).catch((err) => console.error('点亮失败', err)),
+      onLight: (id, force) => void lightWithCeremony(id, force).catch((err) => console.error('点亮失败', err)),
+      onUnlight: (id) => {
+        store.unlightLeaf(id)
+        renderPanel()
+      },
+      onLightAll: (unitId, force) => {
+        store.lightAllLeaves(unitId, force)
+        renderPanel()
+      },
+      onUnlightAll: (unitId) => {
+        store.unlightAllLeaves(unitId)
+        renderPanel()
+      },
       onEnter: (id) => jumpToNode(id),
       onJump: (id) => {
         jumpToNode(id)
@@ -219,6 +312,7 @@ async function boot(): Promise<void> {
         selectedId = null
         routerSyncNode?.(null)
         renderPanel()
+        void renderView()
       }
     })
     panelEl.scrollTop = prevTop
@@ -241,6 +335,7 @@ async function boot(): Promise<void> {
     selectedId = id
     routerSyncNode?.(id)
     renderPanel()
+    void renderView()
   }
 
   function sameStack(a: string[], b: string[]): boolean {
@@ -311,7 +406,8 @@ async function boot(): Promise<void> {
       domainColor: (id) => {
         const d = store.index.nodeById.get(id)?.domain
         return d ? store.pack.domains.find((x) => x.id === d)?.color ?? null : null
-      }
+      },
+      focusedId: selectedId
     })
     applyTransform()
     if (containerChanged) fitView()
@@ -363,7 +459,7 @@ async function boot(): Promise<void> {
   void router.detach
 
   /** 点亮仪式（v2：由 DetailPanel 确认触发） */
-  async function lightWithCeremony(id: string): Promise<void> {
+  async function lightWithCeremony(id: string, force = false): Promise<void> {
     const node = store.index.nodeById.get(id)
     if (!node || node.kind !== 'leaf') return
     // 点亮前可用性快照：只遍历 hardDependentsOf 可达子集（旧实现遍历全部 9793 节点）
@@ -379,7 +475,7 @@ async function boot(): Promise<void> {
         reachQueue.push(dep.id)
       }
     }
-    store.lightLeaf(id)
+    store.lightLeaf(id, force)
     await lastRender
     const g = svgEl.querySelector(`g.node[data-id="${CSS.escape(id)}"]`)
     if (g instanceof SVGGElement) {
@@ -419,30 +515,59 @@ async function boot(): Promise<void> {
     renderPanel() // 面板切换为"已点亮"态
   }
 
-  // 单击 = 打开/更新 DetailPanel（v2 spec §3）
+  // 单击 = 首次点击聚焦天体并展开面板；再次点击已聚焦的天体深入星系/详细界面
   svgEl.addEventListener('click', (e) => {
-    // stub 徽章点击（跨视图前置/后继）→ 打开锚点面板
+    if (dragMoved) {
+      dragMoved = false
+      return
+    }
+    // stub 徽章点击（跨视图前置/后继）→ 打开锚点面板并聚焦
     const stub = (e.target as Element).closest('g.stub')
     if (stub instanceof SVGGElement) {
       const anchorId = stub.getAttribute('data-anchor')
       if (anchorId && store.index.nodeById.get(anchorId)) {
+        selectedId = anchorId
+        const center = centerOf(anchorId)
+        focusOn(center.x, center.y)
         openPanel(anchorId)
         return
       }
     }
     const g = (e.target as Element).closest('g.node')
-    if (!(g instanceof SVGGElement)) return
-    const id = g.getAttribute('data-id')
-    if (id && store.index.nodeById.get(id)) {
-      // locked 节点误触反馈（spec §9.3：抖动 + 锁图标确认动画）。
-      // 不能 return：锁定单元也要打开面板，才能看到「还差 N 步」与 pathTrace 点亮路径，
-      // 否则用户点锁着的节点只看到抖一下、什么信息都没有（操作复杂的根因之一）。
-      if (store.stateOf(id) === 'locked') {
-        g.classList.add('node--denied')
-        window.setTimeout(() => g.classList.remove('node--denied'), 300)
+    if (!(g instanceof SVGGElement)) {
+      // 点击画布深空背景：取消选中聚焦与收起面板
+      if (selectedId !== null) {
+        selectedId = null
+        routerSyncNode?.(null)
+        renderPanel()
+        void renderView()
       }
-      openPanel(id)
+      return
     }
+    const id = g.getAttribute('data-id')
+    if (!id || !store.index.nodeById.get(id)) return
+    const node = store.index.nodeById.get(id)!
+
+    // locked 节点误触反馈（抖动）
+    if (store.stateOf(id) === 'locked') {
+      g.classList.add('node--denied')
+      window.setTimeout(() => g.classList.remove('node--denied'), 300)
+    }
+
+    // 交互核心逻辑：点击后聚焦，再次点击深入星系进入详细视图
+    if (selectedId === id) {
+      if (node.kind === 'branch' || node.kind === 'unit') {
+        jumpToNode(node.id)
+        openPanel(node.id)
+        return
+      }
+    }
+
+    // 首次点击：平滑聚焦镜头至行星/恒星天体世界坐标，展开详细面板
+    selectedId = id
+    const center = centerOf(id)
+    focusOn(center.x, center.y)
+    openPanel(id)
   })
 
   // 双击容器 = 进入（面板跟随）
@@ -462,6 +587,7 @@ async function boot(): Promise<void> {
       selectedId = null
       routerSyncNode?.(null)
       renderPanel()
+      void renderView()
     } else {
       store.back()
     }
@@ -506,44 +632,6 @@ async function boot(): Promise<void> {
     ctxMenu.style.display = 'none'
   })
 
-  // 平移/缩放
-  let tx = 0
-  let ty = 0
-  let scale = 1
-  function applyTransform(): void {
-    const vp = svgEl.querySelector('.viewport')
-    if (vp instanceof SVGGElement) vp.setAttribute('transform', `translate(${tx}, ${ty}) scale(${scale})`)
-    // 粒子层坐标系同步（审查 P0：旧实现粒子位置错乱）
-    effects.setTransform(tx, ty, scale)
-    toolbar.setZoomPercent(scale)
-  }
-  function fitView(): void {
-    const sw = stageEl.clientWidth
-    const sh = stageEl.clientHeight
-    const vp = svgEl.querySelector('.viewport')
-    const bbox = vp instanceof SVGGElement ? vp.getBBox() : null
-    if (bbox && bbox.width > 0) {
-      // 下限 0.7（审查 P0：57 个大单元 fitView 缩到 4.5px 不可读），超出交给平移缩放
-      scale = Math.min(1.2, Math.max(0.7, Math.min(sw / (bbox.width + 80), sh / (bbox.height + 80))))
-      tx = (sw - bbox.width * scale) / 2 - bbox.x * scale
-      ty = (sh - bbox.height * scale) / 2 - bbox.y * scale
-    } else {
-      scale = 1
-      tx = sw / 2
-      ty = 60
-    }
-    applyTransform()
-  }
-  function zoomBy(factor: number): void {
-    const rect = svgEl.getBoundingClientRect()
-    const mx = rect.width / 2
-    const my = rect.height / 2
-    tx = mx - (mx - tx) * factor
-    ty = my - (my - ty) * factor
-    scale *= factor
-    scale = Math.max(0.15, Math.min(4, scale))
-    applyTransform()
-  }
   svgEl.addEventListener('wheel', (e) => {
     e.preventDefault()
     const factor = e.deltaY < 0 ? 1.1 : 0.9
@@ -559,7 +647,6 @@ async function boot(): Promise<void> {
   let dragging = false
   let lastX = 0
   let lastY = 0
-  let dragMoved = false
   svgEl.addEventListener('mousedown', (e) => {
     if (e.button !== 0) return // 右键不进入拖拽（审查：旧实现右键也 dragging）
     dragging = true

@@ -8,7 +8,7 @@ import {
   type GraphIndex,
   type NodeState
 } from './graph'
-import { emptyProgress, lightLeaf, orphanedLitIds, toggleLearning } from './progress'
+import { emptyProgress, lightLeaf, unlightLeaf, orphanedLitIds, toggleLearning } from './progress'
 import { validatePack } from './schema'
 import type { Pack, Progress } from './types'
 
@@ -70,11 +70,11 @@ export class AppStore {
     return { lit: litN, total: leaves.length }
   }
 
-  /** 点亮知识点：硬门控（所属单元的 hard 前置须全部点亮）；500ms debounce 自动保存 */
-  lightLeaf(id: string): void {
+  /** 点亮知识点：硬门控（默认所属单元的 hard 前置须全部点亮；force=true 支持自由学习未解锁内容）；500ms debounce 自动保存 */
+  lightLeaf(id: string, force = false): void {
     const node = this.index.nodeById.get(id)
     if (node?.kind !== 'leaf') throw new Error('只有知识点可点亮: ' + id)
-    if (!leafAvailable(id, this.index, this.litLeaves())) {
+    if (!force && !leafAvailable(id, this.index, this.litLeaves())) {
       throw new Error('前置未满足，无法点亮: ' + id)
     }
     this.progress = lightLeaf(this.progress, id, this.index, new Date().toISOString())
@@ -82,15 +82,38 @@ export class AppStore {
     this.notify()
   }
 
-  /** 批量点亮本单元全部知识点（spec §4.2）：仅当单元解锁；逐个计分 */
-  lightAllLeaves(unitId: string): void {
+  /** 撤回知识点点亮：重新置为未学状态并扣减积分 */
+  unlightLeaf(id: string): void {
+    const node = this.index.nodeById.get(id)
+    if (node?.kind !== 'leaf') throw new Error('只有知识点可撤回点亮: ' + id)
+    if (this.progress.lit[id] === undefined) return
+    this.progress = unlightLeaf(this.progress, id)
+    this.scheduleSave()
+    this.notify()
+  }
+
+  /** 批量点亮本单元全部知识点（spec §4.2）：默认仅当单元解锁；force=true 支持自由学习；逐个计分 */
+  lightAllLeaves(unitId: string, force = false): void {
     const node = this.index.nodeById.get(unitId)
     if (node?.kind !== 'unit') throw new Error('批量点亮只作用于单元: ' + unitId)
-    if (!unitAvailable(unitId, this.index, this.litLeaves())) {
+    if (!force && !unitAvailable(unitId, this.index, this.litLeaves())) {
       throw new Error('前置未满足，无法批量点亮: ' + unitId)
     }
     for (const leaf of this.index.leavesOf(unitId)) {
       this.progress = lightLeaf(this.progress, leaf.id, this.index, new Date().toISOString())
+    }
+    this.scheduleSave()
+    this.notify()
+  }
+
+  /** 批量撤回本单元全部已点亮知识点 */
+  unlightAllLeaves(unitId: string): void {
+    const node = this.index.nodeById.get(unitId)
+    if (node?.kind !== 'unit') throw new Error('批量撤回只作用于单元: ' + unitId)
+    for (const leaf of this.index.leavesOf(unitId)) {
+      if (this.progress.lit[leaf.id] !== undefined) {
+        this.progress = unlightLeaf(this.progress, leaf.id)
+      }
     }
     this.scheduleSave()
     this.notify()

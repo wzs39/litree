@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula Knowledge Graph | 交互式星云图谱</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>">
+  <link rel="stylesheet" href="nebula_style.css">
+  <!-- Offline Self-Contained D3.js -->
+  <script src="vendor/d3.v7.min.js"></script>
+  <!-- Dual-mode offline data fallback for file:/// protocol -->
+  <script src="nebula_data.js"></script>
+</head>
+<body>
+  <!-- Top Navigation & Radar Search Bar -->
+  <header class="nebula-header">
+    <div class="brand">
+      <div class="brand-core"></div>
+      <div class="brand-text">
+        <span class="brand-title">NEBULA GRAPH</span>
+        <span class="brand-subtitle">项目资产星云图谱</span>
+      </div>
+    </div>
+
+    <div class="radar-search-container">
+      <div class="search-box">
+        <span class="search-icon">⚲</span>
+        <input type="text" id="search-input" placeholder="雷达探测：搜索文档、技能、模块、标签 (快捷键: /)" autocomplete="off">
+        <button id="search-clear-btn" class="clear-btn" title="清除搜索" style="display: none;">✕</button>
+      </div>
+      <div id="search-results-count" class="search-count" style="display: none;"></div>
+    </div>
+
+    <div class="filter-pills" id="filter-pills">
+      <button class="pill active" data-filter="all">全部 <span class="badge" id="badge-all">87</span></button>
+      <button class="pill pill-docs" data-filter="galaxy-documents">文档星系 <span class="badge" id="badge-docs">29</span></button>
+      <button class="pill pill-skills" data-filter="galaxy-skills">技能星座 <span class="badge" id="badge-skills">39</span></button>
+      <button class="pill pill-modules" data-filter="galaxy-modules">模块星轨 <span class="badge" id="badge-modules">19</span></button>
+    </div>
+  </header>
+
+  <!-- Main Canvas Viewport -->
+  <main class="canvas-viewport" id="viewport-container">
+    <canvas id="nebula-canvas"></canvas>
+
+    <!-- Floating HUD Tooltip -->
+    <div id="hud-tooltip" class="hud-tooltip" style="display: none;">
+      <div class="hud-header">
+        <span class="hud-type-badge" id="hud-type">SKILL</span>
+        <span class="hud-cluster-dot" id="hud-dot"></span>
+      </div>
+      <div class="hud-title" id="hud-title">ask-matt</div>
+      <div class="hud-desc" id="hud-desc">Central router over skills</div>
+      <div class="hud-footer">
+        <span class="hud-meta" id="hud-links-count">12 条引力连线</span>
+        <span class="hud-hint">点击查看天体档案 ↗</span>
+      </div>
+    </div>
+
+    <!-- Viewport Floating Controls Island -->
+    <div class="viewport-controls">
+      <div class="control-group zoom-group">
+        <button id="btn-zoom-in" class="ctrl-btn" title="放大视口">+</button>
+        <div id="zoom-level-display" class="zoom-display">100%</div>
+        <button id="btn-zoom-out" class="ctrl-btn" title="缩小视口">−</button>
+      </div>
+      <div class="control-group">
+        <button id="btn-reset-view" class="ctrl-btn ctrl-fit" title="自适应居中全景 (Fit View)">⛶</button>
+      </div>
+      <div class="control-group cluster-jump-group">
+        <button class="ctrl-cluster-btn btn-focus-docs" data-cluster="galaxy-documents" title="聚焦文档星系">文档</button>
+        <button class="ctrl-cluster-btn btn-focus-skills" data-cluster="galaxy-skills" title="聚焦技能星座">技能</button>
+        <button class="ctrl-cluster-btn btn-focus-modules" data-cluster="galaxy-modules" title="聚焦模块星轨">模块</button>
+      </div>
+    </div>
+
+    <!-- Quick Stats Indicator -->
+    <div class="cosmic-stats-pill" id="stats-indicator">
+      <span class="pulse-indicator"></span>
+      <span id="stats-text">天体系统就绪: 87 恒星 · 328 引力连线</span>
+    </div>
+  </main>
+
+  <!-- Slide-out Glassmorphism Detail Drawer -->
+  <aside id="detail-drawer" class="detail-drawer">
+    <div class="drawer-glow"></div>
+    <div class="drawer-header">
+      <div class="drawer-type-row">
+        <span id="drawer-type-badge" class="type-pill">SKILL</span>
+        <span id="drawer-cluster-name" class="cluster-pill">技能星座</span>
+        <button id="drawer-close-btn" class="drawer-close" title="关闭档案面板">✕</button>
+      </div>
+      <h2 id="drawer-title" class="drawer-title">ask-matt</h2>
+      <div id="drawer-display-name" class="drawer-display-name">Ask Matt Pocock</div>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Path & Copy Section -->
+      <section class="drawer-section">
+        <label class="section-label">工作区物理路径</label>
+        <div class="path-box">
+          <code id="drawer-path">.agents/skills/ask-matt/SKILL.md</code>
+          <button id="btn-copy-path" class="copy-btn" title="复制路径">复制</button>
+        </div>
+      </section>
+
+      <!-- Description Section -->
+      <section class="drawer-section">
+        <label class="section-label">核心职责与功能简述</label>
+        <p id="drawer-desc" class="drawer-desc"></p>
+      </section>
+
+      <!-- Tags Section -->
+      <section class="drawer-section">
+        <label class="section-label">天体属性与标签</label>
+        <div id="drawer-tags" class="tags-container"></div>
+      </section>
+
+      <!-- Metrics Section -->
+      <section class="drawer-section">
+        <label class="section-label">资产度量指标</label>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-val" id="drawer-file-size">1.8 KB</span>
+            <span class="metric-key">文件体积</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-val" id="drawer-line-count">94 行</span>
+            <span class="metric-key">代码/文本行数</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-val" id="drawer-link-count">12 条</span>
+            <span class="metric-key">引力共振数</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Connected Nodes Section -->
+      <section class="drawer-section">
+        <div class="connections-header">
+          <label class="section-label">引力关联星体 (<span id="drawer-connections-count">0</span>)</label>
+          <span class="connections-hint">点击可飞掠跃迁</span>
+        </div>
+        <div id="drawer-connections-list" class="connections-list"></div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- Core Graph & Interaction Engine -->
+  <script src="nebula_graph.js"></script>
+</body>
+</html>

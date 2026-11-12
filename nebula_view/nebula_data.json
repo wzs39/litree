@@ -1,0 +1,5403 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-11-12T03:17:49.552598+00:00",
+  "workspaceRoot": "C:/Users/qwe/.dsh/agy-unlock",
+  "stats": {
+    "totalNodes": 88,
+    "totalSkills": 39,
+    "totalDocs": 29,
+    "totalModules": 20,
+    "totalLinks": 348
+  },
+  "clusters": [
+    {
+      "id": "galaxy-documents",
+      "name": "文档星系",
+      "englishName": "Documents Galaxy",
+      "color": "#00f2fe",
+      "center": {
+        "x": -300,
+        "y": -120
+      },
+      "description": "项目设计规范、工程准则与生产力参考文档集合 (29篇)"
+    },
+    {
+      "id": "galaxy-skills",
+      "name": "技能星座",
+      "englishName": "Skills Constellation",
+      "color": "#b388ff",
+      "center": {
+        "x": 300,
+        "y": -80
+      },
+      "description": ".agents/skills 目录下的全套工程流程与专门技能体系 (39个)"
+    },
+    {
+      "id": "galaxy-modules",
+      "name": "模块星轨",
+      "englishName": "Modules System",
+      "color": "#ffd166",
+      "center": {
+        "x": 0,
+        "y": 280
+      },
+      "description": "核心网关服务、业务子系统、技术规范与工具套件 (19个)"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "skill:ask-matt",
+      "name": "ask-matt",
+      "displayName": "Ask Matt",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/ask-matt/SKILL.md",
+      "description": "Ask which skill or flow fits your situation. A router over the skills in this repo.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "no-model-invoke"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 12691,
+        "lineCount": 97,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/ask-matt/PHASE-BOUNDARIES.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Ask Matt"
+      }
+    },
+    {
+      "id": "skill:chief-of-staff",
+      "name": "chief-of-staff",
+      "displayName": "Chief Of Staff",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/chief-of-staff/SKILL.md",
+      "description": "Pursue a long-running goal in a single session by co-ordinating subagents.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "no-model-invoke"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 4804,
+        "lineCount": 75,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Schedules"
+      }
+    },
+    {
+      "id": "skill:claude-handoff",
+      "name": "claude-handoff",
+      "displayName": "Claude Handoff",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/claude-handoff/SKILL.md",
+      "description": "Hand the current conversation off to a fresh background agent that picks up the work immediately.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 1442,
+        "lineCount": 18,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:codebase-design",
+      "name": "codebase-design",
+      "displayName": "Codebase Design",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/codebase-design/SKILL.md",
+      "description": "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 6560,
+        "lineCount": 114,
+        "supportingFilesCount": 2,
+        "supportingFiles": [
+          ".agents/skills/codebase-design/DEEPENING.md",
+          ".agents/skills/codebase-design/DESIGN-IT-TWICE.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Codebase Design"
+      }
+    },
+    {
+      "id": "skill:diagnosing-bugs",
+      "name": "diagnosing-bugs",
+      "displayName": "Diagnosing Bugs",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/diagnosing-bugs/SKILL.md",
+      "description": "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 8802,
+        "lineCount": 138,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/diagnosing-bugs/scripts/hitl-loop.template.sh"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Diagnosing Bugs"
+      }
+    },
+    {
+      "id": "skill:domain-modeling",
+      "name": "domain-modeling",
+      "displayName": "Domain Modeling",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/domain-modeling/SKILL.md",
+      "description": "Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 3420,
+        "lineCount": 74,
+        "supportingFilesCount": 2,
+        "supportingFiles": [
+          ".agents/skills/domain-modeling/ADR-FORMAT.md",
+          ".agents/skills/domain-modeling/GLOSSARY-FORMAT.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Domain Modeling"
+      }
+    },
+    {
+      "id": "skill:git-guardrails-claude-code",
+      "name": "git-guardrails-claude-code",
+      "displayName": "Git Guardrails Claude Code",
+      "type": "skill",
+      "category": "infrastructure",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/git-guardrails-claude-code/SKILL.md",
+      "description": "Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code.",
+      "tags": [
+        "infrastructure",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2408,
+        "lineCount": 95,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/git-guardrails-claude-code/scripts/block-dangerous-git.sh"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Setup Git Guardrails"
+      }
+    },
+    {
+      "id": "skill:grill-me",
+      "name": "grill-me",
+      "displayName": "Grill Me",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/grill-me/SKILL.md",
+      "description": "A relentless interview to sharpen a plan or design.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 164,
+        "lineCount": 7,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:grill-with-docs",
+      "name": "grill-with-docs",
+      "displayName": "Grill With Docs",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/grill-with-docs/SKILL.md",
+      "description": "A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 254,
+        "lineCount": 7,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:grilling",
+      "name": "grilling",
+      "displayName": "Grilling",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/grilling/SKILL.md",
+      "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+      "tags": [
+        "productivity",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2107,
+        "lineCount": 30,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:handoff",
+      "name": "handoff",
+      "displayName": "Handoff",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/handoff/SKILL.md",
+      "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 956,
+        "lineCount": 16,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:implement",
+      "name": "implement",
+      "displayName": "Implement",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/implement/SKILL.md",
+      "description": "Implement a piece of work based on a spec or set of tickets.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "no-model-invoke"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 639,
+        "lineCount": 17,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:implement-spec",
+      "name": "implement-spec",
+      "displayName": "Implement Spec",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/implement-spec/SKILL.md",
+      "description": "Implement the result of /to-spec and /to-tickets in code.",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2877,
+        "lineCount": 42,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Steps"
+      }
+    },
+    {
+      "id": "skill:improve-codebase-architecture",
+      "name": "improve-codebase-architecture",
+      "displayName": "Improve Codebase Architecture",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/improve-codebase-architecture/SKILL.md",
+      "description": "Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 6099,
+        "lineCount": 71,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/improve-codebase-architecture/HTML-REPORT.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Improve Codebase Architecture"
+      }
+    },
+    {
+      "id": "skill:loop-me",
+      "name": "loop-me",
+      "displayName": "Loop Me",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/loop-me/SKILL.md",
+      "description": "Grill me about specs for the workflows I want to build, within this workspace.",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2554,
+        "lineCount": 32,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "The loop lens"
+      }
+    },
+    {
+      "id": "skill:matt-code-review",
+      "name": "matt-code-review",
+      "displayName": "Matt Code Review",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/matt-code-review/SKILL.md",
+      "description": "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\".",
+      "tags": [
+        "engineering",
+        "skill",
+        "review"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 6817,
+        "lineCount": 90,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Process"
+      }
+    },
+    {
+      "id": "skill:migrate-to-shoehorn",
+      "name": "migrate-to-shoehorn",
+      "displayName": "Migrate To Shoehorn",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/migrate-to-shoehorn/SKILL.md",
+      "description": "Migrate test files from `as` type assertions to @total-typescript/shoehorn. Use when user mentions shoehorn, wants to replace `as` in tests, or needs partial test data.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2913,
+        "lineCount": 118,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Migrate to Shoehorn"
+      }
+    },
+    {
+      "id": "skill:pr",
+      "name": "pr",
+      "displayName": "Pr",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/pr/SKILL.md",
+      "description": "Use when writing a PR body.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 4339,
+        "lineCount": 170,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/pr/CREDITS.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Sections"
+      }
+    },
+    {
+      "id": "skill:prototype",
+      "name": "prototype",
+      "displayName": "Prototype",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/prototype/SKILL.md",
+      "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2957,
+        "lineCount": 26,
+        "supportingFilesCount": 2,
+        "supportingFiles": [
+          ".agents/skills/prototype/LOGIC.md",
+          ".agents/skills/prototype/UI.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Prototype"
+      }
+    },
+    {
+      "id": "skill:research",
+      "name": "research",
+      "displayName": "Research",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/research/SKILL.md",
+      "description": "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 844,
+        "lineCount": 12,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:retro",
+      "name": "retro",
+      "displayName": "Retro",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/retro/SKILL.md",
+      "description": "Conduct a retrospective on a coding session.",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 4413,
+        "lineCount": 44,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Steps"
+      }
+    },
+    {
+      "id": "skill:scaffold-exercises",
+      "name": "scaffold-exercises",
+      "displayName": "Scaffold Exercises",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/scaffold-exercises/SKILL.md",
+      "description": "Create exercise directory structures with sections, problems, solutions, and explainers that pass linting. Use when user wants to scaffold exercises, create exercise stubs, or set up a new course section.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3695,
+        "lineCount": 106,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Scaffold Exercises"
+      }
+    },
+    {
+      "id": "skill:setup-matt-pocock-skills",
+      "name": "setup-matt-pocock-skills",
+      "displayName": "Setup Matt Pocock Skills",
+      "type": "skill",
+      "category": "infrastructure",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+      "description": "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills.",
+      "tags": [
+        "infrastructure",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 7646,
+        "lineCount": 120,
+        "supportingFilesCount": 5,
+        "supportingFiles": [
+          ".agents/skills/setup-matt-pocock-skills/domain.md",
+          ".agents/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+          ".agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+          ".agents/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+          ".agents/skills/setup-matt-pocock-skills/triage-labels.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Setup Matt Pocock's Skills"
+      }
+    },
+    {
+      "id": "skill:setup-pre-commit",
+      "name": "setup-pre-commit",
+      "displayName": "Setup Pre Commit",
+      "type": "skill",
+      "category": "infrastructure",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/setup-pre-commit/SKILL.md",
+      "description": "Set up Husky pre-commit hooks with lint-staged (Prettier), type checking, and tests in the current repo. Use when user wants to add pre-commit hooks, set up Husky, configure lint-staged, or add commit-time formatting/typechecking/testing.",
+      "tags": [
+        "infrastructure",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2349,
+        "lineCount": 91,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Setup Pre-Commit Hooks"
+      }
+    },
+    {
+      "id": "skill:setup-ts-deep-modules",
+      "name": "setup-ts-deep-modules",
+      "displayName": "Setup Ts Deep Modules",
+      "type": "skill",
+      "category": "infrastructure",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/setup-ts-deep-modules/SKILL.md",
+      "description": "Wire dependency-cruiser into a TypeScript repo so each package is a deep module, with implementation hidden in subfolders and reachable only through its entry-point files. User-invoked.",
+      "tags": [
+        "infrastructure",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 7648,
+        "lineCount": 102,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/setup-ts-deep-modules/dependency-cruiser.config.cjs"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Setup TS Deep Modules"
+      }
+    },
+    {
+      "id": "skill:software-factory",
+      "name": "software-factory",
+      "displayName": "Software Factory",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/software-factory/SKILL.md",
+      "description": "**Task**: A kind of work the factory performs, defined once and run many times: review, explore, implement, ratchet. A task may work on a ticket, a PR, or the codebase as a whole.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 6097,
+        "lineCount": 98,
+        "supportingFilesCount": 5,
+        "supportingFiles": [
+          ".agents/skills/software-factory/EXAMPLE-TASKS.md",
+          ".agents/skills/software-factory/GIT-HOSTS.md",
+          ".agents/skills/software-factory/OBSERVABILITY-PLATFORMS.md",
+          ".agents/skills/software-factory/RUNNERS.md",
+          ".agents/skills/software-factory/TICKET-TRACKERS.md"
+        ],
+        "hasFrontmatter": false,
+        "heading": "Tasks and runs"
+      }
+    },
+    {
+      "id": "skill:tdd",
+      "name": "tdd",
+      "displayName": "Tdd",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/tdd/SKILL.md",
+      "description": "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "testing"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 3667,
+        "lineCount": 38,
+        "supportingFilesCount": 2,
+        "supportingFiles": [
+          ".agents/skills/tdd/mocking.md",
+          ".agents/skills/tdd/tests.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Test-Driven Development"
+      }
+    },
+    {
+      "id": "skill:teach",
+      "name": "teach",
+      "displayName": "Teach",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/teach/SKILL.md",
+      "description": "Teach the user a new skill or concept, within this workspace.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9873,
+        "lineCount": 140,
+        "supportingFilesCount": 4,
+        "supportingFiles": [
+          ".agents/skills/teach/GLOSSARY-FORMAT.md",
+          ".agents/skills/teach/LEARNING-RECORD-FORMAT.md",
+          ".agents/skills/teach/MISSION-FORMAT.md",
+          ".agents/skills/teach/RESOURCES-FORMAT.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Teaching Workspace"
+      }
+    },
+    {
+      "id": "skill:to-questionnaire",
+      "name": "to-questionnaire",
+      "displayName": "To Questionnaire",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/to-questionnaire/SKILL.md",
+      "description": "Turn a decision you can't fully answer into a questionnaire for someone else to fill in.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 2958,
+        "lineCount": 54,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Document structure"
+      }
+    },
+    {
+      "id": "skill:to-spec",
+      "name": "to-spec",
+      "displayName": "To Spec",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/to-spec/SKILL.md",
+      "description": "Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you've already discussed.",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3118,
+        "lineCount": 75,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Process"
+      }
+    },
+    {
+      "id": "skill:to-tickets",
+      "name": "to-tickets",
+      "displayName": "To Tickets",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/to-tickets/SKILL.md",
+      "description": "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker (edges as text in one file per ticket locally, or native blocking links on a real tracker).",
+      "tags": [
+        "engineering",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 5917,
+        "lineCount": 105,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "To Tickets"
+      }
+    },
+    {
+      "id": "skill:triage",
+      "name": "triage",
+      "displayName": "Triage",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/triage/SKILL.md",
+      "description": "Move issues and external PRs through a state machine of triage roles, categorise, verify, grill if needed, and write agent-ready briefs.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "no-model-invoke"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 6670,
+        "lineCount": 112,
+        "supportingFilesCount": 2,
+        "supportingFiles": [
+          ".agents/skills/triage/AGENT-BRIEF.md",
+          ".agents/skills/triage/OUT-OF-SCOPE.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Triage"
+      }
+    },
+    {
+      "id": "skill:wait-what",
+      "name": "wait-what",
+      "displayName": "Wait What",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/wait-what/SKILL.md",
+      "description": "Stop. That last message did not land: re-pitch it.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 403,
+        "lineCount": 7,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": null
+      }
+    },
+    {
+      "id": "skill:wayfinder",
+      "name": "wayfinder",
+      "displayName": "Wayfinder",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/wayfinder/SKILL.md",
+      "description": "Plan a huge chunk of work (more than one agent session can hold) as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear.",
+      "tags": [
+        "engineering",
+        "skill",
+        "hub",
+        "no-model-invoke"
+      ],
+      "size": 26,
+      "color": "#e040fb",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 12536,
+        "lineCount": 128,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Plan, don't do"
+      }
+    },
+    {
+      "id": "skill:wizard",
+      "name": "wizard",
+      "displayName": "Wizard",
+      "type": "skill",
+      "category": "engineering",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/wizard/SKILL.md",
+      "description": "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.",
+      "tags": [
+        "engineering",
+        "skill"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 4167,
+        "lineCount": 44,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/wizard/template.sh"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Wizard"
+      }
+    },
+    {
+      "id": "skill:writing-beats",
+      "name": "writing-beats",
+      "displayName": "Writing Beats",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/writing-beats/SKILL.md",
+      "description": "Writing, exploit; assemble raw material into a journey of beats, grounding each term before a beat leans on it.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke",
+        "writing"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 4922,
+        "lineCount": 67,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "Grounding"
+      }
+    },
+    {
+      "id": "skill:writing-for-agents",
+      "name": "writing-for-agents",
+      "displayName": "Writing For Agents",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/writing-for-agents/SKILL.md",
+      "description": "Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.",
+      "tags": [
+        "productivity",
+        "skill",
+        "writing"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10967,
+        "lineCount": 81,
+        "supportingFilesCount": 1,
+        "supportingFiles": [
+          ".agents/skills/writing-for-agents/SKILL-MECHANICS.md"
+        ],
+        "hasFrontmatter": true,
+        "heading": "Context pointers"
+      }
+    },
+    {
+      "id": "skill:writing-fragments",
+      "name": "writing-fragments",
+      "displayName": "Writing Fragments",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/writing-fragments/SKILL.md",
+      "description": "Writing, explore: mine raw fragments, no structure yet.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke",
+        "writing"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3637,
+        "lineCount": 79,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "What is a fragment"
+      }
+    },
+    {
+      "id": "skill:writing-shape",
+      "name": "writing-shape",
+      "displayName": "Writing Shape",
+      "type": "skill",
+      "category": "productivity",
+      "cluster": "galaxy-skills",
+      "path": ".agents/skills/writing-shape/SKILL.md",
+      "description": "Writing, exploit: shape raw material into an article, paragraph by paragraph.",
+      "tags": [
+        "productivity",
+        "skill",
+        "no-model-invoke",
+        "writing"
+      ],
+      "size": 18,
+      "color": "#b388ff",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 6001,
+        "lineCount": 79,
+        "supportingFilesCount": 0,
+        "supportingFiles": [],
+        "hasFrontmatter": true,
+        "heading": "The loop"
+      }
+    },
+    {
+      "id": "doc:agents/triage-labels",
+      "name": "triage-labels.md",
+      "displayName": "Triage Labels",
+      "type": "document",
+      "category": "agents",
+      "cluster": "galaxy-documents",
+      "path": "docs/agents/triage-labels.md",
+      "description": "The skills speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker.",
+      "tags": [
+        "agents",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 1100,
+        "lineCount": 15,
+        "heading": "Triage Labels",
+        "subcat": "agents"
+      },
+      "stem": "triage-labels"
+    },
+    {
+      "id": "doc:engineering/ask-matt",
+      "name": "ask-matt.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/ask-matt.md",
+      "description": "`ask-matt` is the router over the skills in this repo. You describe the situation you are in (an idea you cannot start, a pile of incoming bug reports, a [session](https://www.aihero.dev/ai-coding-dictionary/session) that has run long), and it names the skill or the sequence of skills that fits, plus where the human decisions in that sequence sit.",
+      "tags": [
+        "engineering",
+        "documentation",
+        "core-guide"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 11295,
+        "lineCount": 91,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "ask-matt"
+    },
+    {
+      "id": "doc:engineering/code-review",
+      "name": "code-review.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/code-review.md",
+      "description": "`code-review` reviews the diff between `HEAD` and a fixed point you name (a commit, a branch, a tag, `main`, `HEAD~5`) along two axes. **Standards** asks whether the code follows how this repo writes code. **Spec** asks whether the code does what the originating issue or [spec](https://www.aihero.dev/ai-coding-dictionary/spec) asked for. Each axis runs in its own [sub-agent](https://www.aihero.dev/ai-coding-dictionary/subagent) so neither sees the other's reasoning.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 11097,
+        "lineCount": 101,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "code-review"
+    },
+    {
+      "id": "doc:engineering/codebase-design",
+      "name": "codebase-design.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/codebase-design.md",
+      "description": "`codebase-design` fixes the words you use to design a module: **module**, **interface**, **depth**, **seam**, **adapter**, **leverage**, **locality**. It defines each one precisely, bans the loose substitutes (\"component\", \"service\", \"API\", \"boundary\"), and states the handful of principles that follow from them.",
+      "tags": [
+        "engineering",
+        "documentation",
+        "core-guide"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 12284,
+        "lineCount": 88,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "codebase-design"
+    },
+    {
+      "id": "doc:engineering/diagnosing-bugs",
+      "name": "diagnosing-bugs.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/diagnosing-bugs.md",
+      "description": "`diagnosing-bugs` runs a six-phase diagnosis on a hard bug or a performance regression: build a repro, minimise it, rank hypotheses, instrument, fix with a regression test, clean up.",
+      "tags": [
+        "engineering",
+        "documentation",
+        "core-guide"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 10861,
+        "lineCount": 94,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "diagnosing-bugs"
+    },
+    {
+      "id": "doc:engineering/domain-modeling",
+      "name": "domain-modeling.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/domain-modeling.md",
+      "description": "`domain-modeling` builds and sharpens a project's **ubiquitous language** while you are designing. It challenges a term that conflicts with the glossary, asks for a precise word where you used a vague one, and tests a relationship against a concrete scenario until the boundaries are exact.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10423,
+        "lineCount": 86,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "domain-modeling"
+    },
+    {
+      "id": "doc:engineering/grill-with-docs",
+      "name": "grill-with-docs.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/grill-with-docs.md",
+      "description": "`grill-with-docs` interviews you about a plan or design until you and the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) share one understanding of it, and writes the vocabulary and the hard decisions into your repo while it does. It is the same interview [grill-me](https://aihero.dev/skills-grill-me) runs (a round of questions, then wait, then the next round), pointed at a codebase.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9939,
+        "lineCount": 82,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "grill-with-docs"
+    },
+    {
+      "id": "doc:engineering/implement-spec",
+      "name": "implement-spec.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/implement-spec.md",
+      "description": "`implement-spec` takes a [spec](https://www.aihero.dev/ai-coding-dictionary/spec) and its [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) and lands the whole thing in one run. The orchestrating [agent](https://www.aihero.dev/ai-coding-dictionary/agent) hands each ticket to an implementer [subagent](https://www.aihero.dev/ai-coding-dictionary/subagent) working in its own git worktree, merges each finished branch into a single **integration branch**, runs [code-review](https://aihero.dev/skills-code-review) over the result, and resolves the tickets.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9850,
+        "lineCount": 86,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "implement-spec"
+    },
+    {
+      "id": "doc:engineering/implement",
+      "name": "implement.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/implement.md",
+      "description": "`implement` builds work that has already been decided. You point it at a [ticket](https://www.aihero.dev/ai-coding-dictionary/ticket), a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), or the plan you just agreed in the conversation, and it writes the code, drives [tdd](https://aihero.dev/skills-tdd) at the seams, typechecks as it goes, runs [code-review](https://aihero.dev/skills-code-review) at the end, and commits to the current branch.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10355,
+        "lineCount": 97,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "implement"
+    },
+    {
+      "id": "doc:engineering/improve-codebase-architecture",
+      "name": "improve-codebase-architecture.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/improve-codebase-architecture.md",
+      "description": "`improve-codebase-architecture` surveys a codebase for **deepening opportunities**. These are places where a shallow module (an interface nearly as complex as the thing it hides) could become a deep one. It writes them up as a self-contained HTML report, and then [grills](https://www.aihero.dev/ai-coding-dictionary/grilling) you through the one you pick.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 11877,
+        "lineCount": 113,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "improve-codebase-architecture"
+    },
+    {
+      "id": "doc:engineering/pr",
+      "name": "pr.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/pr.md",
+      "description": "`pr` defines the shape of a pull request body: a **Summary** that shows the change, **Evidence** that it works, and a **Merge Danger** call on how risky it is to land. It is a format reference, not a workflow. It does not push a branch, open the PR, or decide what goes into it. It tells the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) what the body should look like when it writes one.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 8158,
+        "lineCount": 79,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "pr"
+    },
+    {
+      "id": "doc:engineering/prototype",
+      "name": "prototype.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/prototype.md",
+      "description": "`prototype` writes **throwaway code that answers a question**: does this state model feel right, or what should this screen look like. The question comes first and decides what you build. A prototype that answers the wrong question is wasted, however good it looks.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9583,
+        "lineCount": 67,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "prototype"
+    },
+    {
+      "id": "doc:engineering/research",
+      "name": "research.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/research.md",
+      "description": "`research` answers a question by reading the sources that own the answer, then leaves a cited Markdown file in the repo. It works only from **[primary sources](https://www.aihero.dev/ai-coding-dictionary/primary-source)**: official docs, source code, specs, first-party APIs. It follows every claim back to the source that owns it, so it will not repeat a blog post's account of an API when the API's own docs are reachable.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9429,
+        "lineCount": 73,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "research"
+    },
+    {
+      "id": "doc:engineering/resolving-merge-conflicts",
+      "name": "resolving-merge-conflicts.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/resolving-merge-conflicts.md",
+      "description": "`resolving-merge-conflicts` works through an in-progress git merge or rebase, hunk by hunk, then runs the project's own checks and finishes the operation with a commit.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 5539,
+        "lineCount": 53,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "resolving-merge-conflicts"
+    },
+    {
+      "id": "doc:engineering/retro",
+      "name": "retro.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/retro.md",
+      "description": "`retro` looks back over a coding [session](https://www.aihero.dev/ai-coding-dictionary/session) and suggests improvements to the agent's **[environment](https://www.aihero.dev/ai-coding-dictionary/environment)**, so the next run goes better. It reads the session's own record (the current one by default, or one you point it at in the session logs). It finds the moments where the agent struggled, and gives you a list of candidate fixes, most severe first.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 8909,
+        "lineCount": 81,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "retro"
+    },
+    {
+      "id": "doc:engineering/setup-matt-pocock-skills",
+      "name": "setup-matt-pocock-skills.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/setup-matt-pocock-skills.md",
+      "description": "`setup-matt-pocock-skills` answers three questions about one repo: where issues live, what the triage labels are called, and where the domain docs sit. It records the answers as markdown files under `docs/agents/`.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9226,
+        "lineCount": 94,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "setup-matt-pocock-skills"
+    },
+    {
+      "id": "doc:engineering/tdd",
+      "name": "tdd.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/tdd.md",
+      "description": "`tdd` builds a feature or fixes a bug test-first: one failing test, then just enough code to pass it, then the next behaviour. It carries the standards that make that loop produce tests worth keeping: what a good test is, where tests go, what mocks are for, and the three anti-patterns that make a suite worthless.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10457,
+        "lineCount": 94,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "tdd"
+    },
+    {
+      "id": "doc:engineering/to-spec",
+      "name": "to-spec.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/to-spec.md",
+      "description": "`to-spec` turns the conversation you have just had into a **[spec](https://www.aihero.dev/ai-coding-dictionary/spec)**, and publishes it to your issue tracker as a single issue.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 8583,
+        "lineCount": 81,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "to-spec"
+    },
+    {
+      "id": "doc:engineering/to-tickets",
+      "name": "to-tickets.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/to-tickets.md",
+      "description": "`to-tickets` takes a plan, a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), or the conversation you are in, and breaks it into a set of **[tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)** on your issue tracker. Each ticket declares its **blocking edges**: the other tickets that have to finish before it can start.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10995,
+        "lineCount": 99,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "to-tickets"
+    },
+    {
+      "id": "doc:engineering/triage",
+      "name": "triage.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/triage.md",
+      "description": "`triage` works through the issues on your project's tracker. It moves each one through a small state machine of **triage roles** (a category role and a state role). Each issue ends as an agent-ready brief, a specific question for the reporter, or a closed issue with a recorded reason.",
+      "tags": [
+        "engineering",
+        "documentation",
+        "core-guide"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 13002,
+        "lineCount": 109,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "triage"
+    },
+    {
+      "id": "doc:engineering/wayfinder",
+      "name": "wayfinder.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/wayfinder.md",
+      "description": "`wayfinder` takes an effort too big for one agent [session](https://www.aihero.dev/ai-coding-dictionary/session). This is an idea whose **destination** you can name but whose route you cannot yet see. Wayfinder charts it as a shared **map** of **decision tickets** on your issue tracker, then resolves the tickets one at a time until the route is clear.",
+      "tags": [
+        "engineering",
+        "documentation",
+        "core-guide"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 15685,
+        "lineCount": 103,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "wayfinder"
+    },
+    {
+      "id": "doc:engineering/wizard",
+      "name": "wizard.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "engineering",
+      "cluster": "galaxy-documents",
+      "path": "docs/engineering/wizard.md",
+      "description": "`wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure: wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.",
+      "tags": [
+        "engineering",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 9667,
+        "lineCount": 96,
+        "heading": "What it does",
+        "subcat": "engineering"
+      },
+      "stem": "wizard"
+    },
+    {
+      "id": "doc:productivity/grill-me",
+      "name": "grill-me.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/grill-me.md",
+      "description": "`grill-me` takes a **loose idea** and interviews you until you can commit to it. You do not need a worked-out plan to start, because the [session](https://www.aihero.dev/ai-coding-dictionary/session) exists to produce one. It asks in **rounds**. Each round is the whole **frontier**, which is every question whose prerequisites you have already settled. So it never asks you something that depends on an answer it hasn't heard yet.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 6657,
+        "lineCount": 76,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "grill-me"
+    },
+    {
+      "id": "doc:productivity/grilling",
+      "name": "grilling.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/grilling.md",
+      "description": "`grilling` is the interview loop that stress-tests a plan, a decision, or an idea before anyone acts on it. It maps the subject as a **design tree**: every decision branches into the decisions that hang off it, and interviews you branch by branch until no assumption stays unstated.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10330,
+        "lineCount": 87,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "grilling"
+    },
+    {
+      "id": "doc:productivity/handoff",
+      "name": "handoff.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/handoff.md",
+      "description": "`handoff` compacts the conversation you are in into a **handoff document**: one markdown file, written to your OS's temporary directory rather than into the workspace, that a fresh [agent](https://www.aihero.dev/ai-coding-dictionary/agent) can read to pick the work up.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 8870,
+        "lineCount": 76,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "handoff"
+    },
+    {
+      "id": "doc:productivity/teach",
+      "name": "teach.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/teach.md",
+      "description": "`teach` turns the directory you run it in into a standing teaching workspace and teaches you one topic across many [sessions](https://www.aihero.dev/ai-coding-dictionary/session), in short self-contained HTML lessons.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 12519,
+        "lineCount": 97,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "teach"
+    },
+    {
+      "id": "doc:productivity/to-questionnaire",
+      "name": "to-questionnaire.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/to-questionnaire.md",
+      "description": "`to-questionnaire` turns a decision you can't settle on your own into a **questionnaire**: a Markdown document you hand to the one person who holds what you're missing, for them to fill in async or for the two of you to work through in a meeting.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 7893,
+        "lineCount": 78,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "to-questionnaire"
+    },
+    {
+      "id": "doc:productivity/wait-what",
+      "name": "wait-what.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/wait-what.md",
+      "description": "You type `wait-what` when you did not understand a message. The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) then re-pitches what it just said. It adds the context you were missing, writes in plain English, and uses the vocabulary from your project's `GLOSSARY.md`.",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3647,
+        "lineCount": 36,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "wait-what"
+    },
+    {
+      "id": "doc:productivity/writing-for-agents",
+      "name": "writing-for-agents.md",
+      "displayName": "What it does",
+      "type": "document",
+      "category": "productivity",
+      "cluster": "galaxy-documents",
+      "path": "docs/productivity/writing-for-agents.md",
+      "description": "`writing-for-agents` is the reference for writing agent-facing documents: a skill, an `AGENTS.md` or `CLAUDE.md`, a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), a runtime prompt, a README, any doc an [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reads. The format differs, but the writing does not. The same levers make each one predictable, so the agent follows the same *process* on every run (not necessarily to the same output).",
+      "tags": [
+        "productivity",
+        "documentation"
+      ],
+      "size": 15,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 7769,
+        "lineCount": 70,
+        "heading": "What it does",
+        "subcat": "productivity"
+      },
+      "stem": "writing-for-agents"
+    },
+    {
+      "id": "module:agy_unlock_addon",
+      "name": "agy_unlock_addon.py",
+      "displayName": "Agy Unlock Addon",
+      "type": "module",
+      "category": "core-gateway",
+      "cluster": "galaxy-modules",
+      "path": "agy_unlock_addon.py",
+      "description": "mitmproxy addon - Antigravity eligibility gate repair.",
+      "tags": [
+        "core-gateway",
+        "python",
+        "script"
+      ],
+      "size": 24,
+      "color": "#f59e0b",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 16237,
+        "lineCount": 451,
+        "docstring": "mitmproxy addon - Antigravity eligibility gate repair.\n\nBackground\n----------\nThe agy CLI calls POST /v1internal:loadCodeAssist at startup. The backend\nreturns a metadata object. When that object carries ineligibleTiers /\nineligibleReason, or when the endpoint answers with an error envelope\n(403 PERMISSION_DENIED / VALIDATION_REQUIRED), server_oauth.go refuses to\nstart the session with:\n\n  Eligibility check failed: Your current account is not eligible for\n  Antigravity, because it is not currently available in your location.\n\nWhy the previous build broke\n----------------------------\nThe 2026-11-05 hardening removed the addon request-side armour refill to\nfix a self-harm loop, and at the same time downgraded the response rewrite\nto \"only strip REJECT_FIELDS when present\". Upstream then switched to an\n{\"error\": {...}} envelope, sometimes still with HTTP 200, so touched stayed\nFalse and the rejection was passed straight through. Every eligibility-seen\ndump from 2026-11-05 records fields=[\"error\"] and there is not a single\neligibility-orig dump, i.e. zero successful rewrites.\n\nWhat this build does\n--------------------\nSynthesise a clean loadCodeAssist response for EVERY call, regardless of\nupstream status or body shape. The synthesised object only contains field\nnames observed in a genuine 200 response (see KNOWN_ELIGIBILITY_FIELDS),\nbecause protojson rejects unknown names with HTTP 400. No guessed fields\nsuch as state / onboardingComplete / cloudaicompanionRegion / project.\n\nIt also handles the double-slash path form (//v1internal:loadCodeAssist)\nproduced by the divert relay, and removes stale content-encoding headers\nafter a rewrite so the client does not try to gunzip plain JSON.\n\nRequest side stays empty. Refilling armour here previously undid the\noutbound sanitiser, do not add it back.\n\nActivation: mitmdump loads addons at startup, so restart the 8899 listener\nafter replacing this file. Runtime evidence is written to eligibility-fix.log."
+      }
+    },
+    {
+      "id": "module:build_8_slide_deck",
+      "name": "build_8_slide_deck.py",
+      "displayName": "Build 8 Slide Deck",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_8_slide_deck.py",
+      "description": "build_8_slide_deck.py",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 50594,
+        "lineCount": 814,
+        "docstring": "build_8_slide_deck.py\nGenerates exactly 8 High-Density Slides strictly mapped to the assignment requirements:\n1. Title Hero Slide\n2. Introduction: Traditional vs. Agile Project Management\n3. Leadership Styles in Agile vs. Traditional Settings\n4. Communication and Collaboration\n5. Adaptability and Flexibility\n6. Risk Management and Decision Making\n7. Conclusion & Strategic Key Takeaways\n8. Academic References & Bibliography (APA 7th)\n\nEmbedded with full word-for-word speaker notes calibrated for ~8-9 minutes delivery (5-15 min requirement)."
+      }
+    },
+    {
+      "id": "module:build_claude_style_deck",
+      "name": "build_claude_style_deck.py",
+      "displayName": "Build Claude Style Deck",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_claude_style_deck.py",
+      "description": "build_claude_style_deck.py",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 57310,
+        "lineCount": 1035,
+        "docstring": "build_claude_style_deck.py\nAuthentic Claude / ChatGPT Aesthetic Presentation:\n\"The Role of a Project Manager in Agile vs. Traditional Project Management Settings\"\nFeatures:\n- Borderless & Airy Design (Negative space, zero clunky card soup)\n- Sharp typographic hierarchy (Large bold titles, punchy fragments, no text walls)\n- Big visual anchors: Visual formulas (FIXED SCOPE vs FIXED TIME), minimal accent badges\n- Complete deep research preserved in Speaker Notes (calibrated ~8.5 mins)\n- Clean, sophisticated studio palette: Pure White canvas, Deep Slate text, Electric Blue & Emerald accents"
+      }
+    },
+    {
+      "id": "module:build_deck_framework",
+      "name": "build_deck_framework.py",
+      "displayName": "Build Deck Framework",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_deck_framework.py",
+      "description": "Generate Professional Academic PowerPoint Deck & PDF:",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 8297,
+        "lineCount": 211,
+        "docstring": "Generate Professional Academic PowerPoint Deck & PDF:\nTopic: The Role of a Project Manager in Agile vs. Traditional Project Management Settings\nGrounded in: Sommerville (2016), PMBOK 6th/7th Ed, Scrum Guide, and Micheal Tuape's SE Lecture 9 (2025)."
+      }
+    },
+    {
+      "id": "module:build_executive_presentation",
+      "name": "build_executive_presentation.py",
+      "displayName": "Build Executive Presentation",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_executive_presentation.py",
+      "description": "build_executive_presentation.py",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 58133,
+        "lineCount": 995,
+        "docstring": "build_executive_presentation.py\nUltra-Premium Executive Presentation Deck:\n\"The Role of a Project Manager in Agile vs. Traditional Project Management Settings\"\n8 Slides strictly mapped to assignment criteria.\nDesign Philosophy:\n- Clean, airy Modern Executive Light Canvas (high legibility, academic defense grade)\n- Crisp floating container cards with colored accent headers and subtle borders\n- In-slide visual models: Iron Triangle inversion box, Maslow motivation hierarchy ladder, 4-ceremonies showcase, Lecture 9 Golden Law callout, AI capability grid, Cynefin decision cards\n- Embedded word-for-word spoken transcript in notes pane (calibrated for ~8.5 minutes)\n- Generates PPTX and exports native high-resolution PDF"
+      }
+    },
+    {
+      "id": "module:build_full_visual_deck",
+      "name": "build_full_visual_deck.py",
+      "displayName": "Build Full Visual Deck",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_full_visual_deck.py",
+      "description": "Python module build_full_visual_deck.py for presentation-suite",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 28867,
+        "lineCount": 603,
+        "docstring": ""
+      }
+    },
+    {
+      "id": "module:build_v2_pro_deck",
+      "name": "build_v2_pro_deck.py",
+      "displayName": "Build V2 Pro Deck",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_v2_pro_deck.py",
+      "description": "build_v2_pro_deck.py",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 57878,
+        "lineCount": 1006,
+        "docstring": "build_v2_pro_deck.py\nRedesigned 8-Slide Executive Presentation:\n\"The Role of a Project Manager in Agile vs. Traditional Project Management Settings\"\nFeatures:\n- Diverse, dynamic slide layouts (no repetitive twin-box monotony)\n- Visual conceptual models: Iron Triangle callouts, Maslow motivational ladder, Agile ceremonies grid, Cynefin quadrant cards, AI capability pills\n- Crisp editorial typography, high-contrast visual hierarchy, balanced whitespace\n- Embedded complete word-for-word speaker notes calibrated for ~8.5 minutes\n- Native export to PPTX and PDF via PowerPoint COM"
+      }
+    },
+    {
+      "id": "module:build_web_claude_deck",
+      "name": "build_web_claude_deck.py",
+      "displayName": "Build Web Claude Deck",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "build_web_claude_deck.py",
+      "description": "Python module build_web_claude_deck.py for presentation-suite",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 40996,
+        "lineCount": 937,
+        "docstring": ""
+      }
+    },
+    {
+      "id": "module:create_presentation",
+      "name": "create_presentation.py",
+      "displayName": "Create Presentation",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "create_presentation.py",
+      "description": "create_presentation.py",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 73121,
+        "lineCount": 1162,
+        "docstring": "create_presentation.py\nFull automated generator for:\n\"The Role of a Project Manager in Agile vs. Traditional Project Management Settings\"\n14 High-Density Professional Slides + Embedded Full Spoken Scripts + PDF Export\nOptimized for 5-15 Minute Presentation Delivery (Target: 10-11 Minutes, ~1,450 words)"
+      }
+    },
+    {
+      "id": "module:gemini4_ultimate_bridge",
+      "name": "gemini4_ultimate_bridge.py",
+      "displayName": "Gemini4 Ultimate Bridge",
+      "type": "module",
+      "category": "core-gateway",
+      "cluster": "galaxy-modules",
+      "path": "gemini4_ultimate_bridge.py",
+      "description": "gemini4_ultimate_bridge.py",
+      "tags": [
+        "core-gateway",
+        "python",
+        "script"
+      ],
+      "size": 24,
+      "color": "#f59e0b",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 16446,
+        "lineCount": 405,
+        "docstring": "gemini4_ultimate_bridge.py\n生产级 Gemini 4 接入桥接网关\n特性矩阵:\n1. 账号防封装甲 (Anti-Ban Armor): curl_cffi Chrome 120/130 TLS指纹, 行为抖动Jitter, 速率平滑, 遇险秒级硬熔断\n2. 模型不降智引擎 (Intelligence Preservation Engine): 无损Tool Schema映射, 完整保留CoT深度思考流, 严格采样控制\n3. 双轨无缝支持 (Dual Track): 优先AI Studio免绑卡原生Key, 自动平滑降级至Web Cookie安全逆向流"
+      }
+    },
+    {
+      "id": "module:generate_deck_diagrams",
+      "name": "generate_deck_diagrams.py",
+      "displayName": "Generate Deck Diagrams",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "generate_deck_diagrams.py",
+      "description": "Python module generate_deck_diagrams.py for presentation-suite",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 18767,
+        "lineCount": 370,
+        "docstring": ""
+      }
+    },
+    {
+      "id": "module:quota_readout",
+      "name": "quota_readout.py",
+      "displayName": "Quota Readout",
+      "type": "module",
+      "category": "core-gateway",
+      "cluster": "galaxy-modules",
+      "path": "quota_readout.py",
+      "description": "额度真值读数器 —— 回答\"我的额度明明是满的\"这句话到底哪里来的。",
+      "tags": [
+        "core-gateway",
+        "python",
+        "script"
+      ],
+      "size": 18,
+      "color": "#fbbf24",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 10643,
+        "lineCount": 274,
+        "docstring": "额度真值读数器 —— 回答\"我的额度明明是满的\"这句话到底哪里来的。\n\n为什么需要这个脚本（2026-11-06 实测）\n-------------------------------------\n`~/.dsh/agy-accounts/pool.json` 里的 remainingFraction 最后一次刷新是\n2026-11-02 09:47Z，读数时已经过去 4 天。面板显示\"满\"就来自这份陈旧快照，\n而上游 retrieveUserQuotaSummary 每次都回 200（divert.log 里 PASS-RELAY 200），\n真数一直都在，只是没人落盘 —— v2.0.0 之前 addon 的 QUOTA 分支只在 bad\n（非 200 或带 error）时才 _dump，正常包一个字节都不留。\n\n现在 addon 无条件 dump：\n  <ts>_quota-upstream_<status>.json   上游原样响应体\n  <ts>_quota-identity.json            精简后的 email / 每模型 fraction / resetTime\n  <ts>_eligibility-upstream_<status>.json  层级视图（currentTier / allowedTiers）\n  <ts>_eligibility-seen.json          合成后客户端看到什么（含 fix 版本）\n\n本脚本把这些 dump 与 pool.json 并排列出来，谁的数更新、哪个号在出口、\n落在哪个桶，一眼可见。只读，不发任何请求。\n\n用法\n----\n  python quota_readout.py            # 默认：出口账号 + 与 pool.json 的差异\n  python quota_readout.py --json     # 机器读\n  python quota_readout.py --all      # 列出 pool.json 里每个账号"
+      }
+    },
+    {
+      "id": "module:run_nebula",
+      "name": "run_nebula.py",
+      "displayName": "Run Nebula",
+      "type": "module",
+      "category": "tools",
+      "cluster": "galaxy-modules",
+      "path": "run_nebula.py",
+      "description": "run_nebula.py",
+      "tags": [
+        "tools",
+        "python",
+        "script"
+      ],
+      "size": 16,
+      "color": "#ffd166",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3177,
+        "lineCount": 86,
+        "docstring": "run_nebula.py\nCross-platform local HTTP server and browser launcher for Interactive Nebula Graph View.\nServes workspace on a free local port and automatically launches the default browser.\nSupports --no-browser flag for headless/testing environments."
+      }
+    },
+    {
+      "id": "module:test_gemini4_bridge",
+      "name": "test_gemini4_bridge.py",
+      "displayName": "Test Gemini4 Bridge",
+      "type": "module",
+      "category": "core-gateway",
+      "cluster": "galaxy-modules",
+      "path": "test_gemini4_bridge.py",
+      "description": "test_gemini4_bridge.py",
+      "tags": [
+        "core-gateway",
+        "python",
+        "script"
+      ],
+      "size": 18,
+      "color": "#fbbf24",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 3637,
+        "lineCount": 93,
+        "docstring": "test_gemini4_bridge.py\n验证 Gemini 4 桥接网关的核心功能:\n1. 不降智引擎 (ReAct 提示词保真度与工具解析)\n2. 防封安全装甲 (Jitter、速率控制、熔断机制)\n3. 接口路由与规范"
+      }
+    },
+    {
+      "id": "module:update_webdeck_with_images",
+      "name": "update_webdeck_with_images.py",
+      "displayName": "Update Webdeck With Images",
+      "type": "module",
+      "category": "presentation-suite",
+      "cluster": "galaxy-modules",
+      "path": "update_webdeck_with_images.py",
+      "description": "Python module update_webdeck_with_images.py for presentation-suite",
+      "tags": [
+        "presentation-suite",
+        "python",
+        "script"
+      ],
+      "size": 15,
+      "color": "#f43f5e",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 37518,
+        "lineCount": 842,
+        "docstring": ""
+      }
+    },
+    {
+      "id": "subsystem:wechat_auto_checkin",
+      "name": "wechat_auto_checkin",
+      "displayName": "WeChat Auto Check-in System",
+      "type": "subsystem",
+      "category": "subsystems",
+      "cluster": "galaxy-modules",
+      "path": "wechat_auto_checkin/README.md",
+      "description": "Universal WeChat automated check-in and clock-in system with Siri/Scriptable & Termux integrations.",
+      "tags": [
+        "subsystem",
+        "automation",
+        "python",
+        "wechat"
+      ],
+      "size": 22,
+      "color": "#10b981",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 5468,
+        "exists": true
+      }
+    },
+    {
+      "id": "subsystem:lut-timetable",
+      "name": "lut-timetable",
+      "displayName": "LUT Timetable Application",
+      "type": "subsystem",
+      "category": "subsystems",
+      "cluster": "galaxy-modules",
+      "path": "lut-timetable/README.md",
+      "description": "Multiplatform student timetable application built with React, TypeScript, Vite, Electron, and Capacitor.",
+      "tags": [
+        "subsystem",
+        "react",
+        "typescript",
+        "electron",
+        "timetable"
+      ],
+      "size": 22,
+      "color": "#10b981",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 10496,
+        "exists": true
+      }
+    },
+    {
+      "id": "spec:ELIGIBILITY-FIX",
+      "name": "ELIGIBILITY-FIX-20261105.md",
+      "displayName": "Eligibility Gateway Bypass Spec",
+      "type": "spec",
+      "category": "architecture-specs",
+      "cluster": "galaxy-modules",
+      "path": "ELIGIBILITY-FIX-20261105.md",
+      "description": "Architectural specification detailing Mitmproxy loadCodeAssist response rewriting and quota recovery.",
+      "tags": [
+        "spec",
+        "architecture",
+        "gateway"
+      ],
+      "size": 20,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 15594,
+        "exists": true
+      }
+    },
+    {
+      "id": "spec:SPEAKER_SCRIPT",
+      "name": "SPEAKER_SCRIPT_AND_RECORDING_GUIDE.md",
+      "displayName": "Speaker Script & Recording Guide",
+      "type": "spec",
+      "category": "architecture-specs",
+      "cluster": "galaxy-modules",
+      "path": "SPEAKER_SCRIPT_AND_RECORDING_GUIDE.md",
+      "description": "Presentation narration script, live demo walkthrough sequence, and visual recording guidance.",
+      "tags": [
+        "spec",
+        "presentation",
+        "recording"
+      ],
+      "size": 18,
+      "color": "#38bdf8",
+      "isHub": false,
+      "metadata": {
+        "fileSize": 16106,
+        "exists": true
+      }
+    },
+    {
+      "id": "spec:PROJECT",
+      "name": "PROJECT.md",
+      "displayName": "Project Architecture & Composite Pipeline",
+      "type": "spec",
+      "category": "architecture-specs",
+      "cluster": "galaxy-modules",
+      "path": "PROJECT.md",
+      "description": "Top-level project specification, composite milestone definitions, and subsystem interfaces.",
+      "tags": [
+        "spec",
+        "project",
+        "milestones"
+      ],
+      "size": 22,
+      "color": "#00f2fe",
+      "isHub": true,
+      "metadata": {
+        "fileSize": 7361,
+        "exists": true
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:ask-matt",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:matt-code-review",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:codebase-design",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:diagnosing-bugs",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:domain-modeling",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:grill-with-docs",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:implement-spec",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:implement",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:improve-codebase-architecture",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/pr",
+      "target": "skill:pr",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:prototype",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:research",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/retro",
+      "target": "skill:retro",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:tdd",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:to-spec",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:to-tickets",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:triage",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:wayfinder",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:wizard",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:grill-me",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:grilling",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/handoff",
+      "target": "skill:handoff",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:teach",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:to-questionnaire",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/wait-what",
+      "target": "skill:wait-what",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:productivity/writing-for-agents",
+      "target": "skill:writing-for-agents",
+      "type": "corresponds-to",
+      "label": "1:1 双生镜像 (Doc ↔ Skill)",
+      "strength": 0.9,
+      "distance": 65,
+      "color": "rgba(0, 242, 254, 0.6)"
+    },
+    {
+      "source": "doc:agents/triage-labels",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "标签关联",
+      "strength": 0.75,
+      "distance": 75,
+      "color": "rgba(56, 189, 248, 0.5)"
+    },
+    {
+      "source": "doc:agents/triage-labels",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "配置挂载",
+      "strength": 0.75,
+      "distance": 75,
+      "color": "rgba(56, 189, 248, 0.5)"
+    },
+    {
+      "source": "doc:engineering/resolving-merge-conflicts",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "合并处置",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(56, 189, 248, 0.5)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:implement-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:retro",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:handoff",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/ask-matt",
+      "target": "skill:writing-for-agents",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:diagnosing-bugs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:implement-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:retro",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:pr",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/code-review",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:retro",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:codebase-design",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/domain-modeling",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:to-questionnaire",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/grill-with-docs",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:implement-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:pr",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/implement",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:codebase-design",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:diagnosing-bugs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:retro",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/pr",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/pr",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/pr",
+      "target": "skill:implement-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/pr",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:diagnosing-bugs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:handoff",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/research",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/resolving-merge-conflicts",
+      "target": "skill:diagnosing-bugs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/resolving-merge-conflicts",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/retro",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/retro",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/retro",
+      "target": "skill:writing-for-agents",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/retro",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/setup-matt-pocock-skills",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:codebase-design",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:tdd",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:matt-code-review",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:implement-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/to-tickets",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:diagnosing-bugs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/triage",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:to-tickets",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:handoff",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:research",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wayfinder",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:implement",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:engineering/wizard",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grill-me",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:wayfinder",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:triage",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:improve-codebase-architecture",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/grilling",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/handoff",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/handoff",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/handoff",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:wait-what",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:research",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:handoff",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/teach",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:grill-me",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:prototype",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:to-spec",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/to-questionnaire",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/wait-what",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/wait-what",
+      "target": "skill:grilling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/wait-what",
+      "target": "skill:domain-modeling",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/wait-what",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/writing-for-agents",
+      "target": "skill:grill-with-docs",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/writing-for-agents",
+      "target": "skill:retro",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "doc:productivity/writing-for-agents",
+      "target": "skill:ask-matt",
+      "type": "references",
+      "label": "文档跨域引用 (Reference)",
+      "strength": 0.55,
+      "distance": 90,
+      "color": "rgba(56, 189, 248, 0.4)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:codebase-design",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:diagnosing-bugs",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:domain-modeling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:grill-me",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:grill-with-docs",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:handoff",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:implement",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:implement-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:improve-codebase-architecture",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:pr",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:prototype",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:research",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:retro",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:tdd",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:teach",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:to-questionnaire",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:to-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:to-tickets",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:triage",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:wait-what",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:wayfinder",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:wizard",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:ask-matt",
+      "target": "skill:writing-for-agents",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:implement",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:implement-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:research",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:retro",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:to-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:to-tickets",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:chief-of-staff",
+      "target": "skill:writing-for-agents",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:claude-handoff",
+      "target": "skill:handoff",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:grill-me",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:grill-with-docs",
+      "target": "skill:domain-modeling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:grill-with-docs",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement",
+      "target": "skill:tdd",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:implement",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:research",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:tdd",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:to-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "skill:to-tickets",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:improve-codebase-architecture",
+      "target": "skill:codebase-design",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:improve-codebase-architecture",
+      "target": "skill:domain-modeling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:improve-codebase-architecture",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:loop-me",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:matt-code-review",
+      "target": "skill:implement",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:matt-code-review",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:retro",
+      "target": "skill:writing-for-agents",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:setup-matt-pocock-skills",
+      "target": "skill:to-spec",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:setup-matt-pocock-skills",
+      "target": "skill:to-tickets",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:setup-matt-pocock-skills",
+      "target": "skill:triage",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:setup-ts-deep-modules",
+      "target": "skill:codebase-design",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:software-factory",
+      "target": "skill:implement",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:software-factory",
+      "target": "skill:research",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:tdd",
+      "target": "skill:codebase-design",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-spec",
+      "target": "skill:prototype",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-spec",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-spec",
+      "target": "skill:triage",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-tickets",
+      "target": "skill:prototype",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-tickets",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:to-tickets",
+      "target": "skill:triage",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:triage",
+      "target": "skill:domain-modeling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:triage",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:triage",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:domain-modeling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:prototype",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:research",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:setup-matt-pocock-skills",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:wayfinder",
+      "target": "skill:triage",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.5,
+      "distance": 95,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:writing-fragments",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:writing-shape",
+      "target": "skill:grilling",
+      "type": "workflow-flow",
+      "label": "工作流流转 (Workflow Flow)",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.45)"
+    },
+    {
+      "source": "skill:writing-fragments",
+      "target": "skill:writing-beats",
+      "type": "workflow-flow",
+      "label": "写作流转: 碎片收集 ➔ 节拍组织",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:writing-shape",
+      "target": "skill:writing-beats",
+      "type": "workflow-flow",
+      "label": "写作流转: 结构塑形 ➔ 节拍组织",
+      "strength": 0.7,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "module:quota_readout",
+      "target": "module:agy_unlock_addon",
+      "type": "module-dependency",
+      "label": "代码级引用 (Import)",
+      "strength": 0.8,
+      "distance": 70,
+      "color": "rgba(255, 209, 102, 0.6)"
+    },
+    {
+      "source": "module:test_gemini4_bridge",
+      "target": "module:gemini4_ultimate_bridge",
+      "type": "module-dependency",
+      "label": "代码级引用 (Import)",
+      "strength": 0.8,
+      "distance": 70,
+      "color": "rgba(255, 209, 102, 0.6)"
+    },
+    {
+      "source": "module:agy_unlock_addon",
+      "target": "spec:ELIGIBILITY-FIX",
+      "type": "implements-spec",
+      "label": "规范落地 (Implements)",
+      "strength": 0.85,
+      "distance": 70,
+      "color": "rgba(245, 158, 11, 0.7)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_8_slide_deck",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_claude_style_deck",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_deck_framework",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_executive_presentation",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_full_visual_deck",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_v2_pro_deck",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:build_web_claude_deck",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:create_presentation",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:generate_deck_diagrams",
+      "target": "module:update_webdeck_with_images",
+      "type": "provides-asset",
+      "label": "插图资产供给 (Diagram Asset)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:build_8_slide_deck",
+      "target": "spec:SPEAKER_SCRIPT",
+      "type": "implements-spec",
+      "label": "演讲指引对应 (Guide)",
+      "strength": 0.6,
+      "distance": 90,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:build_claude_style_deck",
+      "target": "spec:SPEAKER_SCRIPT",
+      "type": "implements-spec",
+      "label": "演讲指引对应 (Guide)",
+      "strength": 0.6,
+      "distance": 90,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:build_deck_framework",
+      "target": "spec:SPEAKER_SCRIPT",
+      "type": "implements-spec",
+      "label": "演讲指引对应 (Guide)",
+      "strength": 0.6,
+      "distance": 90,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "module:build_executive_presentation",
+      "target": "spec:SPEAKER_SCRIPT",
+      "type": "implements-spec",
+      "label": "演讲指引对应 (Guide)",
+      "strength": 0.6,
+      "distance": 90,
+      "color": "rgba(244, 63, 94, 0.5)"
+    },
+    {
+      "source": "spec:PROJECT",
+      "target": "module:gemini4_ultimate_bridge",
+      "type": "defines",
+      "label": "顶层架构定义",
+      "strength": 0.6,
+      "distance": 95,
+      "color": "rgba(0, 242, 254, 0.4)"
+    },
+    {
+      "source": "spec:PROJECT",
+      "target": "subsystem:wechat_auto_checkin",
+      "type": "defines",
+      "label": "子系统定义",
+      "strength": 0.6,
+      "distance": 95,
+      "color": "rgba(0, 242, 254, 0.4)"
+    },
+    {
+      "source": "spec:PROJECT",
+      "target": "subsystem:lut-timetable",
+      "type": "defines",
+      "label": "子系统定义",
+      "strength": 0.6,
+      "distance": 95,
+      "color": "rgba(0, 242, 254, 0.4)"
+    },
+    {
+      "source": "spec:PROJECT",
+      "target": "module:create_presentation",
+      "type": "defines",
+      "label": "演示文稿生成引擎",
+      "strength": 0.6,
+      "distance": 95,
+      "color": "rgba(0, 242, 254, 0.4)"
+    },
+    {
+      "source": "spec:PROJECT",
+      "target": "module:generate_deck_diagrams",
+      "type": "defines",
+      "label": "插图生成渲染引擎",
+      "strength": 0.6,
+      "distance": 95,
+      "color": "rgba(0, 242, 254, 0.4)"
+    },
+    {
+      "source": "spec:ELIGIBILITY-FIX",
+      "target": "module:agy_unlock_addon",
+      "type": "references-module",
+      "label": "模块与代码引用 (Module Reference)",
+      "strength": 0.65,
+      "distance": 85,
+      "color": "rgba(255, 209, 102, 0.55)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "spec:PROJECT",
+      "type": "spec-implementation",
+      "label": "工程规约落地方法论",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "spec:PROJECT",
+      "type": "implements-spec",
+      "label": "架构规约落地实施",
+      "strength": 0.8,
+      "distance": 75,
+      "color": "rgba(179, 136, 255, 0.6)"
+    },
+    {
+      "source": "doc:engineering/to-spec",
+      "target": "spec:PROJECT",
+      "type": "spec-authoring",
+      "label": "架构规约制定标准",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:to-spec",
+      "target": "spec:PROJECT",
+      "type": "creates-spec",
+      "label": "架构规约起草与设计",
+      "strength": 0.8,
+      "distance": 75,
+      "color": "rgba(179, 136, 255, 0.6)"
+    },
+    {
+      "source": "doc:engineering/improve-codebase-architecture",
+      "target": "spec:PROJECT",
+      "type": "architecture-governance",
+      "label": "系统级架构治理规范",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:improve-codebase-architecture",
+      "target": "spec:PROJECT",
+      "type": "architecture-governance",
+      "label": "全景架构演进评估",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "module:run_nebula",
+      "target": "spec:PROJECT",
+      "type": "runtime-engine",
+      "label": "星云图谱本地服务引擎",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(255, 209, 102, 0.6)"
+    },
+    {
+      "source": "skill:setup-pre-commit",
+      "target": "spec:PROJECT",
+      "type": "quality-gate",
+      "label": "提交前自动化门禁配置",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:git-guardrails-claude-code",
+      "target": "spec:PROJECT",
+      "type": "safety-guardrail",
+      "label": "Git操作安全防护护栏",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:scaffold-exercises",
+      "target": "spec:PROJECT",
+      "type": "educational-scaffold",
+      "label": "教学实验脚手架规范",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "doc:engineering/implement-spec",
+      "target": "spec:ELIGIBILITY-FIX",
+      "type": "spec-implementation",
+      "label": "网关规约实施指南",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:implement-spec",
+      "target": "spec:ELIGIBILITY-FIX",
+      "type": "implements-spec",
+      "label": "网关规约落地分解",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:writing-beats",
+      "target": "spec:SPEAKER_SCRIPT",
+      "type": "narrative-structure",
+      "label": "演讲讲稿节奏与分镜把控",
+      "strength": 0.8,
+      "distance": 75,
+      "color": "rgba(179, 136, 255, 0.6)"
+    },
+    {
+      "source": "doc:engineering/codebase-design",
+      "target": "module:gemini4_ultimate_bridge",
+      "type": "design-practice",
+      "label": "深模块与防御性设计实践",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:codebase-design",
+      "target": "module:gemini4_ultimate_bridge",
+      "type": "deep-module",
+      "label": "接口隔离与高内聚深模块",
+      "strength": 0.8,
+      "distance": 75,
+      "color": "rgba(179, 136, 255, 0.6)"
+    },
+    {
+      "source": "doc:engineering/tdd",
+      "target": "module:test_gemini4_bridge",
+      "type": "tests-module",
+      "label": "测试驱动开发实践",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:tdd",
+      "target": "module:test_gemini4_bridge",
+      "type": "verifies",
+      "label": "自动化单元测试验证",
+      "strength": 0.8,
+      "distance": 75,
+      "color": "rgba(179, 136, 255, 0.6)"
+    },
+    {
+      "source": "skill:setup-pre-commit",
+      "target": "module:test_gemini4_bridge",
+      "type": "verifies",
+      "label": "门禁自动化测试套件",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "doc:engineering/diagnosing-bugs",
+      "target": "module:quota_readout",
+      "type": "troubleshooting",
+      "label": "排障诊断与额度探测",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(0, 242, 254, 0.5)"
+    },
+    {
+      "source": "skill:diagnosing-bugs",
+      "target": "module:quota_readout",
+      "type": "troubleshooting",
+      "label": "额度读取与排障诊断",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:diagnosing-bugs",
+      "target": "module:agy_unlock_addon",
+      "type": "troubleshooting",
+      "label": "网关绕过排障分析",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "skill:migrate-to-shoehorn",
+      "target": "subsystem:lut-timetable",
+      "type": "type-safety",
+      "label": "TypeScript类型断言治理",
+      "strength": 0.75,
+      "distance": 80,
+      "color": "rgba(179, 136, 255, 0.5)"
+    },
+    {
+      "source": "doc:engineering/prototype",
+      "target": "module:run_nebula",
+      "type": "prototype-runtime",
+      "label": "本地轻量交互原型运行",
+      "strength": 0.7,
+      "distance": 85,
+      "color": "rgba(255, 209, 102, 0.6)"
+    }
+  ]
+}
